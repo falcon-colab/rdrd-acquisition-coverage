@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+message: If you use this code or its findings, please cite the paper.
+title: >-
+  Code and analysis for "Aggregate Accuracy Conceals an Acquisition-Level
+  Failure in a Public Radar Target Recognition Benchmark"
+abstract: >-
+  Session-grouped evaluation of the Real Doppler RAD-DAR database. Twenty of
+  twenty-one drone acquisitions reach out-of-fold recall between 0.90 and
+  0.99; one reaches 0.249. Held out of training entirely, recall on a
+  held-back half is 0.157, rising to 0.967 once the other half is in
+  training. The repository contains the full pipeline, the unit tests, a
+  synthetic self-test that runs without the archive, and a verification
+  script that reruns every experiment and checks each number the paper
+  states.
+type: software
+authors:
+  - given-names: Ghulam
+    family-names: Mustafa
+    alias: falcon-colab
+license: MIT
+keywords:
+  - radar target recognition
+  - range-Doppler
+  - dataset partitioning
+  - out-of-distribution generalisation
+  - reproducibility
+  - FMCW
+repository-code: https://github.com/falcon-colab/rdrd-acquisition-coverage
