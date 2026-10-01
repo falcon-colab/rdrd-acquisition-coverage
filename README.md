@@ -198,6 +198,10 @@ points there.
 See `CITATION.cff`. The dataset itself should be cited separately, to
 I. Roldan et al., and the paper's reference list has the citation.
 
+`docs/RELEASING.md` has the steps for cutting a release and minting the
+Zenodo DOI, including which of the two DOIs Zenodo mints belongs in the
+paper.
+
 ## License
 
 MIT, see `LICENSE`. The RDRD database is not covered by it and carries its own
