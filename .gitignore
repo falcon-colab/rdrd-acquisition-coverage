@@ -1,0 +1,35 @@
+# outputs of a run; a run writes into runs/<date>/
+runs/
+*.npz
+*.zip
+
+# reports/ is NOT ignored. The reports from the manuscript's own run
+# belong there, so that check_expected.py can be pointed at them
+# without retraining anything.
+
+# the archive itself is not redistributed here; see README
+data/
+rdrd/
+
+# kaggle credentials, never commit these
+kaggle.json
+.kaggle/
+
+# latex build products
+paper/*.aux
+paper/*.log
+paper/*.out
+paper/*.bbl
+paper/*.blg
+paper/*.synctex.gz
+paper/*.fdb_latexmk
+paper/*.fls
+paper/*.pdf
+
+# python
+__pycache__/
+*.pyc
+.pytest_cache/
+.ipynb_checkpoints/
+.venv/
+venv/

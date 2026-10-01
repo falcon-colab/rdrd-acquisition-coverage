@@ -1,0 +1,10 @@
+# The analysis needs only three packages. Versions below are the ones the
+# package was last run against; the lower bounds are what the code actually
+# requires. Anything recent works.
+#
+# numpy 2.x is fine. The code uses np.random.default_rng throughout rather
+# than the legacy global random state, so results do not depend on the numpy
+# version's global seeding behaviour.
+numpy>=1.24          # last run against 2.4.4
+torch>=2.0           # last run against 2.14.1
+matplotlib>=3.6      # figures only; the analysis runs without it
