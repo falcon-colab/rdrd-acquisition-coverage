@@ -71,7 +71,7 @@ step "stage 2c"
 
 step "stage 2d"
 "$PY" "$SRC/step2d.py" --data "$DS" --target drone/13-48 --seeds 0 \
-    --epochs 10 --out "$REPORTS/step2d.json" | tail -12
+    --epochs 10 --out "$REPORTS/step2d_13-48.json" | tail -12
 
 step "stage 3"
 "$PY" "$SRC/step3.py" grid --data "$DS" --seeds 0 --epochs 8 \
@@ -81,7 +81,7 @@ step "stage 3"
 
 step "stage 4"
 "$PY" "$SRC/step4.py" seeds --data "$DS" --seeds 0 1 2 --epochs 8 \
-    --out "$REPORTS/step4_seeds.json" | tail -8
+    --out "$REPORTS/step4_seeds10.json" | tail -8
 "$PY" "$SRC/step4.py" augment --data "$DS" --seeds 0 1 --epochs 8 \
     --shifts 4 8 --out "$REPORTS/step4_augment.json" | tail -6
 "$PY" "$SRC/step4.py" ablate --data "$DS" --seeds 0 1 --epochs 8 \
@@ -94,7 +94,7 @@ step "stage 5"
     --out "$REPORTS/step5_loo.json" | tail -8
 
 step "re-analysis without retraining"
-"$PY" "$SRC/analyse4.py" "$REPORTS/step4_seeds.json" | tail -5
+"$PY" "$SRC/analyse4.py" "$REPORTS/step4_seeds10.json" | tail -5
 "$PY" "$SRC/interaction.py" "$REPORTS/step4_ablate.json" | tail -5
 
 step "the manuscript's numbers against this synthetic run"
