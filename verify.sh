@@ -138,7 +138,7 @@ run step2c "$PY" "$SRC/step2c.py" --data "$DS" --folds "$FOLDS" \
 
 banner "stage 2d  the coverage experiment on drone/13-48"
 run step2d "$PY" "$SRC/step2d.py" --data "$DS" --target drone/13-48 \
-    --seeds $S_2D --epochs "$EPOCHS" --out "$REPORTS/step2d.json"
+    --seeds $S_2D --epochs "$EPOCHS" --out "$REPORTS/step2d_13-48.json"
 
 banner "stage 3  the compression grid and the axis ablation"
 run step3_grid "$PY" "$SRC/step3.py" grid --data "$DS" --seeds $S_GRID \
@@ -149,7 +149,7 @@ run step3_ablate "$PY" "$SRC/step3.py" ablate --data "$DS" --seeds $S_GRID \
 
 banner "stage 4  ten-seed confirmation, shift augmentation, factorial axes"
 run step4_seeds "$PY" "$SRC/step4.py" seeds --data "$DS" --seeds $S_SEEDS \
-    --epochs "$EPOCHS" --out "$REPORTS/step4_seeds.json"
+    --epochs "$EPOCHS" --out "$REPORTS/step4_seeds10.json"
 run step4_augment "$PY" "$SRC/step4.py" augment --data "$DS" --seeds $S_AUG \
     --epochs "$EPOCHS" --shifts 4 8 16 --out "$REPORTS/step4_augment.json"
 run step4_ablate "$PY" "$SRC/step4.py" ablate --data "$DS" --seeds $S_ABL \
@@ -161,7 +161,7 @@ run step5 "$PY" "$SRC/step5.py" --data "$DS" --sessions $LOO_SESSIONS \
     --out "$REPORTS/step5_loo.json"
 
 banner "re-analysis without retraining"
-run analyse4 "$PY" "$SRC/analyse4.py" "$REPORTS/step4_seeds.json"
+run analyse4 "$PY" "$SRC/analyse4.py" "$REPORTS/step4_seeds10.json"
 run interaction "$PY" "$SRC/interaction.py" "$REPORTS/step4_ablate.json"
 
 MINS=$((($(date +%s) - START) / 60))

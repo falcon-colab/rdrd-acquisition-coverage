@@ -9,10 +9,10 @@ step2_compare.json     the grouped against random split comparison
 step2b_kfold.json      the cross-validated protocol comparison (Table III)
 step2b_norm.json       the normalisation ablation (Table II)
 step2c_sessions.json   per-acquisition recall against headroom (Table IV)
-step2d.json            the coverage experiment on drone/13-48
+step2d_13-48.json      the coverage experiment on drone/13-48
 step3_grid.json        the compression grid
 step3_ablate.json      which quantisation axis does the damage
-step4_seeds.json       the ten-seed confirmation (Table V)
+step4_seeds10.json     the ten-seed confirmation (Table V)
 step4_augment.json     the shift-augmentation mechanism test
 step4_ablate.json      the factorial quantisation experiment
 step5_loo.json         leave one acquisition out (Table VI)
@@ -34,3 +34,13 @@ comparison against them.
 If this directory is empty apart from this file, the reports have not been
 committed yet and `check_expected.py` will report every claim as untested
 rather than as failing.
+
+Two files go by more than one name, and the checker accepts either, so there
+is never a reason to rename one by hand. The notebook writes
+`step2d_13-48.json` and `step4_seeds10.json`; `verify.sh` writes the same two
+experiments under those names too, and older runs may have called them
+`step2d.json` and `step4_seeds.json`. Where both a five-seed
+`step4_seeds.json` and a ten-seed `step4_seeds10.json` are present, the
+checker reads the ten-seed file, because Table V reports ten seeds. The
+summary prints which file each claim was read from, so you can confirm it
+took the one you meant.

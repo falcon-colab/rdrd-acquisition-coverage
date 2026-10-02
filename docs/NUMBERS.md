@@ -121,7 +121,8 @@ percent nearest the drone centroid**, and **the coverage test** (held out:
 training: 4.5, 190.5, 2.0, recall 0.967).
 
 ```bash
-python src/step2d.py --data $DS --target drone/13-48 --seeds 0 1 --epochs 40
+python src/step2d.py --data $DS --target drone/13-48 --seeds 0 1 \
+  --epochs 40 --out $R/step2d_13-48.json
 ```
 
 The confusion row sums to 197, not 191: all three predicted classes are shown
@@ -148,8 +149,14 @@ and unseen 0.2221 / 0.0408, 0.3295 / 0.1434, 0.3975 / 0.1264, 0.1916 /
 unseen 0.2341, 0.3074, 0.3944, 0.1911).
 
 ```bash
-python src/step4.py seeds --data $DS --seeds 0 1 2 3 4 5 6 7 8 9 --epochs 40
+python src/step4.py seeds --data $DS --seeds 0 1 2 3 4 5 6 7 8 9 \
+  --epochs 40 --out $R/step4_seeds10.json
 ```
+
+The ten-seed run must go to `step4_seeds10.json`, not `step4_seeds.json`,
+which is the earlier five-seed run of the same command. Table V reports ten
+seeds, so the checker reads the ten-seed file when both are present and says
+in its summary which one it used.
 
 **Welch t = +4.17 at 32 bits and +3.08 at 8 bits for 4x against 1x on the
 unseen regime; t = 0.79 and 0.16 on the standard split.** Printed by the same
@@ -159,7 +166,7 @@ command. `check_expected.py` recomputes all four from the `standard_runs` and
 **Bootstrap intervals [+0.049, +0.307] and [+0.058, +0.392].**
 
 ```bash
-python src/analyse4.py $R/step4_seeds.json
+python src/analyse4.py $R/step4_seeds10.json
 ```
 
 No retraining. Also prints the gap statistic, which the paper notes is

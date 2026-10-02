@@ -126,6 +126,11 @@ def d_interaction_contrast(rep, a):
             - rep["weights only"]["accuracy"] + rep["neither"]["accuracy"])
 
 
+def report_label(name):
+    """How a report is named in the 'absent' list: all its candidates."""
+    return name if isinstance(name, str) else " or ".join(name)
+
+
 DERIVATIONS = {
     "session_recall": d_session_recall,
     "min_session_recall": d_min_session_recall,
@@ -163,17 +168,35 @@ def main():
     cache = {}
 
     def load(name):
-        if name not in cache:
-            p = os.path.join(args.reports, name)
-            cache[name] = json.load(open(p)) if os.path.exists(p) else None
-        return cache[name]
+        """Load a report, accepting any of the names it may carry.
 
-    rows, missing, failures = [], {}, []
+        A check's "report" may be a single filename or a list of candidates,
+        tried in order. This exists because the notebook and verify.sh do not
+        agree on two names: the notebook writes the coverage experiment to
+        step2d_13-48.json and the ten-seed confirmation to step4_seeds10.json,
+        while verify.sh writes step2d.json and step4_seeds.json. Both are the
+        same experiment. Renaming files by hand to satisfy a checker is how
+        the wrong file gets checked, so the checker accepts both instead.
+        """
+        names = [name] if isinstance(name, str) else list(name)
+        key = tuple(names)
+        if key not in cache:
+            cache[key] = (None, None)
+            for n in names:
+                p = os.path.join(args.reports, n)
+                if os.path.exists(p):
+                    cache[key] = (json.load(open(p)), n)
+                    break
+        return cache[key]
+
+    rows, missing, failures, used = [], {}, [], {}
     for c in checks:
-        rep = load(c["report"])
+        rep, from_file = load(c["report"])
         if rep is None:
-            missing.setdefault(c["report"], []).append(c["id"])
+            missing.setdefault(report_label(c["report"]), []).append(c["id"])
             continue
+        used.setdefault(from_file, 0)
+        used[from_file] += 1
         try:
             if "derive" in c:
                 got = DERIVATIONS[c["derive"]](rep, c.get("args") or {})
@@ -228,6 +251,11 @@ def main():
     print("=" * (w + 56))
     print("%d of %d claims tested, %d agreed, %d disagreed"
           % (tested, len(checks), tested - len(failures), len(failures)))
+
+    if used:
+        print("\nread from:")
+        for name in sorted(used):
+            print("  %-26s %d claims" % (name, used[name]))
 
     if missing:
         n = sum(len(v) for v in missing.values())
