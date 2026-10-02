@@ -105,6 +105,20 @@ def d_welch_t(rep, a):
     return welch_t(dig(rep, a["a"]), dig(rep, a["b"]))
 
 
+def d_welch_t_abs(rep, a):
+    """Magnitude of Welch's t, for a two-sided claim.
+
+    Used only where the manuscript's claim is a failure to detect a
+    difference. There the test is two-sided, the sign carries no part of the
+    claim, and the manuscript quotes the magnitude while the code computes
+    the signed statistic in the direction aggregated minus full resolution.
+    Comparing magnitudes is what the claim actually asserts. Anywhere the
+    manuscript claims a direction, the signed d_welch_t is used instead, so a
+    sign flip there still fails.
+    """
+    return abs(welch_t(dig(rep, a["a"]), dig(rep, a["b"])))
+
+
 AUGMENT_KEYS = {"baseline": "1x, no augmentation",
                 "aggregation": "4x aggregation",
                 "shift4": "1x + shift +/-4 bins",
@@ -137,6 +151,7 @@ DERIVATIONS = {
     "recall_sd_excluding": d_recall_sd_excluding,
     "pearson_excluding": d_pearson_excluding,
     "welch_t": d_welch_t,
+    "welch_t_abs": d_welch_t_abs,
     "augment_value": d_augment_value,
     "ablate_drop": d_ablate_drop,
     "interaction_contrast": d_interaction_contrast,

@@ -140,6 +140,9 @@ banner "stage 2d  the coverage experiment on drone/13-48"
 run step2d "$PY" "$SRC/step2d.py" --data "$DS" --target drone/13-48 \
     --seeds $S_2D --epochs "$EPOCHS" --out "$REPORTS/step2d_13-48.json"
 
+run centroids "$PY" "$SRC/centroids.py" --data "$DS" \
+    --target drone/13-48 --out "$REPORTS/step2d_centroids.json"
+
 banner "stage 3  the compression grid and the axis ablation"
 run step3_grid "$PY" "$SRC/step3.py" grid --data "$DS" --seeds $S_GRID \
     --epochs "$EPOCHS" --factors $FACTORS --bits $BITS \
