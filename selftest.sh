@@ -73,6 +73,9 @@ step "stage 2d"
 "$PY" "$SRC/step2d.py" --data "$DS" --target drone/13-48 --seeds 0 \
     --epochs 10 --out "$REPORTS/step2d_13-48.json" | tail -12
 
+"$PY" "$SRC/centroids.py" --data "$DS" --target drone/13-48 \
+    --out "$REPORTS/step2d_centroids.json" | tail -6
+
 step "stage 3"
 "$PY" "$SRC/step3.py" grid --data "$DS" --seeds 0 --epochs 8 \
     --factors 1 2 4 8 --bits 32 8 --out "$REPORTS/step3_grid.json" | tail -14
