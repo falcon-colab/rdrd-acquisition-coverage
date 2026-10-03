@@ -1,0 +1,138 @@
+{
+  "target": "drone/13-48",
+  "target_centroid_mean": 8.4989780472002,
+  "target_centroid_sd": 10.642098831524677,
+  "others_centroid_mean_min": 29.703118239634797,
+  "others_centroid_mean_max": 31.192997214896334,
+  "others_centroid_sd_min": 0.6355726700599138,
+  "others_centroid_sd_max": 2.3657923814724744,
+  "n_acquisitions": 21,
+  "by_acquisition": [
+    {
+      "acquisition": "drone/12-34",
+      "n": 660,
+      "centroid_mean": 30.020712460356386,
+      "centroid_sd": 1.3661365756933914
+    },
+    {
+      "acquisition": "drone/12-41",
+      "n": 500,
+      "centroid_mean": 29.95186354774329,
+      "centroid_sd": 1.5399546459991733
+    },
+    {
+      "acquisition": "drone/13-14",
+      "n": 372,
+      "centroid_mean": 30.032939197479394,
+      "centroid_sd": 1.6409230685793041
+    },
+    {
+      "acquisition": "drone/13-21",
+      "n": 471,
+      "centroid_mean": 30.112213972518095,
+      "centroid_sd": 1.4057956949072752
+    },
+    {
+      "acquisition": "drone/13-48",
+      "n": 393,
+      "centroid_mean": 8.4989780472002,
+      "centroid_sd": 10.642098831524677
+    },
+    {
+      "acquisition": "drone/15-16",
+      "n": 31,
+      "centroid_mean": 31.192997214896334,
+      "centroid_sd": 2.3657923814724744
+    },
+    {
+      "acquisition": "drone/15-18",
+      "n": 42,
+      "centroid_mean": 29.703118239634797,
+      "centroid_sd": 1.7982007142909486
+    },
+    {
+      "acquisition": "drone/15-21",
+      "n": 181,
+      "centroid_mean": 30.10138848880445,
+      "centroid_sd": 1.3882906043919403
+    },
+    {
+      "acquisition": "drone/15-24",
+      "n": 169,
+      "centroid_mean": 30.016384476927932,
+      "centroid_sd": 1.2997247322422323
+    },
+    {
+      "acquisition": "drone/15-30",
+      "n": 212,
+      "centroid_mean": 30.117080472287267,
+      "centroid_sd": 0.9627300379535862
+    },
+    {
+      "acquisition": "drone/15-33",
+      "n": 177,
+      "centroid_mean": 29.847059800439638,
+      "centroid_sd": 1.023382912331489
+    },
+    {
+      "acquisition": "drone/15-36",
+      "n": 165,
+      "centroid_mean": 30.296536089421824,
+      "centroid_sd": 1.8906928262206566
+    },
+    {
+      "acquisition": "drone/15-38",
+      "n": 176,
+      "centroid_mean": 29.943457744861984,
+      "centroid_sd": 2.3534320039724634
+    },
+    {
+      "acquisition": "drone/15-42",
+      "n": 186,
+      "centroid_mean": 30.253966184370814,
+      "centroid_sd": 1.3535667004915712
+    },
+    {
+      "acquisition": "drone/15-44",
+      "n": 170,
+      "centroid_mean": 29.890830442604035,
+      "centroid_sd": 0.8447513378656184
+    },
+    {
+      "acquisition": "drone/15-47",
+      "n": 195,
+      "centroid_mean": 30.097778675261054,
+      "centroid_sd": 1.3435504959105804
+    },
+    {
+      "acquisition": "drone/15-50",
+      "n": 172,
+      "centroid_mean": 29.974650267797198,
+      "centroid_sd": 0.6594425964337598
+    },
+    {
+      "acquisition": "drone/16-09",
+      "n": 220,
+      "centroid_mean": 29.917087569825632,
+      "centroid_sd": 0.8749943951461889
+    },
+    {
+      "acquisition": "drone/16-11",
+      "n": 184,
+      "centroid_mean": 29.94670265046446,
+      "centroid_sd": 0.6355726700599138
+    },
+    {
+      "acquisition": "drone/16-15",
+      "n": 211,
+      "centroid_mean": 30.003438607502574,
+      "centroid_sd": 0.7718190673941773
+    },
+    {
+      "acquisition": "drone/16-17",
+      "n": 178,
+      "centroid_mean": 30.119249237585407,
+      "centroid_sd": 1.2322180089625396
+    }
+  ]
+}
