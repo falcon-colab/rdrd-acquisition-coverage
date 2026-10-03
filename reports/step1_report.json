@@ -1,0 +1,80 @@
+{
+  "config": {
+    "root": "/content/rdrd/raw",
+    "out": "/content/drive/MyDrive/radar_compression/splits",
+    "per_session": 120,
+    "top_k": 12,
+    "test_frac": 0.3,
+    "sim_thresh": 0.9,
+    "seed": 0,
+    "quiet_sessions": false
+  },
+  "dedup": {
+    "raw_total": 34970,
+    "total": 17485,
+    "dropped": 80
+  },
+  "units": {
+    "car": {
+      "folders": 27,
+      "units": 15,
+      "multi_folder_units": 10
+    },
+    "drone": {
+      "folders": 21,
+      "units": 21,
+      "multi_folder_units": 0
+    },
+    "person": {
+      "folders": 32,
+      "units": 16,
+      "multi_folder_units": 16
+    }
+  },
+  "signal": {
+    "car": {
+      "ptf_median": 34.735,
+      "ptf_spread": 15.351999999999997,
+      "cells_within_10dB": 9.0
+    },
+    "drone": {
+      "ptf_median": 27.326999999999998,
+      "ptf_spread": 36.663500000000006,
+      "cells_within_10dB": 7.0
+    },
+    "person": {
+      "ptf_median": 43.52250000000001,
+      "ptf_spread": 26.389499999999998,
+      "cells_within_10dB": 16.75
+    }
+  },
+  "leakage": {
+    "car": {
+      "n_units": 15,
+      "within_mean": 0.3331509530544281,
+      "cross_mean": 0.3202077163715682,
+      "gap": 0.012943236682859904,
+      "frac_within_above_cross_p95": 0.06961919141083711
+    },
+    "drone": {
+      "n_units": 21,
+      "within_mean": 0.274473637342453,
+      "cross_mean": 0.23885452755734635,
+      "gap": 0.035619109785106656,
+      "frac_within_above_cross_p95": 0.07904070258402297
+    },
+    "person": {
+      "n_units": 16,
+      "within_mean": 0.046985335648059845,
+      "cross_mean": 0.017407815933296055,
+      "gap": 0.02957751971476379,
+      "frac_within_above_cross_p95": 0.11222612477002843
+    }
+  },
+  "split_verification": {
+    "probed_train": 4000,
+    "probed_test": 600,
+    "collisions": 0,
+    "clean": true
+  }
+}

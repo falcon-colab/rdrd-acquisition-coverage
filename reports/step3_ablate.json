@@ -1,0 +1,22 @@
+[
+  {
+    "setting": "neither",
+    "accuracy": 0.9431547619047619,
+    "drone_f1": 0.9134769502242482
+  },
+  {
+    "setting": "input only",
+    "accuracy": 0.9190476190476191,
+    "drone_f1": 0.8740325787642935
+  },
+  {
+    "setting": "weights only",
+    "accuracy": 0.9080357142857143,
+    "drone_f1": 0.8522528423712161
+  },
+  {
+    "setting": "both",
+    "accuracy": 0.7401785714285714,
+    "drone_f1": 0.4076636508781267
+  }
+]

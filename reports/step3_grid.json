@@ -1,0 +1,326 @@
+{
+  "standard": {
+    "1x_32bit": {
+      "factor": 1,
+      "bits": 32,
+      "accuracy": 0.9357142857142857,
+      "accuracy_sd": 0.0050595238095237915,
+      "drone_recall": 0.8951533135509397,
+      "drone_recall_sd": 0.013847675568743834,
+      "input_cells": 671,
+      "input_bytes": 2684.0
+    },
+    "1x_16bit": {
+      "factor": 1,
+      "bits": 16,
+      "accuracy": 0.9433035714285714,
+      "accuracy_sd": 0.007291666666666641,
+      "drone_recall": 0.9198813056379822,
+      "drone_recall_sd": 0.0029673590504450953,
+      "input_cells": 671,
+      "input_bytes": 1342.0
+    },
+    "1x_8bit": {
+      "factor": 1,
+      "bits": 8,
+      "accuracy": 0.9389880952380952,
+      "accuracy_sd": 0.002678571428571419,
+      "drone_recall": 0.8931750741839763,
+      "drone_recall_sd": 0.017804154302670627,
+      "input_cells": 671,
+      "input_bytes": 671.0
+    },
+    "1x_4bit": {
+      "factor": 1,
+      "bits": 4,
+      "accuracy": 0.8229166666666666,
+      "accuracy_sd": 0.03273809523809523,
+      "drone_recall": 0.652324431256182,
+      "drone_recall_sd": 0.018298714144411476,
+      "input_cells": 671,
+      "input_bytes": 335.5
+    },
+    "2x_32bit": {
+      "factor": 2,
+      "bits": 32,
+      "accuracy": 0.9479166666666666,
+      "accuracy_sd": 0.0011904761904761862,
+      "drone_recall": 0.9154302670623146,
+      "drone_recall_sd": 0.002472799208704246,
+      "input_cells": 330,
+      "input_bytes": 1320.0
+    },
+    "2x_16bit": {
+      "factor": 2,
+      "bits": 16,
+      "accuracy": 0.9441964285714286,
+      "accuracy_sd": 0.001636904761904756,
+      "drone_recall": 0.904055390702275,
+      "drone_recall_sd": 0.014836795252225532,
+      "input_cells": 330,
+      "input_bytes": 660.0
+    },
+    "2x_8bit": {
+      "factor": 2,
+      "bits": 8,
+      "accuracy": 0.9449404761904762,
+      "accuracy_sd": 0.0008928571428571397,
+      "drone_recall": 0.9080118694362018,
+      "drone_recall_sd": 0.018793273986152326,
+      "input_cells": 330,
+      "input_bytes": 330.0
+    },
+    "2x_4bit": {
+      "factor": 2,
+      "bits": 4,
+      "accuracy": 0.9068452380952381,
+      "accuracy_sd": 0.008333333333333304,
+      "drone_recall": 0.8417408506429278,
+      "drone_recall_sd": 0.08506429277942629,
+      "input_cells": 330,
+      "input_bytes": 165.0
+    },
+    "4x_32bit": {
+      "factor": 4,
+      "bits": 32,
+      "accuracy": 0.9461309523809524,
+      "accuracy_sd": 0.0029761904761904656,
+      "drone_recall": 0.9287833827893175,
+      "drone_recall_sd": 0.029673590504451064,
+      "input_cells": 165,
+      "input_bytes": 660.0
+    },
+    "4x_16bit": {
+      "factor": 4,
+      "bits": 16,
+      "accuracy": 0.947470238095238,
+      "accuracy_sd": 0.003720238095238082,
+      "drone_recall": 0.9208704253214639,
+      "drone_recall_sd": 0.015825914935707175,
+      "input_cells": 165,
+      "input_bytes": 330.0
+    },
+    "4x_8bit": {
+      "factor": 4,
+      "bits": 8,
+      "accuracy": 0.9388392857142858,
+      "accuracy_sd": 0.007589285714285687,
+      "drone_recall": 0.9045499505440158,
+      "drone_recall_sd": 0.015331355093966381,
+      "input_cells": 165,
+      "input_bytes": 165.0
+    },
+    "4x_4bit": {
+      "factor": 4,
+      "bits": 4,
+      "accuracy": 0.7504464285714285,
+      "accuracy_sd": 0.1587797619047619,
+      "drone_recall": 0.41196834817012856,
+      "drone_recall_sd": 0.41196834817012856,
+      "input_cells": 165,
+      "input_bytes": 82.5
+    },
+    "8x_32bit": {
+      "factor": 8,
+      "bits": 32,
+      "accuracy": 0.918452380952381,
+      "accuracy_sd": 0.00833333333333336,
+      "drone_recall": 0.8506429277942631,
+      "drone_recall_sd": 0.004945598417408492,
+      "input_cells": 77,
+      "input_bytes": 308.0
+    },
+    "8x_16bit": {
+      "factor": 8,
+      "bits": 16,
+      "accuracy": 0.9191964285714286,
+      "accuracy_sd": 0.008482142857142883,
+      "drone_recall": 0.847675568743818,
+      "drone_recall_sd": 0.003956478733926794,
+      "input_cells": 77,
+      "input_bytes": 154.0
+    },
+    "8x_8bit": {
+      "factor": 8,
+      "bits": 8,
+      "accuracy": 0.9275297619047619,
+      "accuracy_sd": 0.009375000000000022,
+      "drone_recall": 0.8921859545004945,
+      "drone_recall_sd": 0.010880316518298683,
+      "input_cells": 77,
+      "input_bytes": 77.0
+    },
+    "8x_4bit": {
+      "factor": 8,
+      "bits": 4,
+      "accuracy": 0.9046130952380953,
+      "accuracy_sd": 0.002827380952380942,
+      "drone_recall": 0.8348170128585559,
+      "drone_recall_sd": 0.05440158259149358,
+      "input_cells": 77,
+      "input_bytes": 38.5
+    }
+  },
+  "unseen": {
+    "1x_32bit": {
+      "factor": 1,
+      "bits": 32,
+      "accuracy": 0.19338422391857507,
+      "accuracy_sd": 0.033078880407124686,
+      "drone_recall": 0.19338422391857507,
+      "drone_recall_sd": 0.033078880407124686,
+      "input_cells": 671,
+      "input_bytes": 2684.0
+    },
+    "1x_16bit": {
+      "factor": 1,
+      "bits": 16,
+      "accuracy": 0.20610687022900764,
+      "accuracy_sd": 0.038167938931297704,
+      "drone_recall": 0.20610687022900764,
+      "drone_recall_sd": 0.038167938931297704,
+      "input_cells": 671,
+      "input_bytes": 1342.0
+    },
+    "1x_8bit": {
+      "factor": 1,
+      "bits": 8,
+      "accuracy": 0.20229007633587787,
+      "accuracy_sd": 0.03435114503816794,
+      "drone_recall": 0.20229007633587787,
+      "drone_recall_sd": 0.03435114503816794,
+      "input_cells": 671,
+      "input_bytes": 671.0
+    },
+    "1x_4bit": {
+      "factor": 1,
+      "bits": 4,
+      "accuracy": 0.18702290076335878,
+      "accuracy_sd": 0.008905852417302795,
+      "drone_recall": 0.18702290076335878,
+      "drone_recall_sd": 0.008905852417302795,
+      "input_cells": 671,
+      "input_bytes": 335.5
+    },
+    "2x_32bit": {
+      "factor": 2,
+      "bits": 32,
+      "accuracy": 0.3562340966921119,
+      "accuracy_sd": 0.07888040712468194,
+      "drone_recall": 0.3562340966921119,
+      "drone_recall_sd": 0.07888040712468194,
+      "input_cells": 330,
+      "input_bytes": 1320.0
+    },
+    "2x_16bit": {
+      "factor": 2,
+      "bits": 16,
+      "accuracy": 0.25190839694656486,
+      "accuracy_sd": 0.08905852417302798,
+      "drone_recall": 0.25190839694656486,
+      "drone_recall_sd": 0.08905852417302798,
+      "input_cells": 330,
+      "input_bytes": 660.0
+    },
+    "2x_8bit": {
+      "factor": 2,
+      "bits": 8,
+      "accuracy": 0.44147582697201015,
+      "accuracy_sd": 0.20737913486005088,
+      "drone_recall": 0.44147582697201015,
+      "drone_recall_sd": 0.20737913486005088,
+      "input_cells": 330,
+      "input_bytes": 330.0
+    },
+    "2x_4bit": {
+      "factor": 2,
+      "bits": 4,
+      "accuracy": 0.06361323155216285,
+      "accuracy_sd": 0.06361323155216285,
+      "drone_recall": 0.06361323155216285,
+      "drone_recall_sd": 0.06361323155216285,
+      "input_cells": 330,
+      "input_bytes": 165.0
+    },
+    "4x_32bit": {
+      "factor": 4,
+      "bits": 32,
+      "accuracy": 0.48982188295165396,
+      "accuracy_sd": 0.10559796437659033,
+      "drone_recall": 0.48982188295165396,
+      "drone_recall_sd": 0.10559796437659033,
+      "input_cells": 165,
+      "input_bytes": 660.0
+    },
+    "4x_16bit": {
+      "factor": 4,
+      "bits": 16,
+      "accuracy": 0.5776081424936387,
+      "accuracy_sd": 0.06870229007633588,
+      "drone_recall": 0.5776081424936387,
+      "drone_recall_sd": 0.06870229007633588,
+      "input_cells": 165,
+      "input_bytes": 330.0
+    },
+    "4x_8bit": {
+      "factor": 4,
+      "bits": 8,
+      "accuracy": 0.5127226463104325,
+      "accuracy_sd": 0.11068702290076335,
+      "drone_recall": 0.5127226463104325,
+      "drone_recall_sd": 0.11068702290076335,
+      "input_cells": 165,
+      "input_bytes": 165.0
+    },
+    "4x_4bit": {
+      "factor": 4,
+      "bits": 4,
+      "accuracy": 0.18575063613231552,
+      "accuracy_sd": 0.08142493638676845,
+      "drone_recall": 0.18575063613231552,
+      "drone_recall_sd": 0.08142493638676845,
+      "input_cells": 165,
+      "input_bytes": 82.5
+    },
+    "8x_32bit": {
+      "factor": 8,
+      "bits": 32,
+      "accuracy": 0.19338422391857507,
+      "accuracy_sd": 0.012722646310432573,
+      "drone_recall": 0.19338422391857507,
+      "drone_recall_sd": 0.012722646310432573,
+      "input_cells": 77,
+      "input_bytes": 308.0
+    },
+    "8x_16bit": {
+      "factor": 8,
+      "bits": 16,
+      "accuracy": 0.17938931297709923,
+      "accuracy_sd": 0.008905852417302795,
+      "drone_recall": 0.17938931297709923,
+      "drone_recall_sd": 0.008905852417302795,
+      "input_cells": 77,
+      "input_bytes": 154.0
+    },
+    "8x_8bit": {
+      "factor": 8,
+      "bits": 8,
+      "accuracy": 0.20610687022900764,
+      "accuracy_sd": 0.030534351145038177,
+      "drone_recall": 0.20610687022900764,
+      "drone_recall_sd": 0.030534351145038177,
+      "input_cells": 77,
+      "input_bytes": 77.0
+    },
+    "8x_4bit": {
+      "factor": 8,
+      "bits": 4,
+      "accuracy": 0.15012722646310434,
+      "accuracy_sd": 0.015267175572519082,
+      "drone_recall": 0.15012722646310434,
+      "drone_recall_sd": 0.015267175572519082,
+      "input_cells": 77,
+      "input_bytes": 38.5
+    }
+  }
+}
