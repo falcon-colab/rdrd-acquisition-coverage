@@ -23,299 +23,630 @@
     "outside its stated spread means the conclusion drawn from it does not",
     "hold on this machine, and that is worth knowing and worth reporting."
   ],
-
   "checks": [
-
-    { "id": "samples-total",
+    {
+      "id": "samples-total",
       "paper": "Sec. III, 17,485 samples after deduplication",
-      "report": "step1_report.json", "path": "dedup.total",
-      "expect": 17485, "tol": 0,
-      "why_tol": "a file count, exact or the archive is not the same one" },
-
-    { "id": "model-params",
+      "report": "step1_report.json",
+      "path": "dedup.total",
+      "expect": 17485,
+      "tol": 0,
+      "why_tol": "a file count, exact or the archive is not the same one"
+    },
+    {
+      "id": "model-params",
       "paper": "Sec. III, 101,139 parameters",
-      "report": "step2_compare.json", "path": "runs.grouped.0.params",
-      "expect": 101139, "tol": 0,
-      "why_tol": "a parameter count, fixed by the architecture" },
-
-    { "id": "cells-1x",
+      "report": "step2_compare.json",
+      "path": "runs.grouped.0.params",
+      "expect": 101139,
+      "tol": 0,
+      "why_tol": "a parameter count, fixed by the architecture"
+    },
+    {
+      "id": "cells-1x",
       "paper": "Table V, 671 input cells at full resolution",
-      "report": "step3_grid.json", "path": "standard.1x_32bit.input_cells",
-      "expect": 671, "tol": 0, "why_tol": "11 by 61, arithmetic" },
-    { "id": "cells-2x",
+      "report": "step3_grid.json",
+      "path": "standard.1x_32bit.input_cells",
+      "expect": 671,
+      "tol": 0,
+      "why_tol": "11 by 61, arithmetic"
+    },
+    {
+      "id": "cells-2x",
       "paper": "Table V, 330 cells at 2x",
-      "report": "step3_grid.json", "path": "standard.2x_32bit.input_cells",
-      "expect": 330, "tol": 0, "why_tol": "arithmetic" },
-    { "id": "cells-4x",
+      "report": "step3_grid.json",
+      "path": "standard.2x_32bit.input_cells",
+      "expect": 330,
+      "tol": 0,
+      "why_tol": "arithmetic"
+    },
+    {
+      "id": "cells-4x",
       "paper": "Table V, 165 cells at 4x",
-      "report": "step3_grid.json", "path": "standard.4x_32bit.input_cells",
-      "expect": 165, "tol": 0, "why_tol": "arithmetic" },
-    { "id": "cells-8x",
+      "report": "step3_grid.json",
+      "path": "standard.4x_32bit.input_cells",
+      "expect": 165,
+      "tol": 0,
+      "why_tol": "arithmetic"
+    },
+    {
+      "id": "cells-8x",
       "paper": "Table V, 77 cells at 8x",
-      "report": "step3_grid.json", "path": "standard.8x_32bit.input_cells",
-      "expect": 77, "tol": 0, "why_tol": "arithmetic" },
-
-    { "id": "kfold-acc-random",
+      "report": "step3_grid.json",
+      "path": "standard.8x_32bit.input_cells",
+      "expect": 77,
+      "tol": 0,
+      "why_tol": "arithmetic"
+    },
+    {
+      "id": "kfold-acc-random",
       "paper": "Table III, accuracy, random split, mean 0.9335",
-      "report": "step2b_kfold.json", "path": "summary.accuracy.random.mean",
-      "expect": 0.9335, "tol": 0.02,
-      "why_tol": "between-fold sd 0.0055, between-seed 0.0030; 0.02 is about three times the combined spread" },
-    { "id": "kfold-acc-grouped",
+      "report": "step2b_kfold.json",
+      "path": "summary.accuracy.random.mean",
+      "expect": 0.9335,
+      "tol": 0.02,
+      "why_tol": "between-fold sd 0.0055, between-seed 0.0030; 0.02 is about three times the combined spread"
+    },
+    {
+      "id": "kfold-acc-grouped",
       "paper": "Table III, accuracy, grouped split, mean 0.9099",
-      "report": "step2b_kfold.json", "path": "summary.accuracy.grouped.mean",
-      "expect": 0.9099, "tol": 0.06,
-      "why_tol": "between-fold sd 0.0427, and the paper's point is that this spread is large" },
-    { "id": "kfold-acc-grouped-foldsd",
+      "report": "step2b_kfold.json",
+      "path": "summary.accuracy.grouped.mean",
+      "expect": 0.9099,
+      "tol": 0.06,
+      "why_tol": "between-fold sd 0.0427, and the paper's point is that this spread is large"
+    },
+    {
+      "id": "kfold-acc-grouped-foldsd",
       "paper": "Table III, grouped accuracy between-fold sd 0.0427",
       "report": "step2b_kfold.json",
       "path": "summary.accuracy.grouped.between_fold_sd",
-      "expect": 0.0427, "tol": 0.025,
-      "why_tol": "a standard deviation over five folds is itself a noisy statistic" },
-    { "id": "kfold-drone-recall-random",
+      "expect": 0.0427,
+      "tol": 0.025,
+      "why_tol": "a standard deviation over five folds is itself a noisy statistic"
+    },
+    {
+      "id": "kfold-drone-recall-random",
       "paper": "Table III, drone recall, random split, 0.9358",
       "report": "step2b_kfold.json",
       "path": "summary.drone recall.random.mean",
-      "expect": 0.9358, "tol": 0.03, "why_tol": "fold sd 0.0078, seed sd 0.0144" },
-    { "id": "kfold-drone-recall-grouped",
+      "expect": 0.9358,
+      "tol": 0.03,
+      "why_tol": "fold sd 0.0078, seed sd 0.0144"
+    },
+    {
+      "id": "kfold-drone-recall-grouped",
       "paper": "Table III, drone recall, grouped split, 0.8376",
       "report": "step2b_kfold.json",
       "path": "summary.drone recall.grouped.mean",
-      "expect": 0.8376, "tol": 0.15,
-      "why_tol": "fold sd 0.1389; the manuscript reports this cell as dominated by one fold" },
-    { "id": "kfold-vehicle-f1-random",
+      "expect": 0.8376,
+      "tol": 0.15,
+      "why_tol": "fold sd 0.1389; the manuscript reports this cell as dominated by one fold"
+    },
+    {
+      "id": "kfold-vehicle-f1-random",
       "paper": "Table III, vehicle F1, random split, 0.9055",
-      "report": "step2b_kfold.json", "path": "summary.car f1.random.mean",
-      "expect": 0.9055, "tol": 0.03, "why_tol": "fold sd 0.0073, seed sd 0.0043" },
-    { "id": "kfold-vehicle-f1-grouped",
+      "report": "step2b_kfold.json",
+      "path": "summary.car f1.random.mean",
+      "expect": 0.9055,
+      "tol": 0.03,
+      "why_tol": "fold sd 0.0073, seed sd 0.0043"
+    },
+    {
+      "id": "kfold-vehicle-f1-grouped",
       "paper": "Table III, vehicle F1, grouped split, 0.8979",
-      "report": "step2b_kfold.json", "path": "summary.car f1.grouped.mean",
-      "expect": 0.8979, "tol": 0.04, "why_tol": "fold sd 0.0117, seed sd 0.0095" },
-
-    { "id": "norm-offset",
+      "report": "step2b_kfold.json",
+      "path": "summary.car f1.grouped.mean",
+      "expect": 0.8979,
+      "tol": 0.04,
+      "why_tol": "fold sd 0.0117, seed sd 0.0095"
+    },
+    {
+      "id": "norm-offset",
       "paper": "Table II, offset normalisation accuracy 0.925",
-      "report": "step2b_norm.json", "path": "offset.accuracy.mean",
-      "expect": 0.925, "tol": 0.05, "why_tol": "reported sd 0.046" },
-    { "id": "norm-peak",
+      "report": "step2b_norm.json",
+      "path": "offset.accuracy.mean",
+      "expect": 0.925,
+      "tol": 0.05,
+      "why_tol": "reported sd 0.046"
+    },
+    {
+      "id": "norm-peak",
       "paper": "Table II, peak-referenced accuracy 0.908",
-      "report": "step2b_norm.json", "path": "peak.accuracy.mean",
-      "expect": 0.908, "tol": 0.05, "why_tol": "reported sd 0.044" },
-
-    { "id": "session-13-48-recall",
+      "report": "step2b_norm.json",
+      "path": "peak.accuracy.mean",
+      "expect": 0.908,
+      "tol": 0.05,
+      "why_tol": "reported sd 0.044"
+    },
+    {
+      "id": "session-13-48-recall",
       "paper": "Table IV and Sec. IV, out-of-fold recall 0.249 on 13-48",
       "report": "step2c_sessions.json",
-      "derive": "session_recall", "args": { "cls": "drone", "name": "13-48" },
-      "expect": 0.249, "tol": 0.10,
-      "why_tol": "a single acquisition over few folds; the claim is that it is far below 0.90, not that it is 0.249" },
-    { "id": "session-weakest-person",
+      "derive": "session_recall",
+      "args": {
+        "cls": "drone",
+        "name": "13-48"
+      },
+      "expect": 0.249,
+      "tol": 0.1,
+      "why_tol": "a single acquisition over few folds; the claim is that it is far below 0.90, not that it is 0.249"
+    },
+    {
+      "id": "session-weakest-person",
       "paper": "Sec. IV, weakest pedestrian acquisition 0.7776",
       "report": "step2c_sessions.json",
-      "derive": "min_session_recall", "args": { "cls": "person" },
-      "expect": 0.7776, "tol": 0.10, "why_tol": "one acquisition, few folds" },
-    { "id": "session-weakest-car",
+      "derive": "min_session_recall",
+      "args": {
+        "cls": "person"
+      },
+      "expect": 0.7776,
+      "tol": 0.1,
+      "why_tol": "one acquisition, few folds"
+    },
+    {
+      "id": "session-weakest-car",
       "paper": "Sec. IV, weakest vehicle acquisition 0.8189",
       "report": "step2c_sessions.json",
-      "derive": "min_session_recall", "args": { "cls": "car" },
-      "expect": 0.8189, "tol": 0.10, "why_tol": "one acquisition, few folds" },
-    { "id": "drone-recall-sd-excl-13-48",
+      "derive": "min_session_recall",
+      "args": {
+        "cls": "car"
+      },
+      "expect": 0.8189,
+      "tol": 0.1,
+      "why_tol": "one acquisition, few folds"
+    },
+    {
+      "id": "drone-recall-sd-excl-13-48",
       "paper": "Sec. IV, drone per-acquisition recall sd 0.0262 once 13-48 is excluded",
       "report": "step2c_sessions.json",
-      "derive": "recall_sd_excluding", "args": { "cls": "drone", "exclude": "13-48" },
-      "expect": 0.0262, "tol": 0.02,
-      "why_tol": "the claim is that it is below the vehicle and pedestrian figures, which this tolerance still tests" },
-    { "id": "car-recall-sd",
+      "derive": "recall_sd_excluding",
+      "args": {
+        "cls": "drone",
+        "exclude": "13-48"
+      },
+      "expect": 0.0262,
+      "tol": 0.02,
+      "why_tol": "the claim is that it is below the vehicle and pedestrian figures, which this tolerance still tests"
+    },
+    {
+      "id": "car-recall-sd",
       "paper": "Sec. IV, vehicle per-acquisition recall sd 0.0505",
       "report": "step2c_sessions.json",
-      "derive": "recall_sd_excluding", "args": { "cls": "car", "exclude": null },
-      "expect": 0.0505, "tol": 0.03, "why_tol": "sd of a small sample of acquisitions" },
-    { "id": "person-recall-sd",
+      "derive": "recall_sd_excluding",
+      "args": {
+        "cls": "car",
+        "exclude": null
+      },
+      "expect": 0.0505,
+      "tol": 0.03,
+      "why_tol": "sd of a small sample of acquisitions"
+    },
+    {
+      "id": "person-recall-sd",
       "paper": "Sec. IV, pedestrian per-acquisition recall sd 0.0549",
       "report": "step2c_sessions.json",
-      "derive": "recall_sd_excluding", "args": { "cls": "person", "exclude": null },
-      "expect": 0.0549, "tol": 0.03, "why_tol": "sd of a small sample of acquisitions" },
-    { "id": "headroom-pearson-all",
+      "derive": "recall_sd_excluding",
+      "args": {
+        "cls": "person",
+        "exclude": null
+      },
+      "expect": 0.0549,
+      "tol": 0.03,
+      "why_tol": "sd of a small sample of acquisitions"
+    },
+    {
+      "id": "headroom-pearson-all",
       "paper": "Sec. VI, Pearson -0.62 between drone recall and headroom",
-      "report": "step2c_sessions.json", "path": "drone.pearson",
-      "expect": -0.62, "tol": 0.20,
-      "why_tol": "a correlation over 21 points; the refutation rests on the drop below, not on this value" },
-    { "id": "headroom-pearson-excl",
+      "report": "step2c_sessions.json",
+      "path": "drone.pearson",
+      "expect": -0.62,
+      "tol": 0.2,
+      "why_tol": "a correlation over 21 points; the refutation rests on the drop below, not on this value"
+    },
+    {
+      "id": "headroom-pearson-excl",
       "paper": "Sec. VI, that correlation falls to -0.16 once 13-48 is excluded",
       "report": "step2c_sessions.json",
-      "derive": "pearson_excluding", "args": { "cls": "drone", "exclude": "13-48" },
-      "expect": -0.16, "tol": 0.25,
-      "why_tol": "the refuted mechanism needs this to be near zero, which this tolerance tests" },
-
-    { "id": "13-48-doppler-centroid",
+      "derive": "pearson_excluding",
+      "args": {
+        "cls": "drone",
+        "exclude": "13-48"
+      },
+      "expect": -0.16,
+      "tol": 0.25,
+      "why_tol": "the refuted mechanism needs this to be near zero, which this tolerance tests"
+    },
+    {
+      "id": "13-48-doppler-centroid",
       "paper": "Table IV, Doppler centroid 8.50 on 13-48",
-      "report": ["step2d_13-48.json", "step2d.json"], "path": "profile.doppler_centroid.target",
-      "expect": 8.50, "tol": 0.5,
-      "why_tol": "a mean over a fixed sample set, so nearly deterministic" },
-    { "id": "13-48-peak-doppler-bin",
+      "report": [
+        "step2d_13-48.json",
+        "step2d.json"
+      ],
+      "path": "profile.doppler_centroid.target",
+      "expect": 8.5,
+      "tol": 0.5,
+      "why_tol": "a mean over a fixed sample set, so nearly deterministic"
+    },
+    {
+      "id": "13-48-peak-doppler-bin",
       "paper": "Table IV, peak Doppler bin 7.58 on 13-48",
-      "report": ["step2d_13-48.json", "step2d.json"], "path": "profile.peak_doppler_bin.target",
-      "expect": 7.58, "tol": 0.5,
-      "why_tol": "a mean over a fixed sample set; checked separately from the centroid because the two are close in value and easy to confuse in prose" },
-    { "id": "13-48-others-doppler-centroid",
+      "report": [
+        "step2d_13-48.json",
+        "step2d.json"
+      ],
+      "path": "profile.peak_doppler_bin.target",
+      "expect": 7.58,
+      "tol": 0.5,
+      "why_tol": "a mean over a fixed sample set; checked separately from the centroid because the two are close in value and easy to confuse in prose"
+    },
+    {
+      "id": "13-48-others-doppler-centroid",
       "paper": "Table IV, the other drone acquisitions sit at Doppler centroid 30.04",
-      "report": ["step2d_13-48.json", "step2d.json"], "path": "profile.doppler_centroid.others",
-      "expect": 30.04, "tol": 0.5, "why_tol": "a mean over a fixed sample set" },
-    { "id": "13-48-centroid-spread",
+      "report": [
+        "step2d_13-48.json",
+        "step2d.json"
+      ],
+      "path": "profile.doppler_centroid.others",
+      "expect": 30.04,
+      "tol": 0.5,
+      "why_tol": "a mean over a fixed sample set"
+    },
+    {
+      "id": "13-48-centroid-spread",
       "paper": "Sec. IV, 13-48 places its Doppler centroid with a standard deviation of 10.64 bins",
-      "report": "step2d_centroids.json", "path": "target_centroid_sd",
-      "expect": 10.64, "tol": 0.15,
-      "why_tol": "a reduction over a fixed array with no training in it, so it should reproduce exactly; the tolerance only absorbs a dataset rebuilt with a slightly different deduplication outcome" },
-    { "id": "others-centroid-spread-min",
+      "report": "step2d_centroids.json",
+      "path": "target_centroid_sd",
+      "expect": 10.64,
+      "tol": 0.15,
+      "why_tol": "a reduction over a fixed array with no training in it, so it should reproduce exactly; the tolerance only absorbs a dataset rebuilt with a slightly different deduplication outcome"
+    },
+    {
+      "id": "others-centroid-spread-min",
       "paper": "Sec. IV, every other drone acquisition has a centroid standard deviation of at least 0.64 bins",
-      "report": "step2d_centroids.json", "path": "others_centroid_sd_min",
-      "expect": 0.64, "tol": 0.15, "why_tol": "as above, a deterministic reduction" },
-    { "id": "others-centroid-mean-min",
+      "report": "step2d_centroids.json",
+      "path": "others_centroid_sd_min",
+      "expect": 0.64,
+      "tol": 0.15,
+      "why_tol": "as above, a deterministic reduction"
+    },
+    {
+      "id": "others-centroid-mean-min",
       "paper": "Sec. IV, every other drone acquisition sits at a Doppler centroid of at least 29.7",
-      "report": "step2d_centroids.json", "path": "others_centroid_mean_min",
-      "expect": 29.70, "tol": 0.15, "why_tol": "as above, a deterministic reduction" },
-    { "id": "others-centroid-mean-max",
+      "report": "step2d_centroids.json",
+      "path": "others_centroid_mean_min",
+      "expect": 29.7,
+      "tol": 0.15,
+      "why_tol": "as above, a deterministic reduction"
+    },
+    {
+      "id": "others-centroid-mean-max",
       "paper": "Sec. IV, every other drone acquisition sits at a Doppler centroid of at most 31.2",
-      "report": "step2d_centroids.json", "path": "others_centroid_mean_max",
-      "expect": 31.19, "tol": 0.15, "why_tol": "as above, a deterministic reduction" },
-    { "id": "others-centroid-spread-max",
+      "report": "step2d_centroids.json",
+      "path": "others_centroid_mean_max",
+      "expect": 31.19,
+      "tol": 0.15,
+      "why_tol": "as above, a deterministic reduction"
+    },
+    {
+      "id": "others-centroid-spread-max",
       "paper": "Sec. IV, every other drone acquisition has a centroid standard deviation of at most 2.37 bins",
-      "report": "step2d_centroids.json", "path": "others_centroid_sd_max",
-      "expect": 2.37, "tol": 0.15,
-      "why_tol": "as above, and this is the number 13-48's 10.64 has to beat for the sentence about spread to hold, so it is the one worth keeping tight" },
-    { "id": "13-48-nearest-drone",
+      "report": "step2d_centroids.json",
+      "path": "others_centroid_sd_max",
+      "expect": 2.37,
+      "tol": 0.15,
+      "why_tol": "as above, and this is the number 13-48's 10.64 has to beat for the sentence about spread to hold, so it is the one worth keeping tight"
+    },
+    {
+      "id": "13-48-nearest-drone",
       "paper": "Sec. IV, 100 percent of 13-48 samples nearest the drone centroid",
-      "report": ["step2d_13-48.json", "step2d.json"], "path": "nearest.drone.frac_nearest",
-      "expect": 1.0, "tol": 0.02,
-      "why_tol": "the labelling check; it either clears the acquisition or it does not" },
-    { "id": "coverage-held-out",
+      "report": [
+        "step2d_13-48.json",
+        "step2d.json"
+      ],
+      "path": "nearest.drone.frac_nearest",
+      "expect": 1.0,
+      "tol": 0.02,
+      "why_tol": "the labelling check; it either clears the acquisition or it does not"
+    },
+    {
+      "id": "coverage-held-out",
       "paper": "Table IV, recall 0.157 with 13-48 held out of training entirely",
-      "report": ["step2d_13-48.json", "step2d.json"], "path": "coverage.held_out",
-      "expect": 0.157, "tol": 0.10,
-      "why_tol": "the claim is a near-total failure, and the tolerance keeps it far from the 0.967 below" },
-    { "id": "coverage-half-included",
+      "report": [
+        "step2d_13-48.json",
+        "step2d.json"
+      ],
+      "path": "coverage.held_out",
+      "expect": 0.157,
+      "tol": 0.1,
+      "why_tol": "the claim is a near-total failure, and the tolerance keeps it far from the 0.967 below"
+    },
+    {
+      "id": "coverage-half-included",
       "paper": "Table IV, recall 0.967 once half of 13-48 is in training",
-      "report": ["step2d_13-48.json", "step2d.json"], "path": "coverage.half_included",
-      "expect": 0.967, "tol": 0.08, "why_tol": "trained quantity, but a strong effect" },
-    { "id": "coverage-recovery",
+      "report": [
+        "step2d_13-48.json",
+        "step2d.json"
+      ],
+      "path": "coverage.half_included",
+      "expect": 0.967,
+      "tol": 0.08,
+      "why_tol": "trained quantity, but a strong effect"
+    },
+    {
+      "id": "coverage-recovery",
       "paper": "Sec. IV and the abstract, a recovery of about 0.81",
-      "report": ["step2d_13-48.json", "step2d.json"], "path": "coverage.recovery",
-      "expect": 0.81, "tol": 0.15,
-      "why_tol": "the headline claim; a recovery anywhere near this size supports it and one near zero refutes it" },
-
-    { "id": "grid-32-1x-unseen",
+      "report": [
+        "step2d_13-48.json",
+        "step2d.json"
+      ],
+      "path": "coverage.recovery",
+      "expect": 0.81,
+      "tol": 0.15,
+      "why_tol": "the headline claim; a recovery anywhere near this size supports it and one near zero refutes it"
+    },
+    {
+      "id": "grid-32-1x-unseen",
       "paper": "Table V, 32-bit full resolution, unseen recall 0.2221",
-      "report": ["step4_seeds10.json", "step4_seeds.json"], "path": "1x_32bit.unseen.0",
-      "expect": 0.2221, "tol": 0.09, "why_tol": "reported sd 0.0408 over ten seeds" },
-    { "id": "grid-32-4x-unseen",
+      "report": [
+        "step4_seeds10.json",
+        "step4_seeds.json"
+      ],
+      "path": "1x_32bit.unseen.0",
+      "expect": 0.2221,
+      "tol": 0.09,
+      "why_tol": "reported sd 0.0408 over ten seeds"
+    },
+    {
+      "id": "grid-32-4x-unseen",
       "paper": "Table V, 32-bit fourfold aggregation, unseen recall 0.3975",
-      "report": ["step4_seeds10.json", "step4_seeds.json"], "path": "4x_32bit.unseen.0",
-      "expect": 0.3975, "tol": 0.26,
-      "why_tol": "reported sd 0.1264 over ten seeds; the manuscript states this cell is highly seed dependent" },
-    { "id": "grid-32-8x-unseen",
+      "report": [
+        "step4_seeds10.json",
+        "step4_seeds.json"
+      ],
+      "path": "4x_32bit.unseen.0",
+      "expect": 0.3975,
+      "tol": 0.26,
+      "why_tol": "reported sd 0.1264 over ten seeds; the manuscript states this cell is highly seed dependent"
+    },
+    {
+      "id": "grid-32-8x-unseen",
       "paper": "Table V, 32-bit eightfold aggregation, unseen recall 0.1916",
-      "report": ["step4_seeds10.json", "step4_seeds.json"], "path": "8x_32bit.unseen.0",
-      "expect": 0.1916, "tol": 0.08, "why_tol": "reported sd 0.0267" },
-    { "id": "grid-8-1x-unseen",
+      "report": [
+        "step4_seeds10.json",
+        "step4_seeds.json"
+      ],
+      "path": "8x_32bit.unseen.0",
+      "expect": 0.1916,
+      "tol": 0.08,
+      "why_tol": "reported sd 0.0267"
+    },
+    {
+      "id": "grid-8-1x-unseen",
       "paper": "Table V, 8-bit full resolution, unseen recall 0.2341",
-      "report": ["step4_seeds10.json", "step4_seeds.json"], "path": "1x_8bit.unseen.0",
-      "expect": 0.2341, "tol": 0.10, "why_tol": "reported sd 0.0468" },
-    { "id": "grid-8-4x-unseen",
+      "report": [
+        "step4_seeds10.json",
+        "step4_seeds.json"
+      ],
+      "path": "1x_8bit.unseen.0",
+      "expect": 0.2341,
+      "tol": 0.1,
+      "why_tol": "reported sd 0.0468"
+    },
+    {
+      "id": "grid-8-4x-unseen",
       "paper": "Table V, 8-bit fourfold aggregation, unseen recall 0.3944",
-      "report": ["step4_seeds10.json", "step4_seeds.json"], "path": "4x_8bit.unseen.0",
-      "expect": 0.3944, "tol": 0.32, "why_tol": "reported sd 0.1579" },
-    { "id": "grid-32-1x-standard",
+      "report": [
+        "step4_seeds10.json",
+        "step4_seeds.json"
+      ],
+      "path": "4x_8bit.unseen.0",
+      "expect": 0.3944,
+      "tol": 0.32,
+      "why_tol": "reported sd 0.1579"
+    },
+    {
+      "id": "grid-32-1x-standard",
       "paper": "Table V, 32-bit full resolution, standard recall 0.9210",
-      "report": ["step4_seeds10.json", "step4_seeds.json"], "path": "1x_32bit.standard.0",
-      "expect": 0.9210, "tol": 0.09, "why_tol": "reported sd 0.0414" },
-    { "id": "grid-32-4x-standard",
+      "report": [
+        "step4_seeds10.json",
+        "step4_seeds.json"
+      ],
+      "path": "1x_32bit.standard.0",
+      "expect": 0.921,
+      "tol": 0.09,
+      "why_tol": "reported sd 0.0414"
+    },
+    {
+      "id": "grid-32-4x-standard",
       "paper": "Table V, 32-bit fourfold aggregation, standard recall 0.9056",
-      "report": ["step4_seeds10.json", "step4_seeds.json"], "path": "4x_32bit.standard.0",
-      "expect": 0.9056, "tol": 0.10, "why_tol": "reported sd 0.0457" },
-
-    { "id": "welch-4x-vs-1x-unseen-32",
+      "report": [
+        "step4_seeds10.json",
+        "step4_seeds.json"
+      ],
+      "path": "4x_32bit.standard.0",
+      "expect": 0.9056,
+      "tol": 0.1,
+      "why_tol": "reported sd 0.0457"
+    },
+    {
+      "id": "welch-4x-vs-1x-unseen-32",
       "paper": "Sec. V, Welch t = +4.17 for 4x against 1x on the unseen regime at 32 bits",
-      "report": ["step4_seeds10.json", "step4_seeds.json"],
+      "report": [
+        "step4_seeds10.json",
+        "step4_seeds.json"
+      ],
       "derive": "welch_t",
-      "args": { "a": "4x_32bit.unseen_runs", "b": "1x_32bit.unseen_runs" },
-      "expect": 4.17, "tol": 2.2,
-      "why_tol": "a t statistic over ten seeds each; the claim is that it clears about 2.1, so the tolerance keeps the sign and the significance testable" },
-    { "id": "welch-4x-vs-1x-unseen-8",
+      "args": {
+        "a": "4x_32bit.unseen_runs",
+        "b": "1x_32bit.unseen_runs"
+      },
+      "expect": 4.17,
+      "tol": 2.0,
+      "why_tol": "a t statistic over ten seeds each; the claim is that it clears about 2.1, so the tolerance stops just above that at 2.17 rather than admitting a run that would fail to reach significance"
+    },
+    {
+      "id": "welch-4x-vs-1x-unseen-8",
       "paper": "Sec. V, Welch t = +3.08 at 8 bits",
-      "report": ["step4_seeds10.json", "step4_seeds.json"],
+      "report": [
+        "step4_seeds10.json",
+        "step4_seeds.json"
+      ],
       "derive": "welch_t",
-      "args": { "a": "4x_8bit.unseen_runs", "b": "1x_8bit.unseen_runs" },
-      "expect": 3.08, "tol": 2.2, "why_tol": "as above" },
-    { "id": "welch-4x-vs-1x-standard-32",
+      "args": {
+        "a": "4x_8bit.unseen_runs",
+        "b": "1x_8bit.unseen_runs"
+      },
+      "expect": 3.08,
+      "tol": 0.9,
+      "why_tol": "as above; 3.08 less 0.9 is 2.18, which still clears the critical value, so a run that failed to reach significance could not pass this check"
+    },
+    {
+      "id": "welch-4x-vs-1x-standard-32",
       "paper": "Sec. V, Welch t of 0.79 on the standard split at 32 bits, no detected change",
-      "report": ["step4_seeds10.json", "step4_seeds.json"],
+      "report": [
+        "step4_seeds10.json",
+        "step4_seeds.json"
+      ],
       "derive": "welch_t_abs",
-      "args": { "a": "4x_32bit.standard_runs", "b": "1x_32bit.standard_runs" },
-      "expect": 0.79, "tol": 1.3,
-      "why_tol": "the claim is only that this does not reach significance, so the tolerance must keep it below about 2.1; the magnitude is compared because the claim is two-sided and the manuscript quotes |t| while the code signs it as aggregated minus full resolution" },
-    { "id": "welch-4x-vs-1x-standard-8",
-      "paper": "Sec. V, Welch t = 0.16 on the standard split at 8 bits",
-      "report": ["step4_seeds10.json", "step4_seeds.json"],
-      "derive": "welch_t",
-      "args": { "a": "4x_8bit.standard_runs", "b": "1x_8bit.standard_runs" },
-      "expect": 0.16, "tol": 1.9, "why_tol": "as above" },
-
-    { "id": "augment-baseline",
+      "args": {
+        "a": "4x_32bit.standard_runs",
+        "b": "1x_32bit.standard_runs"
+      },
+      "expect": 0.79,
+      "tol": 1.3,
+      "why_tol": "the claim is only that this does not reach significance, so the tolerance must keep it below about 2.1; the magnitude is compared because the claim is two-sided and the manuscript quotes |t| while the code signs it as aggregated minus full resolution"
+    },
+    {
+      "id": "welch-4x-vs-1x-standard-8",
+      "paper": "Sec. V, Welch t of 0.16 on the standard split at 8 bits",
+      "report": [
+        "step4_seeds10.json",
+        "step4_seeds.json"
+      ],
+      "derive": "welch_t_abs",
+      "args": {
+        "a": "4x_8bit.standard_runs",
+        "b": "1x_8bit.standard_runs"
+      },
+      "expect": 0.16,
+      "tol": 1.3,
+      "why_tol": "as for the 32-bit row: the claim is only that this does not reach significance, so the tolerance has to keep it below about 2.1, and the magnitude is compared because the claim is two-sided"
+    },
+    {
+      "id": "augment-baseline",
       "paper": "Sec. VI, shift-augmentation baseline 0.2214",
-      "report": "step4_augment.json", "derive": "augment_value",
-      "args": { "key": "baseline" },
-      "expect": 0.2214, "tol": 0.09, "why_tol": "same quantity as the 1x grid cell" },
-    { "id": "augment-shift-4",
+      "report": "step4_augment.json",
+      "derive": "augment_value",
+      "args": {
+        "key": "baseline"
+      },
+      "expect": 0.2214,
+      "tol": 0.09,
+      "why_tol": "same quantity as the 1x grid cell"
+    },
+    {
+      "id": "augment-shift-4",
       "paper": "Sec. VI, plus or minus 4 bins gives 0.1608, below baseline",
-      "report": "step4_augment.json", "derive": "augment_value",
-      "args": { "key": "shift4" },
-      "expect": 0.1608, "tol": 0.10,
-      "why_tol": "the refutation needs this at or below baseline, which the tolerance still tests" },
-
-    { "id": "ablate-input-only-cost",
+      "report": "step4_augment.json",
+      "derive": "augment_value",
+      "args": {
+        "key": "shift4"
+      },
+      "expect": 0.1608,
+      "tol": 0.1,
+      "why_tol": "the refutation needs this at or below baseline, which the tolerance still tests"
+    },
+    {
+      "id": "ablate-input-only-cost",
       "paper": "Sec. V, quantising the input alone costs 0.0159 in accuracy",
-      "report": "step4_ablate.json", "derive": "ablate_drop",
-      "args": { "condition": "input only" },
-      "expect": 0.0159, "tol": 0.06,
-      "why_tol": "a difference of two trained means, each with sd near 0.02 to 0.05" },
-    { "id": "ablate-weights-only-cost",
+      "report": "step4_ablate.json",
+      "derive": "ablate_drop",
+      "args": {
+        "condition": "input only"
+      },
+      "expect": 0.0159,
+      "tol": 0.06,
+      "why_tol": "a difference of two trained means, each with sd near 0.02 to 0.05"
+    },
+    {
+      "id": "ablate-weights-only-cost",
       "paper": "Sec. V, quantising the weights alone costs 0.1028",
-      "report": "step4_ablate.json", "derive": "ablate_drop",
-      "args": { "condition": "weights only" },
-      "expect": 0.1028, "tol": 0.20,
-      "why_tol": "the manuscript reports an accuracy sd of 0.176 in this condition, with individual seeds collapsing" },
-    { "id": "ablate-joint-cost",
+      "report": "step4_ablate.json",
+      "derive": "ablate_drop",
+      "args": {
+        "condition": "weights only"
+      },
+      "expect": 0.1028,
+      "tol": 0.2,
+      "why_tol": "the manuscript reports an accuracy sd of 0.176 in this condition, with individual seeds collapsing"
+    },
+    {
+      "id": "ablate-joint-cost",
       "paper": "Sec. V, the joint cost is 0.1412 against an additive prediction of 0.1187",
-      "report": "step4_ablate.json", "derive": "ablate_drop",
-      "args": { "condition": "both" },
-      "expect": 0.1412, "tol": 0.20, "why_tol": "reported sd 0.134 in this condition" },
-    { "id": "interaction-contrast",
+      "report": "step4_ablate.json",
+      "derive": "ablate_drop",
+      "args": {
+        "condition": "both"
+      },
+      "expect": 0.1412,
+      "tol": 0.2,
+      "why_tol": "reported sd 0.134 in this condition"
+    },
+    {
+      "id": "interaction-contrast",
       "paper": "Sec. V, interaction contrast I = -0.0225, CI [-0.185, +0.161], not distinguishable from zero",
-      "report": "step4_ablate.json", "derive": "interaction_contrast",
-      "expect": -0.0225, "tol": 0.18,
-      "why_tol": "the published confidence interval is itself about plus or minus 0.17; the claim is that the contrast is indistinguishable from zero, and any value inside this tolerance supports exactly that" },
-    { "id": "weights-only-instability",
+      "report": "step4_ablate.json",
+      "derive": "interaction_contrast",
+      "expect": -0.0225,
+      "tol": 0.18,
+      "why_tol": "the published confidence interval is itself about plus or minus 0.17; the claim is that the contrast is indistinguishable from zero, and any value inside this tolerance supports exactly that"
+    },
+    {
+      "id": "weights-only-instability",
       "paper": "Sec. V, accuracy sd 0.176 in the weights-only condition, the reason the test has little power",
-      "report": "step4_ablate.json", "path": "weights only.sd",
-      "expect": 0.176, "tol": 0.12,
-      "why_tol": "an sd over few seeds; the claim is that it is large, not that it is 0.176" },
-
-    { "id": "loo-mean-delta",
+      "report": "step4_ablate.json",
+      "path": "weights only.sd",
+      "expect": 0.176,
+      "tol": 0.12,
+      "why_tol": "an sd over few seeds; the claim is that it is large, not that it is 0.176"
+    },
+    {
+      "id": "loo-mean-delta",
       "paper": "Table VI, mean change +0.033 across five acquisitions",
-      "report": "step5_loo.json", "path": "mean_delta",
-      "expect": 0.033, "tol": 0.09,
-      "why_tol": "a mean of five per-acquisition differences, each a trained quantity" },
-    { "id": "loo-n-improved",
+      "report": "step5_loo.json",
+      "path": "mean_delta",
+      "expect": 0.033,
+      "tol": 0.09,
+      "why_tol": "a mean of five per-acquisition differences, each a trained quantity"
+    },
+    {
+      "id": "loo-n-improved",
       "paper": "Table VI, aggregation improved three of the five acquisitions",
-      "report": "step5_loo.json", "path": "n_improved",
-      "expect": 3, "tol": 1,
-      "why_tol": "the conclusion is that the effect does not generalise, which holds for any count below five" },
-    { "id": "loo-sign-test-p",
+      "report": "step5_loo.json",
+      "path": "n_improved",
+      "expect": 3,
+      "tol": 1,
+      "why_tol": "the conclusion is that the effect does not generalise, which holds for any count below five"
+    },
+    {
+      "id": "loo-sign-test-p",
       "paper": "Sec. V, exact sign test p = 0.50",
-      "report": "step5_loo.json", "path": "sign_test_p",
-      "expect": 0.50, "tol": 0.35,
-      "why_tol": "the exact sign test on five observations takes only a few discrete values; the claim is that it is nowhere near significance" },
-    { "id": "loo-13-48-delta",
+      "report": "step5_loo.json",
+      "path": "sign_test_p",
+      "expect": 0.5,
+      "tol": 0.35,
+      "why_tol": "the exact sign test on five observations takes only a few discrete values; the claim is that it is nowhere near significance"
+    },
+    {
+      "id": "loo-13-48-delta",
       "paper": "Table VI, 13-48 improves by +0.136, the largest of the five",
-      "report": "step5_loo.json", "path": "deltas.13-48",
-      "expect": 0.136, "tol": 0.20,
-      "why_tol": "the acquisition the manuscript calls highly seed dependent" }
+      "report": "step5_loo.json",
+      "path": "deltas.13-48",
+      "expect": 0.136,
+      "tol": 0.2,
+      "why_tol": "the acquisition the manuscript calls highly seed dependent"
+    }
   ]
 }
