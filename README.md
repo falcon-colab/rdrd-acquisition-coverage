@@ -57,15 +57,17 @@ the archive.
 ## Getting the data
 
 The RDRD archive is not redistributed here. It comes from Kaggle, under the
-slug `iroldan/real-dopler-raddar-database`. Note the single `p` in `dopler`,
-which is a typo in the dataset's own URL and not one here.
+slug `iroldan/real-doppler-raddar-database`, spelled with two `p`s in
+`doppler`. An earlier version of this README claimed the slug carried a
+single `p`. It does not, and that URL returns 404, so anyone who followed
+the old instructions could not download the archive at all.
 
 ```bash
 pip install kaggle
 mkdir -p ~/.kaggle && cp /path/to/kaggle.json ~/.kaggle/
 chmod 600 ~/.kaggle/kaggle.json
-kaggle datasets download -d iroldan/real-dopler-raddar-database -p archive/
-unzip -q archive/real-dopler-raddar-database.zip -d rdrd/
+kaggle datasets download -d iroldan/real-doppler-raddar-database -p archive/
+unzip -q archive/real-doppler-raddar-database.zip -d rdrd/
 ```
 
 Two things about the archive are worth knowing before you count anything.
