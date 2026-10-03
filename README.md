@@ -128,10 +128,18 @@ download and a resume block for when the runtime disconnects, is in
 
 ## How the numbers are checked
 
-`expected.json` holds every number the paper states, each with the report
+`expected.json` holds all 57 numbers the paper states, each with the report
 file and the exact location inside it that produces the number, a tolerance,
 and a one-line reason for that tolerance. `check_expected.py` reads it and
-prints a table.
+prints a table, naming the file each number was read from.
+
+Two of those reports go by more than one name, because the notebook and
+`verify.sh` once disagreed, and the checker accepts either rather than
+asking anyone to rename a file. That matters more than it sounds: the
+ten-seed confirmation and an earlier five-seed run of the same command
+differ only in filename, and renaming one over the other silently checks
+Table V against half the seeds it reports. Where both are present the
+checker takes the ten-seed file and says so.
 
 The tolerances are the part worth reading. Counts and the parameter count are
 exact, because a mismatch there means a different dataset or a different
@@ -168,12 +176,14 @@ src/                 the pipeline, one module per stage
   step3.py           the compression grid and the axis ablation
   step4.py           ten-seed confirmation, shift augmentation, factorial axes
   step5.py           leave one acquisition out
+  centroids.py       per-acquisition Doppler centroid, mean and spread
   analyse4.py        re-analysis of stage 4 without retraining
   interaction.py     the factorial interaction contrast
 tests/test_core.py   16 unit tests of the paper's claims about the code
 tools/               synthetic data generators and the exploratory scripts
 notebooks/           the Colab master notebook, plus earlier probes
 paper/               the LaTeX source
+figures/             the figure the paper uses, and the four it does not
 reports/             where the paper's own reports belong
 expected.json        every number in the paper, with its tolerance and why
 check_expected.py    compares a run's reports against expected.json
@@ -188,10 +198,16 @@ actually run. `src/` is what the paper's numbers come from.
 
 ## A note on the figures
 
-The paper's figures are produced by the notebook, into a `figures/`
-directory. They are not committed here. To build the paper, copy them next to
-`paper/paper_main.tex` in a `figures/` subdirectory; `\graphicspath` already
-points there.
+The paper uses one figure, `session_13-48_vs_others.png`, placed as a
+two-column `figure*` in Section IV. The notebook produces it, under the
+heading "Look at the samples", into `MyDrive/radar_compression/figures/`,
+along with four others the paper does not use.
+
+To build the paper, the figures must sit in a `figures/` directory beside
+`paper_main.tex`, which is what `\graphicspath{{figures/}}` in the preamble
+expects. On Overleaf that means a folder named `figures`, not the project
+root. `figures/README.md` here lists what each one is and which stage
+produced it.
 
 ## Citing
 
