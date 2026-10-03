@@ -7,6 +7,7 @@ statement can run it rather than take it on trust.
     python -m pytest tests/ -v          (or: python tests/test_core.py)
 """
 import os
+import re
 import sys
 
 import numpy as np
@@ -244,6 +245,74 @@ def test_random_split_straddles_acquisitions_grouped_split_does_not():
 
     assert not straddling(grouped), straddling(grouped)
     assert straddling(rand), "random split unexpectedly unit-disjoint"
+
+
+# --------------------------------------------------------------------------
+# The package tells a reader where to get the archive. If that is wrong, the
+# reproduction fails at step one, which is the one failure a reproducibility
+# package cannot afford. An earlier version of this repository carried the
+# slug misspelled with a single "p" in "doppler", in the README, in both
+# notebooks and in the Zenodo metadata, together with a note asserting that
+# the misspelling was correct and should not be fixed. That URL is a 404.
+# This test does not check that the dataset is reachable, which would need
+# the network; it checks that the package names it with one consistent
+# spelling and never the known-bad one.
+# --------------------------------------------------------------------------
+
+DATASET_SLUG = "iroldan/real-doppler-raddar-database"
+KNOWN_BAD_SLUGS = ("iroldan/real-dopler-raddar-database",
+                   "iroldan/real-doppler-rad-dar-database")
+
+ROOT = os.path.join(HERE, os.pardir)
+
+
+def _package_files():
+    """Every file that could name the dataset, except this one, which names
+    the bad spellings on purpose so it can forbid them."""
+    skip = {".git", "__pycache__", ".ipynb_checkpoints", "runs", ".venv"}
+    me = os.path.abspath(__file__)
+    for base, dirs, files in os.walk(ROOT):
+        dirs[:] = [d for d in dirs if d not in skip]
+        for f in files:
+            if not f.endswith((".md", ".py", ".json", ".ipynb", ".sh",
+                               ".tex", ".cff", ".txt")):
+                continue
+            path = os.path.join(base, f)
+            if os.path.abspath(path) == me:
+                continue
+            yield path
+
+
+def test_no_file_carries_a_known_bad_dataset_slug():
+    bad = []
+    for path in _package_files():
+        try:
+            text = open(path, encoding="utf-8").read()
+        except (UnicodeDecodeError, OSError):
+            continue
+        for slug in KNOWN_BAD_SLUGS:
+            # the corrective note in the README names the bad spelling on
+            # purpose, so allow a line that also says it returns 404
+            for line in text.splitlines():
+                if slug in line and "404" not in line:
+                    bad.append((os.path.relpath(path, ROOT), slug))
+    assert not bad, bad
+
+
+def test_the_dataset_slug_is_stated_the_same_way_everywhere():
+    """Every file that names the dataset must name it identically. A package
+    that spells its own data source two ways has already lost the reader."""
+    seen = set()
+    pattern = re.compile(r"iroldan/[A-Za-z0-9._-]+")
+    for path in _package_files():
+        try:
+            text = open(path, encoding="utf-8").read()
+        except (UnicodeDecodeError, OSError):
+            continue
+        for m in pattern.findall(text):
+            seen.add(m)
+    assert seen, "no dataset slug found anywhere in the package"
+    assert seen == {DATASET_SLUG}, sorted(seen)
 
 
 def _run_all():
