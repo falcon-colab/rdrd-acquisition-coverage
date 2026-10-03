@@ -430,6 +430,60 @@
       "why_tol": "a deterministic reduction over a fixed array; it is the evidence for reading the control as confusable rather than unrepresented"
     },
     {
+      "id": "control2-held-out",
+      "paper": "Sec. VI-D, the second control 15-37 reaches 0.837 held out entirely",
+      "report": "step2d_control2.json",
+      "path": "coverage.held_out",
+      "expect": 0.837,
+      "tol": 0.05,
+      "why_tol": "ten seeds, sd 0.021; the claim is that it starts far above 13-48 and stays there"
+    },
+    {
+      "id": "control2-half-included",
+      "paper": "Sec. VI-D, 15-37 reaches 0.845 with half of it in training",
+      "report": "step2d_control2.json",
+      "path": "coverage.half_included",
+      "expect": 0.845,
+      "tol": 0.05,
+      "why_tol": "ten seeds, sd 0.025"
+    },
+    {
+      "id": "control2-recovery",
+      "paper": "Sec. VI-D, 15-37 recovers 0.008, indistinguishable from zero",
+      "report": "step2d_control2.json",
+      "path": "coverage.recovery",
+      "expect": 0.008,
+      "tol": 0.06,
+      "why_tol": "the per-seed difference has sd 0.030 and improves on five of ten seeds, so this check must admit zero; what it must exclude is a recovery anywhere near 13-48's 0.770"
+    },
+    {
+      "id": "control2-nearest-own-class",
+      "paper": "Sec. VI-D, 62.7 percent of 15-37's samples sit nearest their own class centroid",
+      "report": "step2d_control2.json",
+      "path": "nearest.car.frac_nearest",
+      "expect": 0.627,
+      "tol": 0.06,
+      "why_tol": "a deterministic reduction; it is why 15-37 is the cleaner of the two controls"
+    },
+    {
+      "id": "capacity-single-split-baseline",
+      "paper": "Sec. VIII-C, the paper's own architecture on a single random partition reaches 0.9537",
+      "report": "capacity.json",
+      "path": "rows.0.accuracy",
+      "expect": 0.9537,
+      "tol": 0.02,
+      "why_tol": "two seeds on one split; the claim is that roughly two points of the apparent gap are protocol rather than model, which this tolerance still tests"
+    },
+    {
+      "id": "capacity-ceiling",
+      "paper": "Sec. VIII-C, the best configuration over the capacity and schedule sweep reaches 0.9546",
+      "report": "capacity.json",
+      "path": "best.accuracy",
+      "expect": 0.9546,
+      "tol": 0.02,
+      "why_tol": "the claim is that this is barely above the paper's own architecture and far below the published figures; a value inside this tolerance supports both halves"
+    },
+    {
       "id": "grid-32-1x-unseen",
       "paper": "Table V, 32-bit full resolution, unseen recall 0.2221",
       "report": [

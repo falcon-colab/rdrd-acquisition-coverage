@@ -16,6 +16,11 @@ step4_seeds10.json     the ten-seed confirmation (Table V)
 step4_augment.json     the shift-augmentation mechanism test
 step4_ablate.json      the factorial quantisation experiment
 step5_loo.json         leave one acquisition out (Table VI)
+step2d_13-48_10seeds.json  the ten-seed coverage test (Table V)
+step2d_control.json    the coverage test on the pedestrian control 11-23
+step2d_control2.json   the coverage test on the vehicle control 15-37
+step2d_centroids.json  per-acquisition Doppler centroid, mean and spread
+capacity.json          the capacity and schedule sweep behind Sec. VIII-C
 ```
 
 With these present, the manuscript's numbers can be checked without
