@@ -261,6 +261,7 @@
       "id": "13-48-doppler-centroid",
       "paper": "Table IV, Doppler centroid 8.50 on 13-48",
       "report": [
+        "step2d_13-48_10seeds.json",
         "step2d_13-48.json",
         "step2d.json"
       ],
@@ -273,6 +274,7 @@
       "id": "13-48-peak-doppler-bin",
       "paper": "Table IV, peak Doppler bin 7.58 on 13-48",
       "report": [
+        "step2d_13-48_10seeds.json",
         "step2d_13-48.json",
         "step2d.json"
       ],
@@ -285,6 +287,7 @@
       "id": "13-48-others-doppler-centroid",
       "paper": "Table IV, the other drone acquisitions sit at Doppler centroid 30.04",
       "report": [
+        "step2d_13-48_10seeds.json",
         "step2d_13-48.json",
         "step2d.json"
       ],
@@ -342,6 +345,7 @@
       "id": "13-48-nearest-drone",
       "paper": "Sec. IV, 100 percent of 13-48 samples nearest the drone centroid",
       "report": [
+        "step2d_13-48_10seeds.json",
         "step2d_13-48.json",
         "step2d.json"
       ],
@@ -352,39 +356,78 @@
     },
     {
       "id": "coverage-held-out",
-      "paper": "Table IV, recall 0.157 with 13-48 held out of training entirely",
+      "paper": "Table IV, recall 0.178 with 13-48 held out of training entirely",
       "report": [
+        "step2d_13-48_10seeds.json",
         "step2d_13-48.json",
         "step2d.json"
       ],
       "path": "coverage.held_out",
-      "expect": 0.157,
-      "tol": 0.1,
-      "why_tol": "the claim is a near-total failure, and the tolerance keeps it far from the 0.967 below"
+      "expect": 0.178,
+      "tol": 0.05,
+      "why_tol": "ten seeds, held-out recall ranging 0.142 to 0.264 with sd 0.048; the tolerance spans that range and keeps the condition far from the 0.948 below"
     },
     {
       "id": "coverage-half-included",
-      "paper": "Table IV, recall 0.967 once half of 13-48 is in training",
+      "paper": "Table IV, recall 0.948 once half of 13-48 is in training",
       "report": [
+        "step2d_13-48_10seeds.json",
         "step2d_13-48.json",
         "step2d.json"
       ],
       "path": "coverage.half_included",
-      "expect": 0.967,
-      "tol": 0.08,
-      "why_tol": "trained quantity, but a strong effect"
+      "expect": 0.948,
+      "tol": 0.05,
+      "why_tol": "ten seeds, ranging 0.904 to 0.980 with sd 0.024"
     },
     {
       "id": "coverage-recovery",
-      "paper": "Sec. IV and the abstract, a recovery of about 0.81",
+      "paper": "Sec. IV and the abstract, a recovery of about 0.77",
       "report": [
+        "step2d_13-48_10seeds.json",
         "step2d_13-48.json",
         "step2d.json"
       ],
       "path": "coverage.recovery",
-      "expect": 0.81,
-      "tol": 0.15,
-      "why_tol": "the headline claim; a recovery anywhere near this size supports it and one near zero refutes it"
+      "expect": 0.77,
+      "tol": 0.08,
+      "why_tol": "the headline claim; the two conditions do not overlap on any of the ten seeds, so a recovery anywhere in this range supports it and one near zero refutes it"
+    },
+    {
+      "id": "control-held-out",
+      "paper": "Sec. VI-D, the control acquisition 11-23 reaches 0.800 held out entirely",
+      "report": "step2d_control.json",
+      "path": "coverage.held_out",
+      "expect": 0.8,
+      "tol": 0.06,
+      "why_tol": "ten seeds; the claim is that it starts far above 13-48's 0.178, which this tolerance preserves"
+    },
+    {
+      "id": "control-half-included",
+      "paper": "Sec. VI-D, the control reaches 0.856 with half of it in training",
+      "report": "step2d_control.json",
+      "path": "coverage.half_included",
+      "expect": 0.856,
+      "tol": 0.06,
+      "why_tol": "ten seeds"
+    },
+    {
+      "id": "control-recovery",
+      "paper": "Sec. VI-D, the control recovers 0.056 against 0.770 for 13-48",
+      "report": "step2d_control.json",
+      "path": "coverage.recovery",
+      "expect": 0.056,
+      "tol": 0.1,
+      "why_tol": "the comparison the control exists to make; this tolerance cannot reach even half of 13-48's recovery, so a control that behaved like 13-48 would fail here"
+    },
+    {
+      "id": "control-not-nearest-own-class",
+      "paper": "Sec. VI-D, 42.5 percent of the control's samples sit nearest their own class centroid, against 100 percent for 13-48",
+      "report": "step2d_control.json",
+      "path": "nearest.person.frac_nearest",
+      "expect": 0.425,
+      "tol": 0.06,
+      "why_tol": "a deterministic reduction over a fixed array; it is the evidence for reading the control as confusable rather than unrepresented"
     },
     {
       "id": "grid-32-1x-unseen",
