@@ -198,42 +198,42 @@
     },
     {
       "id": "drone-recall-sd-excl-13-48",
-      "paper": "Sec. IV, drone per-acquisition recall sd 0.0262 once 13-48 is excluded",
+      "paper": "Sec. IV, drone per-acquisition recall sd 0.0269 once 13-48 is excluded",
       "report": "step2c_sessions.json",
       "derive": "recall_sd_excluding",
       "args": {
         "cls": "drone",
         "exclude": "13-48"
       },
-      "expect": 0.0262,
-      "tol": 0.02,
-      "why_tol": "the claim is that it is below the vehicle and pedestrian figures, which this tolerance still tests"
+      "expect": 0.0269,
+      "tol": 0.012,
+      "why_tol": "a standard deviation over about twenty per-acquisition recalls, each a trained quantity, so it moves with the run; the tolerance is tight enough that the three classes cannot swap order, which is the claim"
     },
     {
       "id": "car-recall-sd",
-      "paper": "Sec. IV, vehicle per-acquisition recall sd 0.0505",
+      "paper": "Sec. IV, vehicle per-acquisition recall sd 0.0522",
       "report": "step2c_sessions.json",
       "derive": "recall_sd_excluding",
       "args": {
         "cls": "car",
         "exclude": null
       },
-      "expect": 0.0505,
-      "tol": 0.03,
-      "why_tol": "sd of a small sample of acquisitions"
+      "expect": 0.0522,
+      "tol": 0.012,
+      "why_tol": "a standard deviation over about twenty per-acquisition recalls, each a trained quantity, so it moves with the run; the tolerance is tight enough that the three classes cannot swap order, which is the claim"
     },
     {
       "id": "person-recall-sd",
-      "paper": "Sec. IV, pedestrian per-acquisition recall sd 0.0549",
+      "paper": "Sec. IV, pedestrian per-acquisition recall sd 0.0567",
       "report": "step2c_sessions.json",
       "derive": "recall_sd_excluding",
       "args": {
         "cls": "person",
         "exclude": null
       },
-      "expect": 0.0549,
-      "tol": 0.03,
-      "why_tol": "sd of a small sample of acquisitions"
+      "expect": 0.0567,
+      "tol": 0.012,
+      "why_tol": "a standard deviation over about twenty per-acquisition recalls, each a trained quantity, so it moves with the run; the tolerance is tight enough that the three classes cannot swap order, which is the claim"
     },
     {
       "id": "headroom-pearson-all",
