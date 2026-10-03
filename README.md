@@ -9,8 +9,10 @@ difference between the two protocols does not reach significance in
 aggregate. Looking past the aggregate, twenty of the twenty-one drone
 acquisitions reach out-of-fold recall between 0.90 and 0.99 and one reaches
 0.249. Held out of training entirely, recall on a held-back half of that
-acquisition is 0.157, with 81 percent of its samples called pedestrian.
-Adding the other half to training raises it to 0.967. A labelling check
+acquisition is 0.178 over ten seeds, with 79 percent of its samples called
+pedestrian. Adding the other half to training raises it to 0.948. The same
+experiment on the weakest acquisition of another class recovers 0.056, so
+the effect is not a generic property of a difficult recording. A labelling check
 clears the acquisition: all of its samples sit nearest the drone class
 centroid. What distinguishes it is essentially one property, a Doppler
 centroid near 7.6 bins where every other drone acquisition sits near 30.
@@ -37,7 +39,7 @@ Run the first two now, on any machine:
 
 ```bash
 pip install -r requirements.txt
-python tests/test_core.py        # 16 tests
+python tests/test_core.py        # 18 tests
 ./selftest.sh
 ```
 
@@ -130,7 +132,7 @@ download and a resume block for when the runtime disconnects, is in
 
 ## How the numbers are checked
 
-`expected.json` holds all 57 numbers the paper states, each with the report
+`expected.json` holds all 61 numbers the paper states, each with the report
 file and the exact location inside it that produces the number, a tolerance,
 and a one-line reason for that tolerance. `check_expected.py` reads it and
 prints a table, naming the file each number was read from.
@@ -181,7 +183,7 @@ src/                 the pipeline, one module per stage
   centroids.py       per-acquisition Doppler centroid, mean and spread
   analyse4.py        re-analysis of stage 4 without retraining
   interaction.py     the factorial interaction contrast
-tests/test_core.py   16 unit tests of the paper's claims about the code
+tests/test_core.py   18 unit tests of the paper's claims about the code
 tools/               synthetic data generators and the exploratory scripts
 notebooks/           the Colab master notebook, plus earlier probes
 paper/               the LaTeX source

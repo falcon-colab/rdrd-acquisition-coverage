@@ -7,8 +7,9 @@ abstract: >-
   Session-grouped evaluation of the Real Doppler RAD-DAR database. Twenty of
   twenty-one drone acquisitions reach out-of-fold recall between 0.90 and
   0.99; one reaches 0.249. Held out of training entirely, recall on a
-  held-back half is 0.157, rising to 0.967 once the other half is in
-  training. The repository contains the full pipeline, the unit tests, a
+  held-back half is 0.178, rising to 0.948 once the other half is in
+  training, while the same experiment on the weakest acquisition of another
+  class recovers 0.056. The repository contains the full pipeline, the unit tests, a
   synthetic self-test that runs without the archive, and a verification
   script that reruns every experiment and checks each number the paper
   states.

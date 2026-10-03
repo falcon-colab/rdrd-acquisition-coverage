@@ -49,8 +49,10 @@ we do not establish a significant difference. The per-acquisition breakdown
 is nevertheless strongly heterogeneous: of twenty-one drone acquisitions,
 twenty attain out-of-fold recall between 0.90 and 0.99 while one attains
 0.249. In a controlled experiment excluding that acquisition from training
-entirely, recall on a held-back half is 0.157; adding the other half to
-training raises it to 0.967. The acquisition is distinguished from all others
+entirely, recall on a held-back half is 0.178; adding the other half to
+training raises it to 0.948. The same experiment on the weakest acquisition
+of another class recovers 0.056, so the effect is not a generic property of a
+difficult recording. The acquisition is distinguished from all others
 by the Doppler position of its target energy. A follow-up compression study
 finds that fourfold Doppler-bin aggregation raises recall on this held-out
 acquisition from 0.222 to 0.398 with no detected change in standard-split
@@ -99,7 +101,9 @@ to test properly (Section~\ref{sec:leak}).
 \item Identification of a single drone acquisition on which the classifier
 fails almost completely under acquisition-level evaluation, together with a
 controlled exposure experiment indicating that the failure is associated with
-the absence of comparable training examples (Section~\ref{sec:regime}).
+the absence of comparable training examples, and a control acquisition on
+which the same experiment recovers almost nothing
+(Section~\ref{sec:regime}).
 \item A follow-up compression study. Fourfold Doppler aggregation improves
 transfer to the held-out acquisition with no detected change in
 standard-split accuracy, an effect we establish statistically for that
@@ -346,7 +350,7 @@ alternative estimates of one quantity.}
 Experiment & Test set & Recall \\
 \midrule
 Cross-validation & whole acquisition, as one out-of-fold test fold & 0.249 \\
-Coverage test & a held-back half of the acquisition & 0.157 \\
+Coverage test & a held-back half of the acquisition & 0.178 \\
 Compression baseline & whole acquisition, ten seeds, full resolution & 0.222 \\
 \bottomrule
 \end{tabular}
@@ -431,9 +435,13 @@ excluded from training entirely and the model is evaluated on one half; in
 the second, the other half is added to the training set.
 
 \begin{table}[t]
-\caption{Coverage test on \texttt{13-48}, mean of two seeds. Both conditions
+\caption{Coverage test on \texttt{13-48}, mean of ten seeds. Both conditions
 are evaluated on the same held-back half of the acquisition ($N=197$). Counts
-are predicted-class totals and sum to $N$.}
+are predicted-class totals and sum to $N$. The final row is the same
+experiment on the control acquisition \texttt{11-23}, the weakest in either
+non-drone class, evaluated on its own held-back half ($N=154$); only its
+recall is shown, since its predicted-class counts are not comparable to the
+rows above.}
 \label{tab:coverage}
 \centering
 \small
@@ -444,15 +452,23 @@ Condition & \multicolumn{3}{c}{Predicted as} & Drone \\
 \cmidrule(lr){2-4}
  & Vehicle & Drone & Pedestrian & recall \\
 \midrule
-Held out entirely & 6.0 & 31.0 & 160.0 & 0.157 \\
-Half in training  & 4.5 & 190.5 & 2.0 & \textbf{0.967} \\
+Held out entirely & 5.4 & 35.0 & 156.6 & 0.178 \\
+Half in training  & 4.1 & 186.7 & 6.2 & \textbf{0.948} \\
+\midrule
+\multicolumn{5}{l}{\emph{control:} \texttt{11-23}, pedestrian} \\
+Held out entirely & \multicolumn{3}{c}{} & 0.800 \\
+Half in training  & \multicolumn{3}{c}{} & 0.856 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Recall rises from 0.157 to 0.967 (Table~\ref{tab:coverage}). Under the
-held-out condition the great majority of samples are assigned to the
-pedestrian class; with half the acquisition in training, almost none are.
+Recall rises from 0.178 to 0.948 over ten seeds, a recovery of 0.770
+(Table~\ref{tab:coverage}). Under the held-out condition 79\,\% of the
+samples are assigned to the pedestrian class; with half the acquisition in
+training, 3\,\% are. The effect is far larger than its seed-to-seed spread:
+held-out recall ranges from 0.142 to 0.264 across the ten seeds and the
+half-in-training condition from 0.904 to 0.980, so the two conditions do not
+overlap on any seed.
 
 The experiment indicates that the failure is associated with the absence of
 comparable training examples rather than with an irreducible inability to
@@ -463,6 +479,35 @@ acquisition-specific signature that the network learns, nor from a
 per-recording processing difference; it establishes that something present in
 this acquisition and absent from the other twenty is learnable and
 sufficient.
+
+\subsection{A control acquisition}
+
+A large recovery is only evidence of a coverage failure if a large recovery
+is unusual. Acquisitions well below the aggregate exist in the other two
+classes: the weakest pedestrian and vehicle acquisitions sit at 0.7776 and
+0.8189. We therefore repeated the identical experiment, at the same ten
+seeds, on the weakest acquisition in either non-drone class, \texttt{11-23}.
+
+Held out entirely it reaches 0.800, and with half of it in training 0.856, a
+recovery of 0.056 against the 0.770 of \texttt{13-48}. The two acquisitions
+are both well below their class aggregate, and exposure repairs one and
+barely moves the other. Low recall and a large recovery are therefore
+separate properties, and the coverage result is not a restatement of
+\texttt{13-48} being difficult.
+
+The control also separates cleanly from \texttt{13-48} on what distinguishes
+it. Where \texttt{13-48} is an outlier in Doppler position and nothing else,
+\texttt{11-23} is unremarkable in Doppler and an outlier in extent, with
+roughly twice the number of cells within 10\,dB of its peak ($z=+2.9$) and
+nearly three times the number within 20\,dB ($z=+3.4$): a broader, more
+diffuse return. Its samples sit nearest the drone class centroid for
+56.8\,\% of frames and their own for 42.5\,\%, where every frame of
+\texttt{13-48} sits nearest its own. We therefore read \texttt{11-23} as
+confusable with another class rather than unrepresented, which is a different
+failure and one that adding training data should not be expected to repair.
+That reading is consistent with the recovery we measure, but it rests on one
+control acquisition, and we do not claim the two failure modes we describe
+exhaust the possibilities.
 
 This is the paper's principal result. A classifier benchmarked on this
 dataset with random partitioning reports accuracy near 99\,\% while failing
@@ -554,7 +599,7 @@ standard-split recall and a fourfold reduction in input tensor size.} The
 qualifier is important: Section~\ref{sec:compress}C shows that the effect
 does not generalise to other held-out acquisitions. The improvement is
 substantial in relative terms, close to a doubling, but leaves recall far
-below the 0.967 obtainable when the acquisition is represented in training
+below the 0.948 obtainable when the acquisition is represented in training
 (Table~\ref{tab:coverage}). It is a partial mitigation, not a solution.
 
 \subsection{The effect does not generalise across acquisitions}
@@ -636,7 +681,7 @@ and offer no mechanism for it.
 \subsection{What the results support}
 
 The coverage result is the finding we consider established: a measured effect
-of 0.81 in recall, a controlled manipulation isolating the cause, and an
+of 0.77 in recall, a controlled manipulation isolating the cause, and an
 independent descriptive signature identifying the acquisition without
 reference to classifier performance.
 
@@ -672,7 +717,10 @@ construct and difficult to sustain.
 
 \subsection{Limitations}
 
-Both findings rest on the same single acquisition. The coverage result
+Both findings rest on the same single acquisition. The control in
+Section~\ref{sec:regime} shows the recovery is not generic, but one control is
+not a distribution: two acquisitions of fifty-two have been tested this way,
+and the contrast between them is a contrast of two cases. The coverage result
 concerns \texttt{13-48} directly, and the aggregation result is measured by
 transfer to \texttt{13-48}, so the paper has an effective sample size of one
 at the level of flight regimes. Whether fourfold aggregation would improve
@@ -682,7 +730,7 @@ platform, and the acquisition comprises 7.8\,\% of the drone samples. Whether th
 or a per-recording processing difference cannot be determined from the
 published data. The identification of \texttt{13-48} with the free-flight
 exercise is an inference, since the source publication does not supply
-acquisition timestamps. The coverage test used two seeds. Our grouping rule assumes that a shared timestamp prefix implies a shared
+acquisition timestamps. Our grouping rule assumes that a shared timestamp prefix implies a shared
 acquisition. Section~\ref{sec:data}C sets out the evidence for it, but it
 remains an inference from directory structure rather than a ground-truth
 acquisition identifier.
@@ -705,7 +753,7 @@ partitioning, and we do not establish a significant aggregate difference. The
 per-acquisition breakdown is nevertheless strongly heterogeneous: one drone
 acquisition of twenty-one attains 0.249 out-of-fold recall against 0.90 to
 0.99 for the remainder, and in a controlled experiment excluding it from
-training entirely, recall on a held-back half is 0.157, rising to 0.967 when
+training entirely, recall on a held-back half is 0.178, rising to 0.948 when
 the other half is added to training. The acquisition is distinguished by the
 Doppler position of its target energy. We suggest, without being able to
 verify it, that it corresponds to the manually flown free-flight exercise
