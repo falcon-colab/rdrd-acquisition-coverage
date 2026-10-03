@@ -44,27 +44,19 @@ Zenodo mints two.
 
 Zenodo labels the concept one "Cite all versions" on the record page.
 
-## Putting it in the paper
+## Where the DOI lives
 
-One line in `paper/paper_main.tex`, in the Reproducibility section, currently
-reads:
+Both are already filled in for v1.0.0 with the concept DOI
+`10.5281/zenodo.23118075`:
 
-```latex
-TODO: Zenodo DOI
-```
+- `paper/paper_main.tex`, in the Reproducibility section, as
+  `\url{https://doi.org/10.5281/zenodo.23118075}`
+- `CITATION.cff`, as a top-level `doi:` field, which is what makes GitHub's
+  "Cite this repository" button offer it
 
-Replace it with the concept DOI:
-
-```latex
-\url{https://doi.org/10.5281/zenodo.XXXXXXX}
-```
-
-Then add the same DOI to `CITATION.cff` as a top-level field, so that the
-"Cite this repository" button on GitHub offers it:
-
-```yaml
-doi: 10.5281/zenodo.XXXXXXX
-```
+For a later release, neither needs changing. The concept DOI is stable
+across versions by design, which is exactly why it is the one in the paper
+rather than the version DOI.
 
 ## Before the release, worth doing
 

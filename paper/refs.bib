@@ -1,0 +1,130 @@
+% Bibliography for "Aggregate Accuracy Conceals an Acquisition-Level Failure
+% in a Public Radar Target Recognition Benchmark".
+%
+% Keys match the \cite commands already in paper_main.tex, so switching from
+% the manual thebibliography to this file changes no citation in the text.
+%
+% Author names are given as initials, exactly as the manually typed
+% bibliography carried them. Expanding them to full first names would mean
+% guessing, and a guessed first name in a reference list is a fabrication
+% that survives into every paper that cites yours. If you want them
+% expanded, take the full names from each paper's own title page rather
+% than from anyone's recollection.
+%
+% Accents are written as LaTeX escapes rather than UTF-8, which keeps the
+% file safe under both bibtex and a toolchain that has not been told the
+% input encoding. Braces around DopplerNet, RAD-DAR, CNN, UAV and Doppler
+% are deliberate: IEEEtran lowercases titles, and without them those words
+% come out wrong.
+%
+% Each DOI appears twice, in doi and again in note. IEEEtran.bst 1.14 has no
+% support for the doi field and silently drops it, which would have quietly
+% lost every DOI the manually typed bibliography carried. The note field is
+% rendered by every style, so the DOI survives whichever one a venue
+% requires. The doi field is kept because other styles do use it.
+
+@article{roldan2020,
+  author  = {I. Roldan and C. R. {del-Blanco} and
+             {\'A}. Duque de Quevedo and F. Iba{\~n}ez Urzaiz and
+             J. Gismero Menoyo and A. Asensio L{\'o}pez and
+             D. Berj{\'o}n and F. Jaureguizar and N. Garc{\'i}a},
+  title   = {{DopplerNet}: a convolutional neural network for recognising
+             targets in real scenarios using a persistent
+             range--{Doppler} radar},
+  journal = {IET Radar, Sonar \& Navigation},
+  volume  = {14},
+  number  = {4},
+  pages   = {593--600},
+  year    = {2020},
+  doi     = {10.1049/iet-rsn.2019.0307},
+  note    = {doi:10.1049/iet-rsn.2019.0307}
+}
+
+@article{quevedo2019,
+  author  = {{\'A}. Duque de Quevedo and F. Iba{\~n}ez Urzaiz and
+             J. Gismero Menoyo and A. Asensio L{\'o}pez},
+  title   = {Drone detection and radar-cross-section measurements by
+             {RAD-DAR}},
+  journal = {IET Radar, Sonar \& Navigation},
+  volume  = {13},
+  number  = {9},
+  pages   = {1437--1447},
+  year    = {2019},
+  doi     = {10.1049/iet-rsn.2018.5646},
+  note    = {doi:10.1049/iet-rsn.2018.5646}
+}
+
+@article{zhang2025,
+  author  = {L. Zhang and G. Tu and Y. Xu and X. Zhou},
+  title   = {A lightweight {CNN}-based method for micro-{Doppler}
+             feature-based {UAV} detection and classification},
+  journal = {Electronics},
+  volume  = {14},
+  number  = {24},
+  pages   = {4831},
+  year    = {2025},
+  doi     = {10.3390/electronics14244831},
+  note    = {doi:10.3390/electronics14244831}
+}
+
+@article{buchman2022,
+  author  = {D. Buchman and M. Drozdov and
+             T. Krilavi{\v{c}}ius and R. Maskeli{\=u}nas and
+             R. Dama{\v{s}}evi{\v{c}}ius},
+  title   = {Pedestrian and animal recognition using {Doppler} radar
+             signature and deep learning},
+  journal = {Sensors},
+  volume  = {22},
+  number  = {9},
+  pages   = {3456},
+  year    = {2022},
+  doi     = {10.3390/s22093456},
+  note    = {doi:10.3390/s22093456}
+}
+
+@article{dietterich1998,
+  author  = {T. G. Dietterich},
+  title   = {Approximate statistical tests for comparing supervised
+             classification learning algorithms},
+  journal = {Neural Computation},
+  volume  = {10},
+  number  = {7},
+  pages   = {1895--1923},
+  year    = {1998},
+  doi     = {10.1162/089976698300017197},
+  note    = {doi:10.1162/089976698300017197}
+}
+
+@article{nadeau2003,
+  author  = {C. Nadeau and Y. Bengio},
+  title   = {Inference for the generalization error},
+  journal = {Machine Learning},
+  volume  = {52},
+  number  = {3},
+  pages   = {239--281},
+  year    = {2003},
+  doi     = {10.1023/A:1024068626366},
+  note    = {doi:10.1023/A:1024068626366}
+}
+
+@article{hooker2019,
+  author        = {S. Hooker and A. Courville and G. Clark and
+                   Y. Dauphin and A. Frome},
+  title         = {What do compressed deep neural networks forget?},
+  journal       = {arXiv preprint arXiv:1911.05248},
+  year          = {2019},
+  eprint        = {1911.05248},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.LG}
+}
+
+@article{hooker2020,
+  author        = {S. Hooker and N. Moorosi and G. Clark and
+                   S. Bengio and E. Denton},
+  title         = {Characterising bias in compressed models},
+  journal       = {arXiv preprint arXiv:2010.03058},
+  year          = {2020},
+  eprint        = {2010.03058},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.LG}
+}

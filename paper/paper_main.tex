@@ -733,55 +733,68 @@ acquisition, and it should be read at that scope.
 
 All preparation, partitioning, training and analysis code, the generated
 partition files and the per-stage reports are released at
-\url{https://github.com/falcon-colab/rdrd-acquisition-coverage}, archived at
-TODO: Zenodo DOI. The repository records every number reported here in a
-machine-readable form, each paired with the command that produces it and a
-tolerance set from the spread we report for that quantity, and ships a script
-that reruns the experiments and checks each number against it.
+\url{https://github.com/falcon-colab/rdrd-acquisition-coverage} and archived
+at \url{https://doi.org/10.5281/zenodo.23118075}. The repository records
+every number reported here in a machine-readable form, each paired with the
+command that produces it and a tolerance set from the spread we report for
+that quantity, and ships a script that reruns the experiments and checks each
+number against it.
 
 % =====================================================================
-\begin{thebibliography}{00}
+\bibliographystyle{IEEEtran}
+\bibliography{refs}
 
-\bibitem{roldan2020} I.~Roldan, C.~R.~del-Blanco, \'A.~Duque de Quevedo,
-F.~Iba\~nez Urzaiz, J.~Gismero Menoyo, A.~Asensio L\'opez, D.~Berj\'on,
-F.~Jaureguizar and N.~Garc\'ia, ``DopplerNet: a convolutional neural network
-for recognising targets in real scenarios using a persistent range--Doppler
-radar,'' \emph{IET Radar, Sonar \& Navigation}, vol.~14, no.~4, pp.~593--600,
-2020, doi:10.1049/iet-rsn.2019.0307.
-
-\bibitem{quevedo2019} \'A.~Duque de Quevedo, F.~Iba\~nez Urzaiz,
-J.~Gismero Menoyo and A.~Asensio L\'opez, ``Drone detection and
-radar-cross-section measurements by RAD-DAR,'' \emph{IET Radar, Sonar \&
-Navigation}, vol.~13, no.~9, pp.~1437--1447, 2019,
-doi:10.1049/iet-rsn.2018.5646.
-
-\bibitem{zhang2025} L.~Zhang, G.~Tu, Y.~Xu and X.~Zhou, ``A lightweight
-CNN-based method for micro-Doppler feature-based UAV detection and
-classification,'' \emph{Electronics}, vol.~14, no.~24, art.~4831, 2025,
-doi:10.3390/electronics14244831.
-
-\bibitem{buchman2022} D.~Buchman, M.~Drozdov, T.~Krilavi\v{c}ius,
-R.~Maskeli\=unas and R.~Dama\v{s}evi\v{c}ius, ``Pedestrian and animal
-recognition using Doppler radar signature and deep learning,''
-\emph{Sensors}, vol.~22, no.~9, art.~3456, 2022, doi:10.3390/s22093456.
-
-\bibitem{dietterich1998} T.~G.~Dietterich, ``Approximate statistical tests
-for comparing supervised classification learning algorithms,'' \emph{Neural
-Computation}, vol.~10, no.~7, pp.~1895--1923, 1998,
-doi:10.1162/089976698300017197.
-
-\bibitem{nadeau2003} C.~Nadeau and Y.~Bengio, ``Inference for the
-generalization error,'' \emph{Machine Learning}, vol.~52, no.~3,
-pp.~239--281, 2003, doi:10.1023/A:1024068626366.
-
-\bibitem{hooker2019} S.~Hooker, A.~Courville, G.~Clark, Y.~Dauphin and
-A.~Frome, ``What do compressed deep neural networks forget?'' arXiv preprint
-arXiv:1911.05248, 2019.
-
-\bibitem{hooker2020} S.~Hooker, N.~Moorosi, G.~Clark, S.~Bengio and
-E.~Denton, ``Characterising bias in compressed models,'' arXiv preprint
-arXiv:2010.03058, 2020.
-
-\end{thebibliography}
+% ------------------------------------------------------------------
+% The manually typed bibliography is kept below, commented out, as a
+% fallback. Some venues want a single self-contained .tex with no .bib
+% alongside it. To go back, delete the two lines above and uncomment
+% this block. The alternative, and usually the better one for a final
+% submission, is to run bibtex once and paste the generated .bbl in
+% here instead, which gives the same self-contained file with the
+% formatting IEEEtran produced.
+% ------------------------------------------------------------------
+% \begin{thebibliography}{00}
+%
+% \bibitem{roldan2020} I.~Roldan, C.~R.~del-Blanco, \'A.~Duque de Quevedo,
+% F.~Iba\~nez Urzaiz, J.~Gismero Menoyo, A.~Asensio L\'opez, D.~Berj\'on,
+% F.~Jaureguizar and N.~Garc\'ia, ``DopplerNet: a convolutional neural network
+% for recognising targets in real scenarios using a persistent range--Doppler
+% radar,'' \emph{IET Radar, Sonar \& Navigation}, vol.~14, no.~4, pp.~593--600,
+% 2020, doi:10.1049/iet-rsn.2019.0307.
+%
+% \bibitem{quevedo2019} \'A.~Duque de Quevedo, F.~Iba\~nez Urzaiz,
+% J.~Gismero Menoyo and A.~Asensio L\'opez, ``Drone detection and
+% radar-cross-section measurements by RAD-DAR,'' \emph{IET Radar, Sonar \&
+% Navigation}, vol.~13, no.~9, pp.~1437--1447, 2019,
+% doi:10.1049/iet-rsn.2018.5646.
+%
+% \bibitem{zhang2025} L.~Zhang, G.~Tu, Y.~Xu and X.~Zhou, ``A lightweight
+% CNN-based method for micro-Doppler feature-based UAV detection and
+% classification,'' \emph{Electronics}, vol.~14, no.~24, art.~4831, 2025,
+% doi:10.3390/electronics14244831.
+%
+% \bibitem{buchman2022} D.~Buchman, M.~Drozdov, T.~Krilavi\v{c}ius,
+% R.~Maskeli\=unas and R.~Dama\v{s}evi\v{c}ius, ``Pedestrian and animal
+% recognition using Doppler radar signature and deep learning,''
+% \emph{Sensors}, vol.~22, no.~9, art.~3456, 2022, doi:10.3390/s22093456.
+%
+% \bibitem{dietterich1998} T.~G.~Dietterich, ``Approximate statistical tests
+% for comparing supervised classification learning algorithms,'' \emph{Neural
+% Computation}, vol.~10, no.~7, pp.~1895--1923, 1998,
+% doi:10.1162/089976698300017197.
+%
+% \bibitem{nadeau2003} C.~Nadeau and Y.~Bengio, ``Inference for the
+% generalization error,'' \emph{Machine Learning}, vol.~52, no.~3,
+% pp.~239--281, 2003, doi:10.1023/A:1024068626366.
+%
+% \bibitem{hooker2019} S.~Hooker, A.~Courville, G.~Clark, Y.~Dauphin and
+% A.~Frome, ``What do compressed deep neural networks forget?'' arXiv preprint
+% arXiv:1911.05248, 2019.
+%
+% \bibitem{hooker2020} S.~Hooker, N.~Moorosi, G.~Clark, S.~Bengio and
+% E.~Denton, ``Characterising bias in compressed models,'' arXiv preprint
+% arXiv:2010.03058, 2020.
+%
+% \end{thebibliography}
 
 \end{document}
