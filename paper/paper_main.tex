@@ -65,7 +65,7 @@ That correlated samples inflate apparent performance is not a new observation. G
 
 Comparing learning procedures across resampled partitions is also known to be statistically delicate. Dietterich showed that several commonly used tests have inflated Type~I error on cross-validation scores~\cite{dietterich1998}, and Nadeau and Bengio showed that the dependence introduced by overlapping training sets must be accounted for in any variance estimate~\cite{nadeau2003}. We take both cautions seriously in Section~\ref{sec:leak} and deliberately do not rest any claim on a resampling-based significance test.
 
-Separately, the observation that model compression damages some classes far more than others is established in the vision domain~\cite{hooker2019,hooker2020}. Our compression study was originally motivated as a radar instantiation of that phenomenon; we report in Section~\ref{sec:compress} that we did not reproduce it.
+Separately, the observation that model compression damages some classes far more than others is established in the vision domain~\cite{hooker2019,hooker2020,tran2022}. Our compression study was originally motivated as a radar instantiation of that phenomenon; we report in Section~\ref{sec:compress} that we did not reproduce it.
 % =====================================================================
 \section{Dataset and Preparation}
 \label{sec:data}
@@ -380,9 +380,9 @@ All preparation, partitioning, training and analysis code, the generated partiti
 % =====================================================================
 \begin{thebibliography}{00}
 
-\bibitem{roldan2020} I.~Roldan, C.~R.~del-Blanco, \'A.~Duque de Quevedo, F.~Iba\~nez Urzaiz, J.~Gismero Menoyo, A.~Asensio L\'opez, D.~Berj\'on, F.~Jaureguizar and N.~Garc\'ia, ``DopplerNet: a convolutional neural network for recognising targets in real scenarios using a persistent range--Doppler radar,'' \emph{IET Radar, Sonar \& Navigation}, vol.~14, no.~4, pp.~593--600, 2020, doi:10.1049/iet-rsn.2019.0307.
+\bibitem{roldan2020} I.~Roldan, C.~R.~del-Blanco, \'A.~Duque de Quevedo, F.~Ib\'a\~nez Urzaiz, J.~Gismero Menoyo, A.~Asensio L\'opez, D.~Berj\'on, F.~Jaureguizar and N.~Garc\'ia, ``DopplerNet: a convolutional neural network for recognising targets in real scenarios using a persistent range--Doppler radar,'' \emph{IET Radar, Sonar \& Navigation}, vol.~14, no.~4, pp.~593--600, 2020, doi:10.1049/iet-rsn.2019.0307.
 
-\bibitem{quevedo2019} \'A.~Duque de Quevedo, F.~Iba\~nez Urzaiz, J.~Gismero Menoyo and A.~Asensio L\'opez, ``Drone detection and radar-cross-section measurements by RAD-DAR,'' \emph{IET Radar, Sonar \& Navigation}, vol.~13, no.~9, pp.~1437--1447, 2019, doi:10.1049/iet-rsn.2018.5646.
+\bibitem{quevedo2019} \'A.~Duque de Quevedo, F.~Ib\'a\~nez Urzaiz, J.~Gismero Menoyo and A.~Asensio L\'opez, ``Drone detection and radar-cross-section measurements by RAD-DAR,'' \emph{IET Radar, Sonar \& Navigation}, vol.~13, no.~9, pp.~1437--1447, 2019, doi:10.1049/iet-rsn.2018.5646.
 
 \bibitem{zhang2025} L.~Zhang, G.~Tu, Y.~Xu and X.~Zhou, ``A lightweight CNN-based method for micro-Doppler feature-based UAV detection and classification,'' \emph{Electronics}, vol.~14, no.~24, art.~4831, 2025, doi:10.3390/electronics14244831.
 
@@ -395,6 +395,8 @@ All preparation, partitioning, training and analysis code, the generated partiti
 \bibitem{hooker2019} S.~Hooker, A.~Courville, G.~Clark, Y.~Dauphin and A.~Frome, ``What do compressed deep neural networks forget?'' arXiv preprint arXiv:1911.05248, 2019.
 
 \bibitem{hooker2020} S.~Hooker, N.~Moorosi, G.~Clark, S.~Bengio and E.~Denton, ``Characterising bias in compressed models,'' arXiv preprint arXiv:2010.03058, 2020.
+
+\bibitem{tran2022} C.~Tran, F.~Fioretto, J.-E.~Kim and R.~Naidu, ``Pruning has a disparate impact on model accuracy,'' in \emph{Advances in Neural Information Processing Systems}, vol.~35, 2022, pp.~17652--17664.
 
 \bibitem{dataset2026} G.~Mustafa, ``Code and analysis for `Aggregate Accuracy Conceals an Acquisition-Level Failure in a Public Radar Target Recognition Benchmark','' software, \emph{Zenodo}, 2026. \url{https://doi.org/10.5281/zenodo.23118075}
 
