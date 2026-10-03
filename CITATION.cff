@@ -13,6 +13,7 @@ abstract: >-
   script that reruns every experiment and checks each number the paper
   states.
 type: software
+doi: 10.5281/zenodo.23118075
 authors:
   - given-names: Ghulam
     family-names: Mustafa

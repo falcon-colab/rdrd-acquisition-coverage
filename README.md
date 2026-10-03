@@ -211,7 +211,9 @@ produced it.
 
 ## Citing
 
-See `CITATION.cff`. The dataset itself should be cited separately, to
+Archived at [doi:10.5281/zenodo.23118075](https://doi.org/10.5281/zenodo.23118075),
+which is the concept DOI and always resolves to the newest version. See
+`CITATION.cff`. The dataset itself should be cited separately, to
 I. Roldan et al., and the paper's reference list has the citation.
 
 `docs/RELEASING.md` has the steps for cutting a release and minting the
