@@ -19,6 +19,7 @@ import rdrd                                  # noqa: E402
 from step2 import make_model                 # noqa: E402
 from step2b import normalise                 # noqa: E402
 from step3 import quantise, reduce_doppler    # noqa: E402
+import temporal                               # noqa: E402
 
 
 # --------------------------------------------------------------------------
@@ -313,6 +314,67 @@ def test_the_dataset_slug_is_stated_the_same_way_everywhere():
             seen.add(m)
     assert seen, "no dataset slug found anywhere in the package"
     assert seen == {DATASET_SLUG}, sorted(seen)
+
+
+# --------------------------------------------------------------------------
+# Section VIII: the three-frame input. The manuscript claims the triplets are
+# formed in file-name INDEX order and only across genuinely consecutive
+# integers, and that the shuffle arm removes adjacency while keeping the
+# folder. All three are properties of the construction, so they are testable
+# without the archive.
+# --------------------------------------------------------------------------
+
+def test_triplets_use_numeric_not_lexicographic_order():
+    """9, 10, 11 are consecutive; a string sort would scatter them."""
+    paths = ["Drones/13-48/%d.csv" % i for i in (1, 2, 3, 9, 10, 11)]
+    trips = temporal.triplet_rows(paths)
+    assert (0, 1, 2) in trips, trips
+    assert (3, 4, 5) in trips, "numeric order lost: %s" % (trips,)
+    assert len(trips) == 2, trips
+
+
+def test_triplets_never_span_a_gap_in_numbering():
+    """A missing file means the frames are not adjacent, so no triplet."""
+    paths = ["Cars/15-37/%d.csv" % i for i in (1, 2, 4, 5)]
+    assert temporal.triplet_rows(paths) == []
+    paths = ["Cars/15-37/%d.csv" % i for i in (1, 2, 3, 5, 6, 7)]
+    trips = temporal.triplet_rows(paths)
+    assert trips == [(0, 1, 2), (3, 4, 5)], trips
+
+
+def test_triplets_never_cross_a_folder_boundary():
+    """Two folders whose numbering runs on must not be joined."""
+    paths = (["Drones/13-48/%d.csv" % i for i in (1, 2)]
+             + ["Drones/12-34/%d.csv" % i for i in (3, 4)])
+    assert temporal.triplet_rows(paths) == []
+
+
+def test_shuffle_arm_keeps_the_folder_and_drops_adjacency():
+    paths = ["Drones/13-48/%d.csv" % i for i in range(1, 11)]
+    trips = temporal.triplet_rows(paths)
+    comps, fallback = temporal.companion_rows(paths, trips, seed=0)
+    assert fallback == 0
+    assert len(comps) == len(trips)
+    for (r0, r1, r2), (c0, c1) in zip(trips, comps):
+        assert c0 not in (r0, r1, r2), "companion is a true neighbour"
+        assert c1 not in (r0, r1, r2), "companion is a true neighbour"
+
+
+def test_arms_agree_on_sample_count_and_centre():
+    """single, index and shuffle must describe the SAME samples, or the
+    comparison between them is not paired."""
+    paths = ["Drones/13-48/%d.csv" % i for i in range(1, 13)]
+    trips = temporal.triplet_rows(paths)
+    comps, _ = temporal.companion_rows(paths, trips, seed=0)
+    Xn1 = np.arange(12 * 1 * 11 * 61, dtype=np.float32).reshape(12, 1, 11, 61)
+    a = temporal.build_arm(Xn1, trips, comps, "single")
+    b = temporal.build_arm(Xn1, trips, comps, "index")
+    c = temporal.build_arm(Xn1, trips, comps, "shuffle")
+    assert a.shape[0] == b.shape[0] == c.shape[0] == len(trips)
+    assert a.shape[1] == 1 and b.shape[1] == 3 and c.shape[1] == 3
+    # the centre channel is the same frame in every arm
+    assert np.array_equal(a[:, 0], b[:, 1])
+    assert np.array_equal(a[:, 0], c[:, 1])
 
 
 def _run_all():

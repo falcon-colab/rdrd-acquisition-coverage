@@ -140,6 +140,122 @@ def d_interaction_contrast(rep, a):
             - rep["weights only"]["accuracy"] + rep["neither"]["accuracy"])
 
 
+# ------------------------------------------------- paired derivations
+# Every condition in step4.py and step5.py is run at the same seeds, and the
+# seed fixes both the partition and the initialisation. Conditions therefore
+# differ only in the quantity under test, and the per-seed difference is the
+# unit of analysis. Welch's test, which the first version of this manuscript
+# used, assumes the two samples are independent and throws that pairing away.
+# These derivations replace it.
+
+def _paired(a, b):
+    """Per-seed differences a minus b, truncated to the shorter array."""
+    n = min(len(a), len(b))
+    if n < 2:
+        return []
+    return [a[i] - b[i] for i in range(n)]
+
+
+def paired_t(a, b):
+    d = _paired(a, b)
+    if len(d) < 2:
+        return float("nan")
+    s = sd(d)
+    if s == 0.0:
+        return float("nan")
+    return mean(d) / (s / math.sqrt(len(d)))
+
+
+def d_paired_t(rep, a):
+    return paired_t(dig(rep, a["a"]), dig(rep, a["b"]))
+
+
+def d_paired_t_abs(rep, a):
+    """Magnitude of the paired t, for a claim that is a failure to detect.
+
+    Same reasoning as d_welch_t_abs: where the manuscript's claim is
+    two-sided the sign carries no part of it, and the manuscript quotes the
+    magnitude. Anywhere a direction is claimed, d_paired_t is used instead so
+    that a sign flip still fails the check.
+    """
+    return abs(paired_t(dig(rep, a["a"]), dig(rep, a["b"])))
+
+
+def d_paired_mean_diff(rep, a):
+    d = _paired(dig(rep, a["a"]), dig(rep, a["b"]))
+    return mean(d) if d else float("nan")
+
+
+def d_paired_n_positive(rep, a):
+    """How many seeds move in the claimed direction.
+
+    This is the assumption-free version of the claim and the manuscript
+    quotes it alongside the t. It needs no distributional assumption at all.
+    """
+    return sum(1 for x in _paired(dig(rep, a["a"]), dig(rep, a["b"])) if x > 0)
+
+
+def d_interaction_contrast_t(rep, a):
+    """One-sample t on the per-seed interaction contrast.
+
+    I_s is formed within each seed, so the four cells' shared run-to-run
+    component cancels. The mean of I_s equals the contrast of the cell means,
+    because the contrast is linear, so the point estimate is unchanged and
+    only its uncertainty differs from the unpaired version.
+    """
+    cells = ("both", "input only", "weights only", "neither")
+    runs = {k: rep[k]["runs"] for k in cells}
+    n = min(len(v) for v in runs.values())
+    I = [runs["both"][i] - runs["input only"][i]
+         - runs["weights only"][i] + runs["neither"][i] for i in range(n)]
+    if len(I) < 2:
+        return float("nan")
+    s = sd(I)
+    if s == 0.0:
+        return float("nan")
+    return mean(I) / (s / math.sqrt(len(I)))
+
+
+def d_separation_gap(rep, a):
+    """Smallest value of a minus largest value of b.
+
+    Positive means the two conditions do not overlap on any seed. For the
+    coverage experiment this is a stronger statement than any p-value, and it
+    is what the manuscript leads with.
+    """
+    return min(dig(rep, a["a"])) - max(dig(rep, a["b"]))
+
+
+def d_sign_test_p(rep, a):
+    """Exact binomial sign-test p on per-acquisition deltas.
+
+    args: hi, lo  -- the two by_factor keys
+          sided    -- "one" or "two"; the manuscript must say which, because
+                      with three of five positive the one-sided value is 0.50
+                      and the two-sided value is 1.00.
+    """
+    rows = rep["per_session"]
+    deltas = []
+    for _name, r in rows.items():
+        hi = r["by_factor"][a["hi"]]
+        lo = r["by_factor"][a["lo"]]
+        deltas.append(mean(hi) - mean(lo))
+    n = len(deltas)
+    pos = sum(1 for x in deltas if x > 0)
+    upper = sum(_comb(n, k) for k in range(pos, n + 1)) / float(2 ** n)
+    if a.get("sided", "two") == "one":
+        return upper
+    lower = sum(_comb(n, k) for k in range(0, pos + 1)) / float(2 ** n)
+    return min(1.0, 2.0 * min(upper, lower))
+
+
+def _comb(n, k):
+    num = 1
+    for i in range(k):
+        num = num * (n - i) // (i + 1)
+    return num
+
+
 def report_label(name):
     """How a report is named in the 'absent' list: all its candidates."""
     return name if isinstance(name, str) else " or ".join(name)
@@ -155,6 +271,13 @@ DERIVATIONS = {
     "augment_value": d_augment_value,
     "ablate_drop": d_ablate_drop,
     "interaction_contrast": d_interaction_contrast,
+    "paired_t": d_paired_t,
+    "paired_t_abs": d_paired_t_abs,
+    "paired_mean_diff": d_paired_mean_diff,
+    "paired_n_positive": d_paired_n_positive,
+    "interaction_contrast_t": d_interaction_contrast_t,
+    "separation_gap": d_separation_gap,
+    "sign_test_p": d_sign_test_p,
 }
 
 

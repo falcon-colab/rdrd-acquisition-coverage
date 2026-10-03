@@ -139,12 +139,23 @@ def main():
              t, len(deltas)))
     print("  improved in %d of %d acquisitions" % (n_pos, len(deltas)))
 
-    # sign test, exact, two-tailed
+    # Exact sign test. Both tails are reported because with five
+    # acquisitions they differ a great deal: three of five positive gives
+    # 0.50 one-sided and 1.00 two-sided. An earlier version of this comment
+    # said "two-tailed" while the arithmetic below was the upper tail only,
+    # which is one-sided. Quoting 0.50 without saying which tail it is would
+    # read as a directional test chosen after seeing the direction, so the
+    # manuscript states the two-sided value and names the one-sided value as
+    # the directional alternative.
     from math import comb
     n = len(deltas)
     k = n_pos
     p = sum(comb(n, i) for i in range(k, n + 1)) / (2.0 ** n)
-    print("  one-sided sign test p = %.3f" % p)
+    p_lower = sum(comb(n, i) for i in range(0, k + 1)) / (2.0 ** n)
+    p_two = min(1.0, 2.0 * min(p, p_lower))
+    print("  exact sign test: p = %.3f one-sided (aggregation helps),"
+          " p = %.3f two-sided" % (p, p_two))
+    print("  with n=%d the test has almost no power either way" % n)
 
     print("")
     if n_pos == len(deltas) and len(deltas) >= 4:
@@ -167,7 +178,10 @@ def main():
                    "deltas": {n_: float(v) for n_, v in zip(names, deltas)},
                    "mean_delta": float(deltas.mean()),
                    "paired_t": t, "n_improved": n_pos,
-                   "sign_test_p": p}, open(args.out, "w"), indent=2)
+                   "sign_test_p": p,
+                   "sign_test_p_one_sided": p,
+                   "sign_test_p_two_sided": p_two},
+                  open(args.out, "w"), indent=2)
         print("\n  written %s" % args.out)
 
 

@@ -137,6 +137,14 @@ def stat(v):
 
 
 def welch(a, b):
+    """Kept for the factorial block below, where it is labelled as such.
+
+    It is NOT the right test for the aggregation comparison: every condition
+    there is trained at the same seeds, and the seed fixes the partition and
+    the initialisation together, so the two samples are paired rather than
+    independent. Use paired() for that. An earlier version of this script
+    reported Welch for the paired comparison and the manuscript quoted it.
+    """
     a, b = np.asarray(a, float), np.asarray(b, float)
     if len(a) < 2 or len(b) < 2:
         return float("nan")
@@ -144,6 +152,23 @@ def welch(a, b):
     if va + vb <= 0:
         return float("nan")
     return float((a.mean() - b.mean()) / np.sqrt(va + vb))
+
+
+def paired(a, b):
+    """Per-seed differences and the one-sample t on them, a minus b.
+
+    Returns (mean difference, t, number of seeds where a exceeds b, n).
+    The count is reported because it needs no distributional assumption and
+    is the form the manuscript leads with.
+    """
+    a, b = np.asarray(a, float), np.asarray(b, float)
+    n = min(len(a), len(b))
+    d = a[:n] - b[:n]
+    if n < 2:
+        return float("nan"), float("nan"), 0, n
+    sd = d.std(ddof=1)
+    t = float(d.mean() / (sd / np.sqrt(n))) if sd > 0 else float("nan")
+    return float(d.mean()), t, int((d > 0).sum()), n
 
 
 # ------------------------------------------------------------------ main
@@ -198,13 +223,28 @@ def main():
                     "standard_runs": st, "unseen_runs": un}
                 print("    %-6s %11.4f +/-%.4f %11.4f +/-%.4f %10.4f"
                       % ("%dx" % f, sm, ss, um, us, sm - um))
-        print("\n  Does the 4x peak survive? Compare 4x unseen against 1x:")
+        print("\n  Does the 4x peak survive? Compare 4x unseen against 1x.")
+        print("  Paired by seed: each seed fixes the split and the init, so")
+        print("  the two conditions differ only in the input representation.")
         for bits in (32, 8):
             a = out["4x_%dbit" % bits]["unseen_runs"]
             b = out["1x_%dbit" % bits]["unseen_runs"]
-            print("    %d-bit: %.4f vs %.4f   Welch t = %+.2f"
-                  % (bits, np.mean(a), np.mean(b), welch(a, b)))
-        print("    |t| above about 2.3 is significant with 5 seeds each.")
+            md, t, npos, n = paired(a, b)
+            out["4x_%dbit" % bits]["paired_vs_1x_unseen"] = {
+                "mean_diff": md, "paired_t": t, "n_positive": npos, "n": n}
+            print("    %d-bit: %.4f vs %.4f   mean diff %+.4f   paired t %+.2f"
+                  "   positive on %d of %d seeds"
+                  % (bits, np.mean(a), np.mean(b), md, t, npos, n))
+        for bits in (32, 8):
+            a = out["4x_%dbit" % bits]["standard_runs"]
+            b = out["1x_%dbit" % bits]["standard_runs"]
+            md, t, npos, n = paired(a, b)
+            out["4x_%dbit" % bits]["paired_vs_1x_standard"] = {
+                "mean_diff": md, "paired_t": t, "n_positive": npos, "n": n}
+            print("    %d-bit standard split: mean diff %+.4f  paired t %+.2f"
+                  % (bits, md, t))
+        print("    With ten seeds the two-sided critical value is 2.262 on")
+        print("    nine degrees of freedom.")
         if args.out:
             json.dump(out, open(args.out, "w"), indent=2)
         return

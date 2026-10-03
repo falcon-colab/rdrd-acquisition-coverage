@@ -568,68 +568,68 @@
       "why_tol": "reported sd 0.0457"
     },
     {
-      "id": "welch-4x-vs-1x-unseen-32",
-      "paper": "Sec. V, Welch t = +4.17 for 4x against 1x on the unseen regime at 32 bits",
+      "id": "paired-4x-vs-1x-unseen-32",
+      "paper": "Sec. V, paired t = +4.24 for 4x against 1x on the unseen regime at 32 bits",
       "report": [
         "step4_seeds10.json",
         "step4_seeds.json"
       ],
-      "derive": "welch_t",
+      "derive": "paired_t",
       "args": {
         "a": "4x_32bit.unseen_runs",
         "b": "1x_32bit.unseen_runs"
       },
-      "expect": 4.17,
-      "tol": 2.0,
-      "why_tol": "a t statistic over ten seeds each; the claim is that it clears about 2.1, so the tolerance stops just above that at 2.17 rather than admitting a run that would fail to reach significance"
+      "expect": 4.24,
+      "tol": 1.9,
+      "why_tol": "a paired t on ten per-seed differences, so nine degrees of freedom and a two-sided critical value of 2.262; 4.24 less 1.9 is 2.34, which still clears it, so no run that failed to reach significance could pass this check"
     },
     {
-      "id": "welch-4x-vs-1x-unseen-8",
-      "paper": "Sec. V, Welch t = +3.08 at 8 bits",
+      "id": "paired-4x-vs-1x-unseen-8",
+      "paper": "Sec. V, paired t = +4.08 at 8 bits",
       "report": [
         "step4_seeds10.json",
         "step4_seeds.json"
       ],
-      "derive": "welch_t",
+      "derive": "paired_t",
       "args": {
         "a": "4x_8bit.unseen_runs",
         "b": "1x_8bit.unseen_runs"
       },
-      "expect": 3.08,
-      "tol": 0.9,
-      "why_tol": "as above; 3.08 less 0.9 is 2.18, which still clears the critical value, so a run that failed to reach significance could not pass this check"
+      "expect": 4.08,
+      "tol": 1.75,
+      "why_tol": "as above; 4.08 less 1.75 is 2.33, still above the 2.262 critical value at nine degrees of freedom"
     },
     {
-      "id": "welch-4x-vs-1x-standard-32",
-      "paper": "Sec. V, Welch t of 0.79 on the standard split at 32 bits, no detected change",
+      "id": "paired-4x-vs-1x-standard-32",
+      "paper": "Sec. V, paired t of 1.05 on the standard split at 32 bits, no detected change",
       "report": [
         "step4_seeds10.json",
         "step4_seeds.json"
       ],
-      "derive": "welch_t_abs",
+      "derive": "paired_t_abs",
       "args": {
         "a": "4x_32bit.standard_runs",
         "b": "1x_32bit.standard_runs"
       },
-      "expect": 0.79,
-      "tol": 1.3,
-      "why_tol": "the claim is only that this does not reach significance, so the tolerance must keep it below about 2.1; the magnitude is compared because the claim is two-sided and the manuscript quotes |t| while the code signs it as aggregated minus full resolution"
+      "expect": 1.05,
+      "tol": 1.2,
+      "why_tol": "the claim is only that this does not reach significance, so the tolerance has to keep it below the 2.262 critical value; 1.05 plus 1.2 is 2.25, just inside, and the magnitude is compared because the claim is two-sided"
     },
     {
-      "id": "welch-4x-vs-1x-standard-8",
-      "paper": "Sec. V, Welch t of 0.16 on the standard split at 8 bits",
+      "id": "paired-4x-vs-1x-standard-8",
+      "paper": "Sec. V, paired t of 0.17 on the standard split at 8 bits",
       "report": [
         "step4_seeds10.json",
         "step4_seeds.json"
       ],
-      "derive": "welch_t_abs",
+      "derive": "paired_t_abs",
       "args": {
         "a": "4x_8bit.standard_runs",
         "b": "1x_8bit.standard_runs"
       },
-      "expect": 0.16,
-      "tol": 1.3,
-      "why_tol": "as for the 32-bit row: the claim is only that this does not reach significance, so the tolerance has to keep it below about 2.1, and the magnitude is compared because the claim is two-sided"
+      "expect": 0.17,
+      "tol": 1.2,
+      "why_tol": "as for the 32-bit row: the tolerance keeps the value below the 2.262 critical value, and the magnitude is compared because the claim is two-sided"
     },
     {
       "id": "augment-baseline",
@@ -729,12 +729,12 @@
     },
     {
       "id": "loo-sign-test-p",
-      "paper": "Sec. V, exact sign test p = 0.50",
+      "paper": "Sec. V, exact sign test p = 0.50 for the directional alternative that aggregation helps (one-sided)",
       "report": "step5_loo.json",
       "path": "sign_test_p",
       "expect": 0.5,
       "tol": 0.35,
-      "why_tol": "the exact sign test on five observations takes only a few discrete values; the claim is that it is nowhere near significance"
+      "why_tol": "the exact sign test on five observations takes only a few discrete values; the claim is that it is nowhere near significance, and the manuscript now names this as the one-sided value because the two-sided value on the same data is 1.00"
     },
     {
       "id": "loo-13-48-delta",
@@ -744,6 +744,93 @@
       "expect": 0.136,
       "tol": 0.2,
       "why_tol": "the acquisition the manuscript calls highly seed dependent"
+    },
+    {
+      "id": "paired-n-positive-unseen-32",
+      "paper": "Sec. V, the per-seed difference is positive on ten of ten seeds at 32 bits",
+      "report": [
+        "step4_seeds10.json",
+        "step4_seeds.json"
+      ],
+      "derive": "paired_n_positive",
+      "args": {
+        "a": "4x_32bit.unseen_runs",
+        "b": "1x_32bit.unseen_runs"
+      },
+      "expect": 10,
+      "tol": 1,
+      "why_tol": "the manuscript's claim is that the sign is consistent across seeds, which nine or ten supports and eight or fewer would contradict; the quoted figure is the measured count"
+    },
+    {
+      "id": "paired-n-positive-unseen-8",
+      "paper": "Sec. V, positive on nine of ten seeds at 8 bits",
+      "report": [
+        "step4_seeds10.json",
+        "step4_seeds.json"
+      ],
+      "derive": "paired_n_positive",
+      "args": {
+        "a": "4x_8bit.unseen_runs",
+        "b": "1x_8bit.unseen_runs"
+      },
+      "expect": 9,
+      "tol": 1,
+      "why_tol": "as above; the claim is a consistent sign, not an exact count"
+    },
+    {
+      "id": "paired-mean-diff-unseen-32",
+      "paper": "Sec. V, mean per-seed gain of 0.175 in unseen recall at 32 bits",
+      "report": [
+        "step4_seeds10.json",
+        "step4_seeds.json"
+      ],
+      "derive": "paired_mean_diff",
+      "args": {
+        "a": "4x_32bit.unseen_runs",
+        "b": "1x_32bit.unseen_runs"
+      },
+      "expect": 0.175,
+      "tol": 0.09,
+      "why_tol": "the difference of two trained quantities over ten seeds, sd of the per-seed differences 0.131; the tolerance keeps the mean clearly above zero"
+    },
+    {
+      "id": "interaction-contrast-t",
+      "paper": "Sec. V, one-sample t of -0.24 on the per-seed interaction contrast",
+      "report": "step4_ablate.json",
+      "derive": "interaction_contrast_t",
+      "expect": -0.24,
+      "tol": 1.8,
+      "why_tol": "four degrees of freedom gives a two-sided critical value of 2.776; the claim is that the contrast is indistinguishable from zero, and this tolerance cannot admit a value that would reach significance"
+    },
+    {
+      "id": "coverage-separation-gap",
+      "paper": "Sec. IV, the worst half-in-training seed still exceeds the best held-out seed by 0.64, so the conditions do not overlap",
+      "report": [
+        "step2d_13-48_10seeds.json",
+        "step2d_13-48.json"
+      ],
+      "derive": "separation_gap",
+      "args": {
+        "a": "coverage.runs.half included",
+        "b": "coverage.runs.held out"
+      },
+      "expect": 0.6396,
+      "tol": 0.15,
+      "why_tol": "the claim is only that this is positive, which is what no overlap means; any value in this range keeps it well clear of zero"
+    },
+    {
+      "id": "loo-sign-test-p-two-sided",
+      "paper": "Sec. V, exact sign test p = 1.00 two-sided on five acquisitions",
+      "report": "step5_loo.json",
+      "derive": "sign_test_p",
+      "args": {
+        "hi": "4",
+        "lo": "1",
+        "sided": "two"
+      },
+      "expect": 1.0,
+      "tol": 0.3,
+      "why_tol": "the exact sign test on five observations takes only a few discrete values; the claim is that it is nowhere near significance in either direction"
     }
   ]
 }
