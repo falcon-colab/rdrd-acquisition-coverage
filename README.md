@@ -181,6 +181,7 @@ src/                 the pipeline, one module per stage
   step4.py           ten-seed confirmation, shift augmentation, factorial axes
   step5.py           leave one acquisition out
   centroids.py       per-acquisition Doppler centroid, mean and spread
+  capacity.py        can this architecture reach the published accuracy?
   analyse4.py        re-analysis of stage 4 without retraining
   interaction.py     the factorial interaction contrast
 tests/test_core.py   18 unit tests of the paper's claims about the code
