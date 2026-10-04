@@ -242,6 +242,47 @@ def stat(v):
     return float(v.mean()), float(v.std(ddof=1)) if len(v) > 1 else 0.0
 
 
+def audit_overlap(trips, comps, rnd):
+    """How much of the test set appears inside training inputs.
+
+    A sliding window over frames plus a frame-level random partition is a
+    leakage mechanism, and it is not a subtle one. A triplet centred on a
+    training frame carries two companion frames whose own split tags are
+    whatever they happen to be, so a training input can contain the pixels of
+    a test frame. Because neighbouring detections within one acquisition are
+    nearly identical, a test frame whose neighbour was seen in training is
+    close to a memorised sample.
+
+    This counts the effect instead of reasoning about it. It needs no GPU and
+    no training, and it is reported for both three-channel arms so the
+    difference between local and acquisition-wide companions is visible.
+    """
+    out = {}
+    for name, flank in (("index", [(t[0], t[2]) for t in trips]),
+                        ("shuffle", list(comps))):
+        n_tr_contaminated = 0
+        n_train = 0
+        reached = set()
+        for (r0, r1, r2), (a, c) in zip(trips, flank):
+            if rnd[r1] != "train":
+                continue
+            n_train += 1
+            hit = [r for r in (a, c) if rnd[r] == "test"]
+            if hit:
+                n_tr_contaminated += 1
+                reached.update(hit)
+        n_test_frames = int((rnd == "test").sum())
+        out[name] = {
+            "train_triplets": n_train,
+            "train_triplets_touching_a_test_frame": n_tr_contaminated,
+            "share_of_train_triplets": (n_tr_contaminated / n_train
+                                        if n_train else float("nan")),
+            "distinct_test_frames_inside_training_inputs": len(reached),
+            "share_of_test_frames": (len(reached) / n_test_frames
+                                     if n_test_frames else float("nan"))}
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--data", required=True)
@@ -251,6 +292,10 @@ def main():
     ap.add_argument("--epochs", type=int, default=40)
     ap.add_argument("--arms", nargs="+", default=list(ARMS), choices=ARMS)
     ap.add_argument("--scheme", default="offset")
+    ap.add_argument("--audit", action="store_true",
+                    help="report how much of the test set appears inside "
+                         "training inputs under the random protocol, then "
+                         "exit; no training, no GPU, runs in seconds")
     args = ap.parse_args()
 
     d = np.load(args.data, allow_pickle=False)
@@ -285,6 +330,29 @@ def main():
            "n_triplets_target": int((ut == TARGET).sum()),
            "shuffle_fallbacks": int(fallback),
            "epochs": args.epochs, "seeds": list(args.seeds), "arms": {}}
+
+    over = audit_overlap(trips, comps, rnd)
+    out["overlap_audit"] = over
+    print("  OVERLAP AUDIT, random protocol. A sliding window plus a")
+    print("  frame-level random split puts test frames inside training")
+    print("  inputs, so the three-channel accuracies below are inflated and")
+    print("  are reported only to establish comparability with the published")
+    print("  protocol, never as a measure of generalisation.")
+    for name in ("index", "shuffle"):
+        o = over[name]
+        print("    %-8s %6.1f%% of training triplets contain a test frame;"
+              " %6.1f%% of test frames appear in some training input"
+              % (name, 100.0 * o["share_of_train_triplets"],
+                 100.0 * o["share_of_test_frames"]))
+    print("  The single-frame arm cannot leak this way: its input is one")
+    print("  frame and that frame carries its own split tag.\n")
+    if args.audit:
+        if args.out:
+            os.makedirs(os.path.dirname(os.path.abspath(args.out)),
+                        exist_ok=True)
+            json.dump(out, open(args.out, "w"), indent=2)
+            print("written %s (audit only, no training)" % args.out)
+        return
 
     tr_r = np.where(rt == "train")[0]
     va_r = np.where(rt == "val")[0]

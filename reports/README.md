@@ -20,7 +20,8 @@ step2d_13-48_10seeds.json  the ten-seed coverage test (Table V)
 step2d_control.json    the coverage test on the pedestrian control 11-23
 step2d_control2.json   the coverage test on the vehicle control 15-37
 step2d_centroids.json  per-acquisition Doppler centroid, mean and spread
-capacity.json          the capacity and schedule sweep behind Sec. VIII-C
+capacity.json          the capacity and schedule sweep behind the gap analysis
+temporal.json          the three-frame input experiment (Table VII)
 ```
 
 With these present, the manuscript's numbers can be checked without

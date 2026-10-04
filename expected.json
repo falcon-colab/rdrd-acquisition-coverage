@@ -143,7 +143,7 @@
     },
     {
       "id": "norm-offset",
-      "paper": "Table II, offset normalisation accuracy 0.925",
+      "paper": "Sec. IV-A, offset normalisation accuracy 0.925",
       "report": "step2b_norm.json",
       "path": "offset.accuracy.mean",
       "expect": 0.925,
@@ -152,7 +152,7 @@
     },
     {
       "id": "norm-peak",
-      "paper": "Table II, peak-referenced accuracy 0.908",
+      "paper": "Sec. IV-A, peak-referenced accuracy 0.908",
       "report": "step2b_norm.json",
       "path": "peak.accuracy.mean",
       "expect": 0.908,
@@ -711,7 +711,7 @@
     },
     {
       "id": "loo-mean-delta",
-      "paper": "Table VI, mean change +0.033 across five acquisitions",
+      "paper": "Sec. VIII-C, mean change +0.033 across five acquisitions",
       "report": "step5_loo.json",
       "path": "mean_delta",
       "expect": 0.033,
@@ -720,7 +720,7 @@
     },
     {
       "id": "loo-n-improved",
-      "paper": "Table VI, aggregation improved three of the five acquisitions",
+      "paper": "Sec. VIII-C, aggregation improved three of the five acquisitions",
       "report": "step5_loo.json",
       "path": "n_improved",
       "expect": 3,
@@ -738,7 +738,7 @@
     },
     {
       "id": "loo-13-48-delta",
-      "paper": "Table VI, 13-48 improves by +0.136, the largest of the five",
+      "paper": "Sec. VIII-C, 13-48 improves by +0.136, the largest of the five",
       "report": "step5_loo.json",
       "path": "deltas.13-48",
       "expect": 0.136,
@@ -831,6 +831,105 @@
       "expect": 1.0,
       "tol": 0.3,
       "why_tol": "the exact sign test on five observations takes only a few discrete values; the claim is that it is nowhere near significance in either direction"
+    },
+    {
+      "id": "temporal-n-triplets",
+      "paper": "Sec. VII-D, 17,221 consecutive-index triplets from 17,485 frames",
+      "report": "temporal.json",
+      "path": "n_triplets",
+      "expect": 17221,
+      "tol": 0,
+      "why_tol": "a count derived from the file names, exact or the archive is not the same one"
+    },
+    {
+      "id": "temporal-n-triplets-13-48",
+      "paper": "Sec. VII-D, 391 triplets on 13-48",
+      "report": "temporal.json",
+      "path": "n_triplets_target",
+      "expect": 391,
+      "tol": 0,
+      "why_tol": "as above, a deterministic count"
+    },
+    {
+      "id": "temporal-params-3ch",
+      "paper": "Sec. VII-D, the three-channel model has 102,291 parameters",
+      "report": "temporal.json",
+      "path": "arms.index.params",
+      "expect": 102291,
+      "tol": 0,
+      "why_tol": "a parameter count, fixed by the architecture"
+    },
+    {
+      "id": "temporal-single-random",
+      "paper": "Table VII, single-frame random-split accuracy 0.9512",
+      "report": "temporal.json",
+      "path": "arms.single.random_accuracy",
+      "expect": 0.9512,
+      "tol": 0.02,
+      "why_tol": "three seeds, sd 0.0030; the tolerance spans several sd and keeps it clearly below the three-channel arms"
+    },
+    {
+      "id": "temporal-index-random",
+      "paper": "Table VII, three-frame index-order random-split accuracy 0.9785",
+      "report": "temporal.json",
+      "path": "arms.index.random_accuracy",
+      "expect": 0.9785,
+      "tol": 0.02,
+      "why_tol": "three seeds, sd 0.0049; the manuscript's claim is that this lands near the 0.9808 published figure, which this range supports"
+    },
+    {
+      "id": "temporal-shuffle-random",
+      "paper": "Table VII, shuffled-companion random-split accuracy 0.9934",
+      "report": "temporal.json",
+      "path": "arms.shuffle.random_accuracy",
+      "expect": 0.9934,
+      "tol": 0.02,
+      "why_tol": "three seeds, sd 0.0007; the claim is that overlap drives this to the published figure, so the tolerance stays well above 0.97"
+    },
+    {
+      "id": "temporal-single-unseen",
+      "paper": "Table VII, single-frame recall on held-out 13-48 is 0.2092",
+      "report": "temporal.json",
+      "path": "arms.single.unseen_recall",
+      "expect": 0.2092,
+      "tol": 0.09,
+      "why_tol": "ten seeds, sd 0.0296; the tolerance spans the observed spread and keeps the value far below the 0.90 to 0.99 of other acquisitions"
+    },
+    {
+      "id": "temporal-index-unseen",
+      "paper": "Table VII, three-frame recall on held-out 13-48 is 0.3806, still a failure",
+      "report": "temporal.json",
+      "path": "arms.index.unseen_recall",
+      "expect": 0.3806,
+      "tol": 0.18,
+      "why_tol": "ten seeds, sd 0.0842; the claim is that a classifier at published accuracy still misclassifies the majority of this acquisition, which any value below 0.5 supports"
+    },
+    {
+      "id": "temporal-shuffle-unseen",
+      "paper": "Table VII, shuffled-companion recall on held-out 13-48 is 0.6087",
+      "report": "temporal.json",
+      "path": "arms.shuffle.unseen_recall",
+      "expect": 0.6087,
+      "tol": 0.25,
+      "why_tol": "ten seeds, sd 0.1657; the claim is only that even this configuration stays far below the 0.948 reachable with coverage"
+    },
+    {
+      "id": "temporal-index-minus-single",
+      "paper": "Sec. VII-D, three frames beat one on 13-48 by +0.171, paired t = +6.93",
+      "report": "temporal.json",
+      "path": "index_minus_single.paired_t",
+      "expect": 6.93,
+      "tol": 4.0,
+      "why_tol": "a paired t over ten seeds; the two-sided critical value is 2.262 and 6.93 less 4.0 is 2.93, so no run failing to reach significance could pass"
+    },
+    {
+      "id": "temporal-index-minus-shuffle",
+      "paper": "Sec. VII-D, index-adjacent companions are WORSE than random same-folder ones by 0.228, paired t = -3.93, so file-name order is not arbitrary",
+      "report": "temporal.json",
+      "path": "index_minus_shuffle.paired_t",
+      "expect": -3.93,
+      "tol": 1.6,
+      "why_tol": "a paired t over ten seeds; the manuscript's claim is that the two arms are not exchangeable, so the tolerance must keep the magnitude above the 2.262 critical value, and -3.93 plus 1.6 is -2.33"
     }
   ]
 }
