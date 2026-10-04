@@ -259,7 +259,7 @@
     },
     {
       "id": "13-48-doppler-centroid",
-      "paper": "Table IV, Doppler centroid 8.50 on 13-48",
+      "paper": "Sec. VI-B, Doppler centroid 8.50 on 13-48",
       "report": [
         "step2d_13-48_10seeds.json",
         "step2d_13-48.json",
@@ -272,7 +272,7 @@
     },
     {
       "id": "13-48-peak-doppler-bin",
-      "paper": "Table IV, peak Doppler bin 7.58 on 13-48",
+      "paper": "Sec. VI-B, peak Doppler bin 7.58 on 13-48",
       "report": [
         "step2d_13-48_10seeds.json",
         "step2d_13-48.json",
@@ -285,7 +285,7 @@
     },
     {
       "id": "13-48-others-doppler-centroid",
-      "paper": "Table IV, the other drone acquisitions sit at Doppler centroid 30.04",
+      "paper": "Sec. VI-B, the other drone acquisitions sit at Doppler centroid 30.04",
       "report": [
         "step2d_13-48_10seeds.json",
         "step2d_13-48.json",
@@ -930,6 +930,33 @@
       "expect": -3.93,
       "tol": 1.6,
       "why_tol": "a paired t over ten seeds; the manuscript's claim is that the two arms are not exchangeable, so the tolerance must keep the magnitude above the 2.262 critical value, and -3.93 plus 1.6 is -2.33"
+    },
+    {
+      "id": "audit-train-triplets-leaking",
+      "paper": "Sec. VII-D, 50.6 per cent of training triplets contain at least one test frame",
+      "report": "temporal_audit.json",
+      "path": "overlap_audit.index.share_of_train_triplets",
+      "expect": 0.506,
+      "tol": 0.02,
+      "why_tol": "a deterministic count over a fixed partition; the tolerance allows only for a differently seeded split, and the claim is that roughly half of training inputs are affected"
+    },
+    {
+      "id": "audit-test-frames-reached-index",
+      "paper": "Sec. VII-D, 82.7 per cent of test frames appear inside some training input under index order",
+      "report": "temporal_audit.json",
+      "path": "overlap_audit.index.share_of_test_frames",
+      "expect": 0.827,
+      "tol": 0.05,
+      "why_tol": "deterministic given the partition; the manuscript's claim is that the great majority of the test set is reached, which any value in this range supports"
+    },
+    {
+      "id": "audit-test-frames-reached-shuffle",
+      "paper": "Sec. VII-D, 68.4 per cent under shuffled companions, which is LESS than index order",
+      "report": "temporal_audit.json",
+      "path": "overlap_audit.shuffle.share_of_test_frames",
+      "expect": 0.684,
+      "tol": 0.05,
+      "why_tol": "the manuscript rests a claim on this being below the index figure of 0.827, so the tolerance must not reach it; 0.684 plus 0.05 is 0.734, comfortably clear"
     }
   ]
 }
