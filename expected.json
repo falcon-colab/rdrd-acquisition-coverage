@@ -940,7 +940,10 @@
     {
       "id": "audit-train-triplets-leaking",
       "paper": "Sec. VII-D, 50.6 per cent of training triplets contain at least one test frame",
-      "report": "temporal_audit.json",
+      "report": [
+        "temporal.json",
+        "temporal_audit.json"
+      ],
       "path": "overlap_audit.index.share_of_train_triplets",
       "expect": 0.506,
       "tol": 0.02,
@@ -949,7 +952,10 @@
     {
       "id": "audit-test-frames-reached-index",
       "paper": "Sec. VII-D, 82.7 per cent of test frames appear inside some training input under index order",
-      "report": "temporal_audit.json",
+      "report": [
+        "temporal.json",
+        "temporal_audit.json"
+      ],
       "path": "overlap_audit.index.share_of_test_frames",
       "expect": 0.827,
       "tol": 0.05,
@@ -958,7 +964,10 @@
     {
       "id": "audit-test-frames-reached-shuffle",
       "paper": "Sec. VII-D, 68.4 per cent under shuffled companions, which is LESS than index order",
-      "report": "temporal_audit.json",
+      "report": [
+        "temporal.json",
+        "temporal_audit.json"
+      ],
       "path": "overlap_audit.shuffle.share_of_test_frames",
       "expect": 0.684,
       "tol": 0.05,
@@ -1003,11 +1012,23 @@
     {
       "id": "audit-clean-zero-overlap",
       "paper": "Sec. VII-C, the overlap-free arm reaches none of the test set, which is what makes it the control",
-      "report": "temporal_audit.json",
+      "report": [
+        "temporal.json",
+        "temporal_audit.json"
+      ],
       "path": "overlap_audit.clean.share_of_test_frames",
       "expect": 0.0,
       "tol": 0.0,
       "why_tol": "exact by construction: a companion sharing the centre's split tag cannot cross the partition, so any non-zero value means the arm is not doing its job"
+    },
+    {
+      "id": "samples-raw-total",
+      "paper": "Fig. 1, the distributed archive holds 34,970 files before deduplication",
+      "report": "step1_report.json",
+      "path": "dedup.raw_total",
+      "expect": 34970,
+      "tol": 0,
+      "why_tol": "a file count, exact or the archive is not the same one; it is twice the deduplicated 17,485 because the tree appears twice"
     }
   ]
 }

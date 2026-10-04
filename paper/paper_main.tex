@@ -21,16 +21,26 @@
 \usepackage{booktabs}
 \usepackage{url}
 \usepackage[table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning}
+
+%% Float spacing only. Type size, column width and margins are the
+%% IEEEtran defaults and are deliberately left untouched.
+\setlength{\textfloatsep}{8pt plus 2pt minus 2pt}
+\setlength{\floatsep}{8pt plus 2pt minus 2pt}
+\setlength{\intextsep}{8pt plus 2pt minus 2pt}
+\setlength{\abovecaptionskip}{4pt}
+\setlength{\belowcaptionskip}{0pt}
 
 \begin{document}
 
 \title{Aggregate Accuracy Conceals an Acquisition-Level Failure in a Public Radar Target Recognition Benchmark}
 
-\author{\IEEEauthorblockN{Ghulam Mustafa, Ali Nawaz, Zohaib Ahmad Khan}
+\author{\IEEEauthorblockN{Ghulam Mustafa, Ghulam Murtaza, Ali Nawaz, Zohaib Ahmad Khan}
 \IEEEauthorblockA{\textit{College of Aeronautical Engineering} \\
 \textit{National University of Sciences and Technology}\\
 Islamabad, Pakistan \\
-gmustafa.ms19avecae@student.nust.edu.pk; alinawaz1302@gmail.com; zakhan@cae.nust.edu.pk}
+gmustafa.ms19avecae@student.nust.edu.pk; murtaza.sab2@gmail.com; alinawaz1302@gmail.com; zakhan@cae.nust.edu.pk}
 }
 
 \maketitle
@@ -69,6 +79,36 @@ Comparing learning procedures across resampled partitions is statistically delic
 \label{sec:data}
 
 \subsection{Acquisition}
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[
+  node distance=2.6mm,
+  bx/.style={draw, rounded corners=1.5pt, align=center, inner xsep=3pt,
+             inner ysep=2.5pt, text width=0.86\columnwidth,
+             font=\scriptsize},
+  hl/.style={bx, very thick},
+  ar/.style={-{Latex[length=1.4mm,width=1.2mm]}, shorten >=0.5pt}]
+\node[bx] (a) {distributed archive, 34\,970 files\\[-1pt]
+               {\itshape the whole tree appears twice}};
+\node[bx, below=of a] (b) {deduplicate by sampled content digest\\[-1pt]
+               {\itshape 17\,485 samples in 80 folders}};
+\node[bx, below=of b] (c) {group by leading \texttt{HH-MM} timestamp\\[-1pt]
+               {\itshape 52 acquisitions: 15 car, 21 drone, 16 person}};
+\node[bx, below=of c] (d) {five-fold split, whole units never split\\[-1pt]
+               {\itshape validation drawn from whole training units}};
+\node[hl, below=of d] (e) {per-acquisition out-of-fold recall\\[-1pt]
+               {\itshape 20 of 21 drone units 0.90--0.99, \texttt{13-48} 0.249}};
+\node[bx, below=of e] (f) {coverage test, controls, three-frame arms};
+\draw[ar] (a) -- (b); \draw[ar] (b) -- (c); \draw[ar] (c) -- (d);
+\draw[ar] (d) -- (e); \draw[ar] (e) -- (f);
+\end{tikzpicture}
+\caption{Preparation and evaluation. The step in bold is the one a standard
+frame-level protocol does not produce: because every unit is held out exactly
+once, a single cross-validation pass yields a recall per acquisition at no
+extra cost, and that breakdown is what exposes \texttt{13-48}.}
+\label{fig:pipeline}
+\end{figure}
+
 
 The database was collected with an FMCW system at 8.75\,GHz with 500\,MHz of bandwidth, using one transmitting and eight receiving antennas forming a 64-element array~\cite{roldan2020,quevedo2019}. The published parameters give a range resolution of 0.878\,m, a maximum unambiguous range of 3.598\,km and a Doppler resolution of 0.34\,km/h with 512 integrated ramps. We quote these rather than recomputing them: a naive calculation from bandwidth alone gives a range resolution roughly three times finer than the system achieves.
 
@@ -114,7 +154,7 @@ We rest no claim on a significance test. Fold scores under the two protocols are
 
 \subsection{Per-session recall}
 
-Several experiments below evaluate acquisition \texttt{13-48} and report different recall for it, because their training and test sets differ. They are not alternative estimates of one quantity. Cross-validation tests the whole acquisition as one out-of-fold fold and gives 0.249; the coverage test of Section~\ref{sec:regime}C evaluates a held-back half and gives 0.178; the held-out experiment of Section~\ref{sec:inputgap} excludes the acquisition from training entirely and gives 0.209 at one frame and 0.381 at three. We name the protocol wherever a figure for this acquisition appears.
+Several experiments below report different recall for acquisition \texttt{13-48} because their training and test sets differ; they are not alternative estimates of one quantity. Cross-validation tests the whole acquisition as one out-of-fold fold (0.249), the coverage test a held-back half (0.178), and the held-out experiment of Section~\ref{sec:inputgap} excludes it from training entirely (0.238 at one frame, 0.367 at three). We name the protocol wherever a figure for it appears.
 
 Because every unit appears in the test fold exactly once, a single cross-validation pass yields an out-of-fold recall for each of the 52 acquisitions. Across drone acquisitions, twenty fall between 0.90 and 0.99. One, \texttt{13-48}, is classified at 0.249. The weakest pedestrian and vehicle acquisitions are 0.7776 and 0.8189, respectively.
 
@@ -146,17 +186,37 @@ The source publication describes three drone exercises: radial trajectories flow
 To separate absence of comparable training data from intrinsic difficulty, we split \texttt{13-48} in half. In the first condition, the acquisition is excluded from training entirely and the model is evaluated on one half; in the second, the other half is added to the training set.
 
 
-Both conditions are evaluated on the same held-back half ($N=197$). Recall rises from 0.178 to 0.948 over ten seeds, a recovery of 0.770. Held out, 79\,\% of samples are assigned to the pedestrian class; with half the acquisition in training, 3\,\% are. Held-out recall ranges 0.142 to 0.264 across the ten seeds and the half-in-training condition 0.904 to 0.980, so the worst seed of one condition still exceeds the best of the other by 0.640. We lead with that separation rather than a significance test because it assumes nothing about either distribution and is an order of magnitude larger than the spread within either.
+\begin{table}[t]
+\caption{Coverage test, mean of ten seeds. Each acquisition is first excluded
+from training entirely, then half of it is added back; both conditions are
+evaluated on the same held-back half. The two controls were selected after
+observing per-acquisition recall and are therefore exploratory.}
+\label{tab:coverage}
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}llccc@{}}
+\toprule
+Acquisition & Class & Held out & Half in training & Recovery \\
+\midrule
+\texttt{13-48} & drone      & 0.178 & \textbf{0.948} & \textbf{$+0.770$} \\
+\texttt{11-23} & pedestrian & 0.800 & 0.856          & $+0.056$ \\
+\texttt{15-37} & vehicle    & 0.837 & 0.845          & $+0.008$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Both conditions are evaluated on the same held-back half ($N=197$). Recall rises from 0.178 to 0.948 over ten seeds, a recovery of 0.770 (Table~\ref{tab:coverage}). Held out, 79\,\% of samples are assigned to the pedestrian class; with half the acquisition in training, 3\,\% are. Held-out recall ranges 0.142 to 0.264 across the ten seeds and the half-in-training condition 0.904 to 0.980, so the worst seed of one condition still exceeds the best of the other by 0.640. We lead with that separation rather than a significance test because it assumes nothing about either distribution and is an order of magnitude larger than the spread within either.
 
 The failure is therefore associated with the absence of comparable training examples rather than an irreducible inability to classify such samples, though we stop short of a stronger causal statement: because the added samples come from the same acquisition, the experiment cannot separate an out-of-distribution flight regime from an acquisition-specific signature or a per-recording processing difference. It establishes that something present here and absent from the other twenty is learnable and sufficient.
 
 \subsection{A control acquisition}
 
-A large recovery is only evidence of a coverage failure if a large recovery is unusual. Acquisitions well below the aggregate exist in the other two classes: the weakest pedestrian and vehicle acquisitions sit at 0.7776 and 0.8189. As an exploratory control we therefore repeated the identical experiment, at the same ten seeds, on the weakest acquisition in either non-drone class, \texttt{11-23}. These controls were selected after observing per-acquisition recall, so they test whether a large recovery accompanies low recall in the cases available rather than serving as independent confirmatory controls.
+A large recovery is only evidence of a coverage failure if a large recovery is unusual, and acquisitions well below the aggregate exist in the other classes: the weakest pedestrian and vehicle units sit at 0.7776 and 0.8189. We therefore repeated the identical experiment at the same ten seeds on each. Both were selected after observing per-acquisition recall, so they test whether a large recovery accompanies low recall in the cases available rather than serving as independent confirmatory controls.
 
-Held out entirely \texttt{11-23} ($N=154$) reaches 0.800, and with half in training 0.856, a recovery of 0.056 against the 0.770 of \texttt{13-48}. We repeated this on \texttt{15-37} ($N=185$), the weakest vehicle acquisition, which goes 0.837 to 0.845, a recovery of 0.008: its held-out and half-in-training conditions overlap on nine of ten seeds and the per-seed difference has a standard deviation of 0.030, so its recovery is not distinguishable from zero. All three acquisitions sit well below their class aggregate, and exposure repairs one while leaving the other two where they were. Low recall and a large recovery are therefore separate properties, and the coverage result is not a restatement of \texttt{13-48} being difficult.
+\texttt{11-23} ($N=154$) recovers 0.056 and \texttt{15-37} ($N=185$) 0.008, the latter indistinguishable from zero: its conditions overlap on nine of ten seeds with a per-seed standard deviation of 0.030. All three sit well below their class aggregate, yet exposure repairs one and leaves the others where they were. Low recall and a large recovery are therefore separate properties, and the coverage result is not a restatement of \texttt{13-48} being difficult.
 
-The controls also differ from \texttt{13-48} descriptively. \texttt{11-23} is unremarkable in Doppler but an outlier in extent ($d=+3.4$), and 56.8\,\% of its frames sit nearest the \emph{drone} centroid: confusable with another class rather than unrepresented, which adding training data should not repair. \texttt{15-37} is the cleaner control, with no property separating it from other vehicle acquisitions, the largest standardised difference across the twelve being $0.25$ against $-15.67$ for \texttt{13-48}, and 62.7\,\% of its frames nearest their own class: descriptively ordinary and simply handled less well. An acquisition can therefore be weak without being unrepresented, which is the alternative the coverage experiment must exclude, though three acquisitions of fifty-two remain three cases.
+The controls also differ descriptively. \texttt{11-23} is unremarkable in Doppler but an outlier in extent ($d=+3.4$) with 56.8\,\% of its frames nearest the \emph{drone} centroid: confusable with another class rather than unrepresented, which training data should not repair. \texttt{15-37} is the cleaner control, no property separating it from other vehicle acquisitions, the largest standardised difference across the twelve being $0.25$ against $-15.67$ for \texttt{13-48}, and 62.7\,\% of its frames nearest their own class: ordinary, and simply handled less well. An acquisition can therefore be weak without being unrepresented, which is the alternative the coverage experiment must exclude.
 
 This is the paper's principal result. A classifier benchmarked on this dataset with random partitioning reports accuracy near 99\,\% while failing almost completely on one acquisition, and the standard evaluation gives no indication of it. If that acquisition is a distinct flight regime, as the Doppler evidence and the source publication's description together suggest, the consequence for a counter-UAS deployment is direct, though it follows from an identification we cannot verify and we treat it accordingly.
 
@@ -175,9 +235,7 @@ Four physically motivated mechanisms for the drone class being more fragile were
 
 \subsection{Limitations}
 
-Both findings rest on the same single acquisition. The coverage result concerns \texttt{13-48} directly, and the aggregation result is measured by transfer to \texttt{13-48}, so the paper has an effective sample size of one at the level of flight regimes. Whether fourfold aggregation would improve transfer to a \emph{different} unrepresented regime is untested, and we cannot claim it. The data comes from one dataset, one radar and one drone platform, and the acquisition comprises 7.8\,\% of the drone samples. Whether the distinguishing Doppler offset reflects flight dynamics or a per-recording processing difference cannot be determined from the published data. The identification of \texttt{13-48} with the free-flight exercise is an inference, since the source publication does not supply acquisition timestamps. The two controls in Section~\ref{sec:regime}D show that the large recovery was not observed in either of them, but three acquisitions of fifty-two have been tested this way, and the contrast between them is a contrast of three cases rather than a general law about difficult recordings. Our grouping rule assumes that a shared timestamp prefix implies a shared acquisition. Section~\ref{sec:data}C sets out the evidence for it, but it remains an inference from directory structure rather than a ground-truth acquisition identifier.
-
-The aggregation effect summarised above is specific to \texttt{13-48}: it did not reproduce on the four other acquisitions tested, and five units cannot support a stronger reading in either direction. Whether it would appear for a different acquisition on which the classifier fails cannot be tested within this dataset, which contains only one such acquisition.
+Both principal findings rest on the same acquisition, so the effective sample size at the level of flight regimes is one, and the data comes from one dataset, one radar and one drone platform, with \texttt{13-48} comprising 7.8\,\% of the drone samples. Whether its distinguishing Doppler offset reflects flight dynamics or a per-recording processing difference cannot be determined from the published data, and its identification with the free-flight exercise is an inference, the source publication supplying no acquisition timestamps. The two controls show that the large recovery was not observed in either, but three acquisitions of fifty-two is a contrast of three cases rather than a law about difficult recordings. Our grouping rule assumes that a shared timestamp prefix implies a shared acquisition, which Section~\ref{sec:data}C supports without establishing. The aggregation effect is likewise specific to \texttt{13-48}, not reproducing on the four others tested, and five units cannot support a stronger reading in either direction.
 
 \subsection{The published baselines use an input the release does not preserve}
 \label{sec:inputgap}
@@ -223,7 +281,7 @@ What does separate the arms is how far the companions sit from the centre. Recal
 
 \section{Conclusion}
 
-Re-evaluating a public radar target recognition benchmark at the level of acquisitions leaves aggregate accuracy close to that obtained under random partitioning, and we do not establish a significant aggregate difference. The per-acquisition breakdown is nevertheless strongly heterogeneous: one drone acquisition of twenty-one attains 0.249 out-of-fold recall against 0.90 to 0.99 for the remainder, and excluding it from training entirely leaves recall on a held-back half at 0.178, rising to 0.948 once the other half is added, with the two conditions overlapping on no seed. The same experiment recovers 0.056 and 0.008 on the weakest acquisition of each other class. The acquisition is distinguished by the Doppler position of its target energy, which we suggest, without being able to verify it, corresponds to the manually flown free-flight exercise described in the source publication. The failure survives a three-frame approximation to the published input formulation, so it does not follow from our single-frame input.
+Re-evaluating a public radar benchmark at the level of acquisitions leaves aggregate accuracy close to that under random partitioning, with no significant difference established. The per-acquisition breakdown is nevertheless strongly heterogeneous: one drone acquisition of twenty-one attains 0.249 out-of-fold recall against 0.90 to 0.99 for the rest, and excluding it from training leaves a held-back half at 0.178, rising to 0.948 once the other half is added, the conditions overlapping on no seed. The same experiment recovers 0.056 and 0.008 on the weakest acquisition of each other class. The acquisition is distinguished by the Doppler position of its target energy, which we suggest, unverifiably, is the manually flown free-flight exercise the source publication describes. The failure survives a three-frame approximation to the published input, so it does not follow from our single-frame one.
 
 The practical conclusion is narrow and, we believe, sound: on benchmarks assembled from continuous acquisitions, a headline accuracy is compatible with near-complete failure on an individual acquisition, and a per-acquisition breakdown is inexpensive insurance against reporting one without knowing it. We present this as a case study of one dataset and one acquisition, and it should be read at that scope. Code, partition files, per-stage reports and a script that reruns the experiments and checks every number reported here against its own tolerance are released at \url{github.com/falcon-colab/rdrd-acquisition-coverage} and archived at~\cite{dataset2026}.
 
