@@ -256,6 +256,19 @@ def _comb(n, k):
     return num
 
 
+def check_scope(c):
+    """manuscript or artefact.
+
+    Removing the compression study from the manuscript did not remove it from
+    the released analysis, and the numbers it produced are still worth
+    guarding. A check whose number the manuscript no longer prints is marked
+    artefact-only: it still runs and still has to agree, but it is counted
+    separately so that "every number in the paper is checked" stays a true
+    statement about the paper rather than about the repository.
+    """
+    return c.get("scope", "manuscript")
+
+
 def report_label(name):
     """How a report is named in the 'absent' list: all its candidates."""
     return name if isinstance(name, str) else " or ".join(name)
@@ -389,6 +402,12 @@ def main():
     print("=" * (w + 56))
     print("%d of %d claims tested, %d agreed, %d disagreed"
           % (tested, len(checks), tested - len(failures), len(failures)))
+    man = [r for r in rows if check_scope(r[0]) == "manuscript"]
+    art = [r for r in rows if check_scope(r[0]) == "artefact"]
+    if art:
+        print("  of these, %d are numbers the manuscript prints and %d guard"
+              % (len(man), len(art)))
+        print("  analysis released in the artefact but not printed in the paper")
 
     if used:
         print("\nread from:")

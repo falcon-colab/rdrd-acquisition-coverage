@@ -44,21 +44,23 @@
     },
     {
       "id": "cells-1x",
-      "paper": "Table V, 671 input cells at full resolution",
+      "paper": "Artefact only: 671 input cells at full resolution",
       "report": "step3_grid.json",
       "path": "standard.1x_32bit.input_cells",
       "expect": 671,
       "tol": 0,
-      "why_tol": "11 by 61, arithmetic"
+      "why_tol": "11 by 61, arithmetic",
+      "scope": "artefact"
     },
     {
       "id": "cells-2x",
-      "paper": "Table V, 330 cells at 2x",
+      "paper": "Artefact only: 330 cells at 2x",
       "report": "step3_grid.json",
       "path": "standard.2x_32bit.input_cells",
       "expect": 330,
       "tol": 0,
-      "why_tol": "arithmetic"
+      "why_tol": "arithmetic",
+      "scope": "artefact"
     },
     {
       "id": "cells-4x",
@@ -71,12 +73,13 @@
     },
     {
       "id": "cells-8x",
-      "paper": "Table V, 77 cells at 8x",
+      "paper": "Artefact only: 77 cells at 8x",
       "report": "step3_grid.json",
       "path": "standard.8x_32bit.input_cells",
       "expect": 77,
       "tol": 0,
-      "why_tol": "arithmetic"
+      "why_tol": "arithmetic",
+      "scope": "artefact"
     },
     {
       "id": "kfold-acc-random",
@@ -422,12 +425,13 @@
     },
     {
       "id": "control-not-nearest-own-class",
-      "paper": "Sec. VI-D, 42.5 percent of the control's samples sit nearest their own class centroid, against 100 percent for 13-48",
+      "paper": "Artefact only: 42.5 percent of the control's samples sit nearest their own class centroid, against 100 percent for 13-48",
       "report": "step2d_control.json",
       "path": "nearest.person.frac_nearest",
       "expect": 0.425,
       "tol": 0.06,
-      "why_tol": "a deterministic reduction over a fixed array; it is the evidence for reading the control as confusable rather than unrepresented"
+      "why_tol": "a deterministic reduction over a fixed array; it is the evidence for reading the control as confusable rather than unrepresented",
+      "scope": "artefact"
     },
     {
       "id": "control2-held-out",
@@ -585,7 +589,7 @@
     },
     {
       "id": "paired-4x-vs-1x-unseen-8",
-      "paper": "Sec. V, paired t = +4.08 at 8 bits",
+      "paper": "Artefact only: paired t = +4.08 at 8 bits",
       "report": [
         "step4_seeds10.json",
         "step4_seeds.json"
@@ -597,7 +601,8 @@
       },
       "expect": 4.08,
       "tol": 1.75,
-      "why_tol": "as above; 4.08 less 1.75 is 2.33, still above the 2.262 critical value at nine degrees of freedom"
+      "why_tol": "as above; 4.08 less 1.75 is 2.33, still above the 2.262 critical value at nine degrees of freedom",
+      "scope": "artefact"
     },
     {
       "id": "paired-4x-vs-1x-standard-32",
@@ -763,7 +768,7 @@
     },
     {
       "id": "paired-n-positive-unseen-8",
-      "paper": "Sec. V, positive on nine of ten seeds at 8 bits",
+      "paper": "Artefact only: positive on nine of ten seeds at 8 bits",
       "report": [
         "step4_seeds10.json",
         "step4_seeds.json"
@@ -775,7 +780,8 @@
       },
       "expect": 9,
       "tol": 1,
-      "why_tol": "as above; the claim is a consistent sign, not an exact count"
+      "why_tol": "as above; the claim is a consistent sign, not an exact count",
+      "scope": "artefact"
     },
     {
       "id": "paired-mean-diff-unseen-32",
