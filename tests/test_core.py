@@ -377,6 +377,48 @@ def test_arms_agree_on_sample_count_and_centre():
     assert np.array_equal(a[:, 0], c[:, 1])
 
 
+def test_clean_companions_always_share_the_centres_split_tag():
+    """The clean arm exists to remove cross-partition overlap. If a companion
+    ever carried a different split tag the arm would not do that, and the
+    measured overlap cost would be wrong."""
+    paths = ["Drones/13-48/%d.csv" % i for i in range(1, 41)]
+    rng = np.random.default_rng(0)
+    rnd = np.array(["train"] * 40, dtype=object)
+    pick = rng.permutation(40)
+    rnd[pick[:12]] = "test"
+    rnd[pick[12:18]] = "val"
+    rnd = rnd.astype(str)
+    trips = temporal.triplet_rows(paths)
+    clean, fallback, dist = temporal.clean_companion_rows(paths, trips, rnd)
+    assert len(clean) == len(trips)
+    for (_r0, r1, _r2), (c0, c1) in zip(trips, clean):
+        if c0 == r1 or c1 == r1:
+            continue                      # a fallback, which repeats the centre
+        assert rnd[c0] == rnd[r1], "companion crossed the split"
+        assert rnd[c1] == rnd[r1], "companion crossed the split"
+    assert dist >= 1.0
+
+
+def test_clean_arm_has_no_cross_partition_overlap():
+    """The audit must report exactly zero for the clean arm, and something
+    non-zero for the index arm on the same shuffled partition, or the
+    comparison between them measures nothing."""
+    paths = ["Drones/13-48/%d.csv" % i for i in range(1, 61)]
+    rng = np.random.default_rng(3)
+    rnd = np.array(["train"] * 60, dtype=object)
+    pick = rng.permutation(60)
+    rnd[pick[:20]] = "test"
+    rnd = rnd.astype(str)
+    trips = temporal.triplet_rows(paths)
+    comps, _ = temporal.companion_rows(paths, trips, seed=0)
+    clean, _, _ = temporal.clean_companion_rows(paths, trips, rnd)
+    over = temporal.audit_overlap(trips, comps, rnd, clean)
+    assert over["clean"]["share_of_test_frames"] == 0.0
+    assert over["clean"]["share_of_train_triplets"] == 0.0
+    assert over["index"]["share_of_test_frames"] > 0.0, \
+        "the index arm should leak on a shuffled partition"
+
+
 def _run_all():
     fns = [(k, v) for k, v in sorted(globals().items())
            if k.startswith("test_") and callable(v)]

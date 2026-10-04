@@ -85,7 +85,7 @@ from step2b import normalise                               # noqa: E402
 from step3 import TARGET, evaluate                         # noqa: E402
 
 NUM_RE = re.compile(r"(\d+)")
-ARMS = ("single", "index", "shuffle")
+ARMS = ("single", "index", "shuffle", "clean")
 
 
 # --------------------------------------------------------------- triplets
@@ -148,7 +148,52 @@ def companion_rows(paths, trips, seed=0):
     return out, fallback
 
 
-def build_arm(Xn1, trips, comps, arm):
+def clean_companion_rows(paths, trips, rnd):
+    """Two companions that share the centre's split tag, nearest in index order.
+
+    This arm exists to turn a claim into a measurement. The index arm's
+    random-split accuracy is inflated because a training triplet can carry
+    test frames, but saying so does not say by how much. Here the companions
+    are the nearest frames in the same folder whose split tag matches the
+    centre's, so a training input contains only training frames and a test
+    input only test frames. No window overlap crosses the partition, and the
+    difference from the index arm is the overlap's contribution.
+
+    The companions sit slightly farther apart in index order than true
+    neighbours, since same-tag frames are sparser than frames. That is a
+    confound between removing overlap and widening the window, so the mean
+    companion distance is returned and reported alongside the result rather
+    than left for a reader to wonder about.
+    """
+    folders = folder_index(paths)
+    pos_of, items_of = {}, {}
+    for folder, items in folders.items():
+        items_of[folder] = items
+        for i, (_idx, row) in enumerate(items):
+            pos_of[row] = (folder, i)
+    out, fallback, dists = [], 0, []
+    for (_r0, r1, _r2) in trips:
+        folder, pos = pos_of[r1]
+        items = items_of[folder]
+        tag = rnd[r1]
+        picks, d = [], 1
+        while len(picks) < 2 and d < len(items):
+            for cp in (pos - d, pos + d):
+                if 0 <= cp < len(items) and len(picks) < 2:
+                    cr = items[cp][1]
+                    if cr != r1 and rnd[cr] == tag:
+                        picks.append((cr, d))
+            d += 1
+        if len(picks) < 2:
+            fallback += 1
+            while len(picks) < 2:
+                picks.append((r1, 0))          # repeat the centre; carries nothing
+        out.append((picks[0][0], picks[1][0]))
+        dists.extend(p[1] for p in picks if p[1] > 0)
+    return out, fallback, (float(np.mean(dists)) if dists else float("nan"))
+
+
+def build_arm(Xn1, trips, comps, arm, clean=None):
     """(M, C, H, W) for one arm. Xn1 is the normalised (N, 1, H, W) array."""
     centre = np.array([t[1] for t in trips])
     if arm == "single":
@@ -157,6 +202,10 @@ def build_arm(Xn1, trips, comps, arm):
         a = np.array([t[0] for t in trips]); c = np.array([t[2] for t in trips])
     elif arm == "shuffle":
         a = np.array([p[0] for p in comps]); c = np.array([p[1] for p in comps])
+    elif arm == "clean":
+        if clean is None:
+            raise ValueError("the clean arm needs clean_companion_rows output")
+        a = np.array([p[0] for p in clean]); c = np.array([p[1] for p in clean])
     else:
         raise ValueError(arm)
     return np.concatenate([Xn1[a], Xn1[centre], Xn1[c]], axis=1)
@@ -242,7 +291,7 @@ def stat(v):
     return float(v.mean()), float(v.std(ddof=1)) if len(v) > 1 else 0.0
 
 
-def audit_overlap(trips, comps, rnd):
+def audit_overlap(trips, comps, rnd, clean=None):
     """How much of the test set appears inside training inputs.
 
     A sliding window over frames plus a frame-level random partition is a
@@ -257,9 +306,12 @@ def audit_overlap(trips, comps, rnd):
     no training, and it is reported for both three-channel arms so the
     difference between local and acquisition-wide companions is visible.
     """
+    flanks = [("index", [(t[0], t[2]) for t in trips]),
+              ("shuffle", list(comps))]
+    if clean is not None:
+        flanks.append(("clean", list(clean)))
     out = {}
-    for name, flank in (("index", [(t[0], t[2]) for t in trips]),
-                        ("shuffle", list(comps))):
+    for name, flank in flanks:
         n_tr_contaminated = 0
         n_train = 0
         reached = set()
@@ -308,6 +360,7 @@ def main():
     Xn1 = normalise(X, args.scheme)
     trips = triplet_rows(paths)
     comps, fallback = companion_rows(paths, trips)
+    clean, clean_fallback, clean_dist = clean_companion_rows(paths, trips, rnd)
     centre = np.array([t[1] for t in trips])
     yt, ut, rt = y[centre], unit[centre], rnd[centre]
     yi = np.array([CLASSES.index(c) for c in yt])
@@ -320,6 +373,8 @@ def main():
           % (len(trips), 100.0 * len(trips) / len(X)))
     print("  folders contributing       %d" % len(folder_index(paths)))
     print("  shuffle-arm fallbacks      %d" % fallback)
+    print("  clean-arm fallbacks        %d  (mean companion distance %.2f)"
+          % (clean_fallback, clean_dist))
     print("  triplets on 13-48          %d" % int((ut == TARGET).sum()))
     print("  published input was 11x61x3 distance-doppler-time, 400 ms apart;")
     print("  the release carries no timestamp, so 'index' is an approximation")
@@ -329,16 +384,20 @@ def main():
     out = {"n_frames": int(len(X)), "n_triplets": int(len(trips)),
            "n_triplets_target": int((ut == TARGET).sum()),
            "shuffle_fallbacks": int(fallback),
+           "clean_fallbacks": int(clean_fallback),
+           "clean_mean_companion_distance": clean_dist,
            "epochs": args.epochs, "seeds": list(args.seeds), "arms": {}}
 
-    over = audit_overlap(trips, comps, rnd)
+    over = audit_overlap(trips, comps, rnd, clean)
     out["overlap_audit"] = over
     print("  OVERLAP AUDIT, random protocol. A sliding window plus a")
     print("  frame-level random split puts test frames inside training")
     print("  inputs, so the three-channel accuracies below are inflated and")
     print("  are reported only to establish comparability with the published")
     print("  protocol, never as a measure of generalisation.")
-    for name in ("index", "shuffle"):
+    for name in ("index", "shuffle", "clean"):
+        if name not in over:
+            continue
         o = over[name]
         print("    %-8s %6.1f%% of training triplets contain a test frame;"
               " %6.1f%% of test frames appear in some training input"
@@ -363,7 +422,7 @@ def main():
     print("  this manuscript, single frame, same split: 0.9537\n")
 
     for arm in args.arms:
-        Xa = build_arm(Xn1, trips, comps, arm)
+        Xa = build_arm(Xn1, trips, comps, arm, clean)
         rec = {"channels": int(Xa.shape[1])}
         print("  %-8s input %s" % (arm, tuple(Xa.shape[1:])))
 
@@ -392,7 +451,8 @@ def main():
               % (um, usd, min(uns), max(uns)))
         out["arms"][arm] = rec
 
-    have = [a for a in ("index", "shuffle", "single") if a in out["arms"]]
+    have = [a for a in ("index", "shuffle", "single", "clean")
+            if a in out["arms"]]
     if "index" in have and "shuffle" in have:
         a = np.array(out["arms"]["index"]["unseen_runs"])
         b = np.array(out["arms"]["shuffle"]["unseen_runs"])
@@ -409,6 +469,29 @@ def main():
               % (dif.mean(), sd_d, t, n))
         print("    A null here means file-name order carries no usable time")
         print("    axis, which is a statement about the release.")
+    if "index" in have and "clean" in have:
+        a = np.array(out["arms"]["index"]["random_runs"])
+        b = np.array(out["arms"]["clean"]["random_runs"])
+        n = min(len(a), len(b)); dif = a[:n] - b[:n]
+        out["overlap_cost_random"] = {
+            "mean": float(dif.mean()), "n": int(n),
+            "per_seed": [float(x) for x in dif]}
+        print("\n  overlap contribution on the random split, index minus clean:")
+        print("    %+.4f accuracy over %d seeds" % (dif.mean(), n))
+        print("    The clean arm removes cross-partition window overlap and")
+        print("    changes nothing else except companion distance, so this is")
+        print("    the inflation attributable to overlap.")
+        a = np.array(out["arms"]["index"]["unseen_runs"])
+        b = np.array(out["arms"]["clean"]["unseen_runs"])
+        n = min(len(a), len(b)); dif = a[:n] - b[:n]
+        out["overlap_cost_unseen"] = {
+            "mean": float(dif.mean()), "n": int(n),
+            "per_seed": [float(x) for x in dif]}
+        print("    on held-out 13-48 the same contrast is %+.4f, which should"
+              % dif.mean())
+        print("    be near zero: that acquisition is excluded from training,")
+        print("    so no overlap was available to remove.")
+
     if "index" in have and "single" in have:
         a = np.array(out["arms"]["index"]["unseen_runs"])
         b = np.array(out["arms"]["single"]["unseen_runs"])
