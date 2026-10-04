@@ -91,6 +91,36 @@ def d_min_session_recall(rep, a):
     return min(s["recall"] for s in rep[a["cls"]]["sessions"])
 
 
+def d_units_above(rep, a):
+    """How many of the 52 units clear a threshold.
+
+    The manuscript and a figure caption both count units above a cut, and
+    counting by eye off a strip plot is exactly how a caption acquires a
+    wrong number. Count it from the report instead. 'cls' restricts to one
+    class, 'exclude' drops a named unit.
+    """
+    classes = [a["cls"]] if a.get("cls") else sorted(rep)
+    n = 0
+    for c in classes:
+        for s in rep[c]["sessions"]:
+            if s["name"] == a.get("exclude"):
+                continue
+            if s["recall"] > a["above"]:
+                n += 1
+    return n
+
+
+def d_session_recall_extreme(rep, a):
+    """The smallest or largest per-acquisition recall in a class.
+
+    Used for the stated band of the drone class once 13-48 is set aside.
+    A band quoted as 'between x and y' is two claims, so it gets two checks.
+    """
+    vals = [s["recall"] for s in rep[a["cls"]]["sessions"]
+            if s["name"] != a.get("exclude")]
+    return max(vals) if a.get("which") == "max" else min(vals)
+
+
 def d_recall_sd_excluding(rep, a):
     rows = [s for s in rep[a["cls"]]["sessions"] if s["name"] != a["exclude"]]
     return sd([s["recall"] for s in rows])
@@ -277,6 +307,8 @@ def report_label(name):
 DERIVATIONS = {
     "session_recall": d_session_recall,
     "min_session_recall": d_min_session_recall,
+    "units_above": d_units_above,
+    "session_recall_extreme": d_session_recall_extreme,
     "recall_sd_excluding": d_recall_sd_excluding,
     "pearson_excluding": d_pearson_excluding,
     "welch_t": d_welch_t,

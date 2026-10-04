@@ -1,1070 +1,1481 @@
 {
-  "_about": [
-    "Every number the manuscript states, paired with the report file and the",
-    "exact location inside it that produces the number. check_expected.py",
-    "reads this file, reads the reports a run produced, and prints a table of",
-    "agreements and disagreements.",
-    "",
-    "On tolerances. Each entry carries its own 'tol' and a one-line reason.",
-    "Counts and parameter counts are exact: a mismatch there is a different",
-    "dataset or a different model, not noise. Trained quantities are not",
-    "exact and are not claimed to be. Training is stochastic, cuDNN kernel",
-    "selection is not deterministic across GPU models, and the manuscript",
-    "reports between-seed standard deviations as high as 0.16 on some cells of",
-    "the grid. The tolerance on a trained quantity is therefore set from the",
-    "reported spread of that quantity, not from a wish for a tight match. An",
-    "entry whose tolerance looks generous is one the manuscript already",
-    "describes as noisy, and the manuscript's own claim about it is",
-    "correspondingly weak.",
-    "",
-    "What a pass means: the run reproduced the number inside the spread the",
-    "paper reports for it. What a failure means: look at it. A failure on an",
-    "exact count means the archive differs. A failure on a trained quantity",
-    "outside its stated spread means the conclusion drawn from it does not",
-    "hold on this machine, and that is worth knowing and worth reporting."
-  ],
-  "checks": [
-    {
-      "id": "samples-total",
-      "paper": "Sec. III, 17,485 samples after deduplication",
-      "report": "step1_report.json",
-      "path": "dedup.total",
-      "expect": 17485,
-      "tol": 0,
-      "why_tol": "a file count, exact or the archive is not the same one"
-    },
-    {
-      "id": "model-params",
-      "paper": "Sec. III, 101,139 parameters",
-      "report": "step2_compare.json",
-      "path": "runs.grouped.0.params",
-      "expect": 101139,
-      "tol": 0,
-      "why_tol": "a parameter count, fixed by the architecture"
-    },
-    {
-      "id": "cells-1x",
-      "paper": "Artefact only: 671 input cells at full resolution",
-      "report": "step3_grid.json",
-      "path": "standard.1x_32bit.input_cells",
-      "expect": 671,
-      "tol": 0,
-      "why_tol": "11 by 61, arithmetic",
-      "scope": "artefact"
-    },
-    {
-      "id": "cells-2x",
-      "paper": "Artefact only: 330 cells at 2x",
-      "report": "step3_grid.json",
-      "path": "standard.2x_32bit.input_cells",
-      "expect": 330,
-      "tol": 0,
-      "why_tol": "arithmetic",
-      "scope": "artefact"
-    },
-    {
-      "id": "cells-4x",
-      "paper": "Table V, 165 cells at 4x",
-      "report": "step3_grid.json",
-      "path": "standard.4x_32bit.input_cells",
-      "expect": 165,
-      "tol": 0,
-      "why_tol": "arithmetic"
-    },
-    {
-      "id": "cells-8x",
-      "paper": "Artefact only: 77 cells at 8x",
-      "report": "step3_grid.json",
-      "path": "standard.8x_32bit.input_cells",
-      "expect": 77,
-      "tol": 0,
-      "why_tol": "arithmetic",
-      "scope": "artefact"
-    },
-    {
-      "id": "kfold-acc-random",
-      "paper": "Table III, accuracy, random split, mean 0.9335",
-      "report": "step2b_kfold.json",
-      "path": "summary.accuracy.random.mean",
-      "expect": 0.9335,
-      "tol": 0.02,
-      "why_tol": "between-fold sd 0.0055, between-seed 0.0030; 0.02 is about three times the combined spread"
-    },
-    {
-      "id": "kfold-acc-grouped",
-      "paper": "Table III, accuracy, grouped split, mean 0.9099",
-      "report": "step2b_kfold.json",
-      "path": "summary.accuracy.grouped.mean",
-      "expect": 0.9099,
-      "tol": 0.06,
-      "why_tol": "between-fold sd 0.0427, and the paper's point is that this spread is large"
-    },
-    {
-      "id": "kfold-acc-grouped-foldsd",
-      "paper": "Table III, grouped accuracy between-fold sd 0.0427",
-      "report": "step2b_kfold.json",
-      "path": "summary.accuracy.grouped.between_fold_sd",
-      "expect": 0.0427,
-      "tol": 0.025,
-      "why_tol": "a standard deviation over five folds is itself a noisy statistic"
-    },
-    {
-      "id": "kfold-drone-recall-random",
-      "paper": "Table III, drone recall, random split, 0.9358",
-      "report": "step2b_kfold.json",
-      "path": "summary.drone recall.random.mean",
-      "expect": 0.9358,
-      "tol": 0.03,
-      "why_tol": "fold sd 0.0078, seed sd 0.0144"
-    },
-    {
-      "id": "kfold-drone-recall-grouped",
-      "paper": "Table III, drone recall, grouped split, 0.8376",
-      "report": "step2b_kfold.json",
-      "path": "summary.drone recall.grouped.mean",
-      "expect": 0.8376,
-      "tol": 0.15,
-      "why_tol": "fold sd 0.1389; the manuscript reports this cell as dominated by one fold"
-    },
-    {
-      "id": "kfold-vehicle-f1-random",
-      "paper": "Table III, vehicle F1, random split, 0.9055",
-      "report": "step2b_kfold.json",
-      "path": "summary.car f1.random.mean",
-      "expect": 0.9055,
-      "tol": 0.03,
-      "why_tol": "fold sd 0.0073, seed sd 0.0043"
-    },
-    {
-      "id": "kfold-vehicle-f1-grouped",
-      "paper": "Table III, vehicle F1, grouped split, 0.8979",
-      "report": "step2b_kfold.json",
-      "path": "summary.car f1.grouped.mean",
-      "expect": 0.8979,
-      "tol": 0.04,
-      "why_tol": "fold sd 0.0117, seed sd 0.0095"
-    },
-    {
-      "id": "norm-offset",
-      "paper": "Sec. IV-A, offset normalisation accuracy 0.925",
-      "report": "step2b_norm.json",
-      "path": "offset.accuracy.mean",
-      "expect": 0.925,
-      "tol": 0.05,
-      "why_tol": "reported sd 0.046"
-    },
-    {
-      "id": "norm-peak",
-      "paper": "Sec. IV-A, peak-referenced accuracy 0.908",
-      "report": "step2b_norm.json",
-      "path": "peak.accuracy.mean",
-      "expect": 0.908,
-      "tol": 0.05,
-      "why_tol": "reported sd 0.044"
-    },
-    {
-      "id": "session-13-48-recall",
-      "paper": "Table IV and Sec. IV, out-of-fold recall 0.249 on 13-48",
-      "report": "step2c_sessions.json",
-      "derive": "session_recall",
-      "args": {
-        "cls": "drone",
-        "name": "13-48"
-      },
-      "expect": 0.249,
-      "tol": 0.1,
-      "why_tol": "a single acquisition over few folds; the claim is that it is far below 0.90, not that it is 0.249"
-    },
-    {
-      "id": "session-weakest-person",
-      "paper": "Sec. IV, weakest pedestrian acquisition 0.7776",
-      "report": "step2c_sessions.json",
-      "derive": "min_session_recall",
-      "args": {
-        "cls": "person"
-      },
-      "expect": 0.7776,
-      "tol": 0.1,
-      "why_tol": "one acquisition, few folds"
-    },
-    {
-      "id": "session-weakest-car",
-      "paper": "Sec. IV, weakest vehicle acquisition 0.8189",
-      "report": "step2c_sessions.json",
-      "derive": "min_session_recall",
-      "args": {
-        "cls": "car"
-      },
-      "expect": 0.8189,
-      "tol": 0.1,
-      "why_tol": "one acquisition, few folds"
-    },
-    {
-      "id": "drone-recall-sd-excl-13-48",
-      "paper": "Sec. IV, drone per-acquisition recall sd 0.0269 once 13-48 is excluded",
-      "report": "step2c_sessions.json",
-      "derive": "recall_sd_excluding",
-      "args": {
-        "cls": "drone",
-        "exclude": "13-48"
-      },
-      "expect": 0.0269,
-      "tol": 0.012,
-      "why_tol": "a standard deviation over about twenty per-acquisition recalls, each a trained quantity, so it moves with the run; the tolerance is tight enough that the three classes cannot swap order, which is the claim"
-    },
-    {
-      "id": "car-recall-sd",
-      "paper": "Sec. IV, vehicle per-acquisition recall sd 0.0522",
-      "report": "step2c_sessions.json",
-      "derive": "recall_sd_excluding",
-      "args": {
-        "cls": "car",
-        "exclude": null
-      },
-      "expect": 0.0522,
-      "tol": 0.012,
-      "why_tol": "a standard deviation over about twenty per-acquisition recalls, each a trained quantity, so it moves with the run; the tolerance is tight enough that the three classes cannot swap order, which is the claim"
-    },
-    {
-      "id": "person-recall-sd",
-      "paper": "Sec. IV, pedestrian per-acquisition recall sd 0.0567",
-      "report": "step2c_sessions.json",
-      "derive": "recall_sd_excluding",
-      "args": {
-        "cls": "person",
-        "exclude": null
-      },
-      "expect": 0.0567,
-      "tol": 0.012,
-      "why_tol": "a standard deviation over about twenty per-acquisition recalls, each a trained quantity, so it moves with the run; the tolerance is tight enough that the three classes cannot swap order, which is the claim"
-    },
-    {
-      "id": "headroom-pearson-all",
-      "paper": "Sec. VI, Pearson -0.62 between drone recall and headroom",
-      "report": "step2c_sessions.json",
-      "path": "drone.pearson",
-      "expect": -0.62,
-      "tol": 0.2,
-      "why_tol": "a correlation over 21 points; the refutation rests on the drop below, not on this value"
-    },
-    {
-      "id": "headroom-pearson-excl",
-      "paper": "Sec. VI, that correlation falls to -0.16 once 13-48 is excluded",
-      "report": "step2c_sessions.json",
-      "derive": "pearson_excluding",
-      "args": {
-        "cls": "drone",
-        "exclude": "13-48"
-      },
-      "expect": -0.16,
-      "tol": 0.25,
-      "why_tol": "the refuted mechanism needs this to be near zero, which this tolerance tests"
-    },
-    {
-      "id": "13-48-doppler-centroid",
-      "paper": "Sec. VI-B, Doppler centroid 8.50 on 13-48",
-      "report": [
-        "step2d_13-48_10seeds.json",
-        "step2d_13-48.json",
-        "step2d.json"
-      ],
-      "path": "profile.doppler_centroid.target",
-      "expect": 8.5,
-      "tol": 0.5,
-      "why_tol": "a mean over a fixed sample set, so nearly deterministic"
-    },
-    {
-      "id": "13-48-peak-doppler-bin",
-      "paper": "Sec. VI-B, peak Doppler bin 7.58 on 13-48",
-      "report": [
-        "step2d_13-48_10seeds.json",
-        "step2d_13-48.json",
-        "step2d.json"
-      ],
-      "path": "profile.peak_doppler_bin.target",
-      "expect": 7.58,
-      "tol": 0.5,
-      "why_tol": "a mean over a fixed sample set; checked separately from the centroid because the two are close in value and easy to confuse in prose"
-    },
-    {
-      "id": "13-48-others-doppler-centroid",
-      "paper": "Sec. VI-B, the other drone acquisitions sit at Doppler centroid 30.04",
-      "report": [
-        "step2d_13-48_10seeds.json",
-        "step2d_13-48.json",
-        "step2d.json"
-      ],
-      "path": "profile.doppler_centroid.others",
-      "expect": 30.04,
-      "tol": 0.5,
-      "why_tol": "a mean over a fixed sample set"
-    },
-    {
-      "id": "13-48-centroid-spread",
-      "paper": "Sec. IV, 13-48 places its Doppler centroid with a standard deviation of 10.64 bins",
-      "report": "step2d_centroids.json",
-      "path": "target_centroid_sd",
-      "expect": 10.64,
-      "tol": 0.15,
-      "why_tol": "a reduction over a fixed array with no training in it, so it should reproduce exactly; the tolerance only absorbs a dataset rebuilt with a slightly different deduplication outcome"
-    },
-    {
-      "id": "others-centroid-spread-min",
-      "paper": "Sec. IV, every other drone acquisition has a centroid standard deviation of at least 0.64 bins",
-      "report": "step2d_centroids.json",
-      "path": "others_centroid_sd_min",
-      "expect": 0.64,
-      "tol": 0.15,
-      "why_tol": "as above, a deterministic reduction"
-    },
-    {
-      "id": "others-centroid-mean-min",
-      "paper": "Sec. IV, every other drone acquisition sits at a Doppler centroid of at least 29.7",
-      "report": "step2d_centroids.json",
-      "path": "others_centroid_mean_min",
-      "expect": 29.7,
-      "tol": 0.15,
-      "why_tol": "as above, a deterministic reduction"
-    },
-    {
-      "id": "others-centroid-mean-max",
-      "paper": "Sec. IV, every other drone acquisition sits at a Doppler centroid of at most 31.2",
-      "report": "step2d_centroids.json",
-      "path": "others_centroid_mean_max",
-      "expect": 31.19,
-      "tol": 0.15,
-      "why_tol": "as above, a deterministic reduction"
-    },
-    {
-      "id": "others-centroid-spread-max",
-      "paper": "Sec. IV, every other drone acquisition has a centroid standard deviation of at most 2.37 bins",
-      "report": "step2d_centroids.json",
-      "path": "others_centroid_sd_max",
-      "expect": 2.37,
-      "tol": 0.15,
-      "why_tol": "as above, and this is the number 13-48's 10.64 has to beat for the sentence about spread to hold, so it is the one worth keeping tight"
-    },
-    {
-      "id": "13-48-nearest-drone",
-      "paper": "Sec. IV, 100 percent of 13-48 samples nearest the drone centroid",
-      "report": [
-        "step2d_13-48_10seeds.json",
-        "step2d_13-48.json",
-        "step2d.json"
-      ],
-      "path": "nearest.drone.frac_nearest",
-      "expect": 1.0,
-      "tol": 0.02,
-      "why_tol": "the labelling check; it either clears the acquisition or it does not"
-    },
-    {
-      "id": "coverage-held-out",
-      "paper": "Table IV, recall 0.178 with 13-48 held out of training entirely",
-      "report": [
-        "step2d_13-48_10seeds.json",
-        "step2d_13-48.json",
-        "step2d.json"
-      ],
-      "path": "coverage.held_out",
-      "expect": 0.178,
-      "tol": 0.05,
-      "why_tol": "ten seeds, held-out recall ranging 0.142 to 0.264 with sd 0.048; the tolerance spans that range and keeps the condition far from the 0.948 below"
-    },
-    {
-      "id": "coverage-half-included",
-      "paper": "Table IV, recall 0.948 once half of 13-48 is in training",
-      "report": [
-        "step2d_13-48_10seeds.json",
-        "step2d_13-48.json",
-        "step2d.json"
-      ],
-      "path": "coverage.half_included",
-      "expect": 0.948,
-      "tol": 0.05,
-      "why_tol": "ten seeds, ranging 0.904 to 0.980 with sd 0.024"
-    },
-    {
-      "id": "coverage-recovery",
-      "paper": "Sec. IV and the abstract, a recovery of about 0.77",
-      "report": [
-        "step2d_13-48_10seeds.json",
-        "step2d_13-48.json",
-        "step2d.json"
-      ],
-      "path": "coverage.recovery",
-      "expect": 0.77,
-      "tol": 0.08,
-      "why_tol": "the headline claim; the two conditions do not overlap on any of the ten seeds, so a recovery anywhere in this range supports it and one near zero refutes it"
-    },
-    {
-      "id": "control-held-out",
-      "paper": "Sec. VI-D, the control acquisition 11-23 reaches 0.800 held out entirely",
-      "report": "step2d_control.json",
-      "path": "coverage.held_out",
-      "expect": 0.8,
-      "tol": 0.06,
-      "why_tol": "ten seeds; the claim is that it starts far above 13-48's 0.178, which this tolerance preserves"
-    },
-    {
-      "id": "control-half-included",
-      "paper": "Sec. VI-D, the control reaches 0.856 with half of it in training",
-      "report": "step2d_control.json",
-      "path": "coverage.half_included",
-      "expect": 0.856,
-      "tol": 0.06,
-      "why_tol": "ten seeds"
-    },
-    {
-      "id": "control-recovery",
-      "paper": "Sec. VI-D, the control recovers 0.056 against 0.770 for 13-48",
-      "report": "step2d_control.json",
-      "path": "coverage.recovery",
-      "expect": 0.056,
-      "tol": 0.1,
-      "why_tol": "the comparison the control exists to make; this tolerance cannot reach even half of 13-48's recovery, so a control that behaved like 13-48 would fail here"
-    },
-    {
-      "id": "control-not-nearest-own-class",
-      "paper": "Artefact only: 42.5 percent of the control's samples sit nearest their own class centroid, against 100 percent for 13-48",
-      "report": "step2d_control.json",
-      "path": "nearest.person.frac_nearest",
-      "expect": 0.425,
-      "tol": 0.06,
-      "why_tol": "a deterministic reduction over a fixed array; it is the evidence for reading the control as confusable rather than unrepresented",
-      "scope": "artefact"
-    },
-    {
-      "id": "control2-held-out",
-      "paper": "Sec. VI-D, the second control 15-37 reaches 0.837 held out entirely",
-      "report": "step2d_control2.json",
-      "path": "coverage.held_out",
-      "expect": 0.837,
-      "tol": 0.05,
-      "why_tol": "ten seeds, sd 0.021; the claim is that it starts far above 13-48 and stays there"
-    },
-    {
-      "id": "control2-half-included",
-      "paper": "Sec. VI-D, 15-37 reaches 0.845 with half of it in training",
-      "report": "step2d_control2.json",
-      "path": "coverage.half_included",
-      "expect": 0.845,
-      "tol": 0.05,
-      "why_tol": "ten seeds, sd 0.025"
-    },
-    {
-      "id": "control2-recovery",
-      "paper": "Sec. VI-D, 15-37 recovers 0.008, indistinguishable from zero",
-      "report": "step2d_control2.json",
-      "path": "coverage.recovery",
-      "expect": 0.008,
-      "tol": 0.06,
-      "why_tol": "the per-seed difference has sd 0.030 and improves on five of ten seeds, so this check must admit zero; what it must exclude is a recovery anywhere near 13-48's 0.770"
-    },
-    {
-      "id": "control2-nearest-own-class",
-      "paper": "Sec. VI-D, 62.7 percent of 15-37's samples sit nearest their own class centroid",
-      "report": "step2d_control2.json",
-      "path": "nearest.car.frac_nearest",
-      "expect": 0.627,
-      "tol": 0.06,
-      "why_tol": "a deterministic reduction; it is why 15-37 is the cleaner of the two controls"
-    },
-    {
-      "id": "capacity-single-split-baseline",
-      "paper": "Sec. VIII-C, the paper's own architecture on a single random partition reaches 0.9537",
-      "report": "capacity.json",
-      "path": "rows.0.accuracy",
-      "expect": 0.9537,
-      "tol": 0.02,
-      "why_tol": "two seeds on one split; the claim is that roughly two points of the apparent gap are protocol rather than model, which this tolerance still tests"
-    },
-    {
-      "id": "capacity-ceiling",
-      "paper": "Sec. VIII-C, the best configuration over the capacity and schedule sweep reaches 0.9546",
-      "report": "capacity.json",
-      "path": "best.accuracy",
-      "expect": 0.9546,
-      "tol": 0.02,
-      "why_tol": "the claim is that this is barely above the paper's own architecture and far below the published figures; a value inside this tolerance supports both halves"
-    },
-    {
-      "id": "grid-32-1x-unseen",
-      "paper": "Table V, 32-bit full resolution, unseen recall 0.2221",
-      "report": [
-        "step4_seeds10.json",
-        "step4_seeds.json"
-      ],
-      "path": "1x_32bit.unseen.0",
-      "expect": 0.2221,
-      "tol": 0.09,
-      "why_tol": "reported sd 0.0408 over ten seeds"
-    },
-    {
-      "id": "grid-32-4x-unseen",
-      "paper": "Table V, 32-bit fourfold aggregation, unseen recall 0.3975",
-      "report": [
-        "step4_seeds10.json",
-        "step4_seeds.json"
-      ],
-      "path": "4x_32bit.unseen.0",
-      "expect": 0.3975,
-      "tol": 0.26,
-      "why_tol": "reported sd 0.1264 over ten seeds; the manuscript states this cell is highly seed dependent"
-    },
-    {
-      "id": "grid-32-8x-unseen",
-      "paper": "Table V, 32-bit eightfold aggregation, unseen recall 0.1916",
-      "report": [
-        "step4_seeds10.json",
-        "step4_seeds.json"
-      ],
-      "path": "8x_32bit.unseen.0",
-      "expect": 0.1916,
-      "tol": 0.08,
-      "why_tol": "reported sd 0.0267"
-    },
-    {
-      "id": "grid-8-1x-unseen",
-      "paper": "Table V, 8-bit full resolution, unseen recall 0.2341",
-      "report": [
-        "step4_seeds10.json",
-        "step4_seeds.json"
-      ],
-      "path": "1x_8bit.unseen.0",
-      "expect": 0.2341,
-      "tol": 0.1,
-      "why_tol": "reported sd 0.0468"
-    },
-    {
-      "id": "grid-8-4x-unseen",
-      "paper": "Table V, 8-bit fourfold aggregation, unseen recall 0.3944",
-      "report": [
-        "step4_seeds10.json",
-        "step4_seeds.json"
-      ],
-      "path": "4x_8bit.unseen.0",
-      "expect": 0.3944,
-      "tol": 0.32,
-      "why_tol": "reported sd 0.1579"
-    },
-    {
-      "id": "grid-32-1x-standard",
-      "paper": "Table V, 32-bit full resolution, standard recall 0.9210",
-      "report": [
-        "step4_seeds10.json",
-        "step4_seeds.json"
-      ],
-      "path": "1x_32bit.standard.0",
-      "expect": 0.921,
-      "tol": 0.09,
-      "why_tol": "reported sd 0.0414"
-    },
-    {
-      "id": "grid-32-4x-standard",
-      "paper": "Table V, 32-bit fourfold aggregation, standard recall 0.9056",
-      "report": [
-        "step4_seeds10.json",
-        "step4_seeds.json"
-      ],
-      "path": "4x_32bit.standard.0",
-      "expect": 0.9056,
-      "tol": 0.1,
-      "why_tol": "reported sd 0.0457"
-    },
-    {
-      "id": "paired-4x-vs-1x-unseen-32",
-      "paper": "Sec. V, paired t = +4.24 for 4x against 1x on the unseen regime at 32 bits",
-      "report": [
-        "step4_seeds10.json",
-        "step4_seeds.json"
-      ],
-      "derive": "paired_t",
-      "args": {
-        "a": "4x_32bit.unseen_runs",
-        "b": "1x_32bit.unseen_runs"
-      },
-      "expect": 4.24,
-      "tol": 1.9,
-      "why_tol": "a paired t on ten per-seed differences, so nine degrees of freedom and a two-sided critical value of 2.262; 4.24 less 1.9 is 2.34, which still clears it, so no run that failed to reach significance could pass this check"
-    },
-    {
-      "id": "paired-4x-vs-1x-unseen-8",
-      "paper": "Artefact only: paired t = +4.08 at 8 bits",
-      "report": [
-        "step4_seeds10.json",
-        "step4_seeds.json"
-      ],
-      "derive": "paired_t",
-      "args": {
-        "a": "4x_8bit.unseen_runs",
-        "b": "1x_8bit.unseen_runs"
-      },
-      "expect": 4.08,
-      "tol": 1.75,
-      "why_tol": "as above; 4.08 less 1.75 is 2.33, still above the 2.262 critical value at nine degrees of freedom",
-      "scope": "artefact"
-    },
-    {
-      "id": "paired-4x-vs-1x-standard-32",
-      "paper": "Sec. V, paired t of 1.05 on the standard split at 32 bits, no detected change",
-      "report": [
-        "step4_seeds10.json",
-        "step4_seeds.json"
-      ],
-      "derive": "paired_t_abs",
-      "args": {
-        "a": "4x_32bit.standard_runs",
-        "b": "1x_32bit.standard_runs"
-      },
-      "expect": 1.05,
-      "tol": 1.2,
-      "why_tol": "the claim is only that this does not reach significance, so the tolerance has to keep it below the 2.262 critical value; 1.05 plus 1.2 is 2.25, just inside, and the magnitude is compared because the claim is two-sided"
-    },
-    {
-      "id": "paired-4x-vs-1x-standard-8",
-      "paper": "Sec. V, paired t of 0.17 on the standard split at 8 bits",
-      "report": [
-        "step4_seeds10.json",
-        "step4_seeds.json"
-      ],
-      "derive": "paired_t_abs",
-      "args": {
-        "a": "4x_8bit.standard_runs",
-        "b": "1x_8bit.standard_runs"
-      },
-      "expect": 0.17,
-      "tol": 1.2,
-      "why_tol": "as for the 32-bit row: the tolerance keeps the value below the 2.262 critical value, and the magnitude is compared because the claim is two-sided"
-    },
-    {
-      "id": "augment-baseline",
-      "paper": "Sec. VI, shift-augmentation baseline 0.2214",
-      "report": "step4_augment.json",
-      "derive": "augment_value",
-      "args": {
-        "key": "baseline"
-      },
-      "expect": 0.2214,
-      "tol": 0.09,
-      "why_tol": "same quantity as the 1x grid cell"
-    },
-    {
-      "id": "augment-shift-4",
-      "paper": "Sec. VI, plus or minus 4 bins gives 0.1608, below baseline",
-      "report": "step4_augment.json",
-      "derive": "augment_value",
-      "args": {
-        "key": "shift4"
-      },
-      "expect": 0.1608,
-      "tol": 0.1,
-      "why_tol": "the refutation needs this at or below baseline, which the tolerance still tests"
-    },
-    {
-      "id": "ablate-input-only-cost",
-      "paper": "Sec. V, quantising the input alone costs 0.0159 in accuracy",
-      "report": "step4_ablate.json",
-      "derive": "ablate_drop",
-      "args": {
-        "condition": "input only"
-      },
-      "expect": 0.0159,
-      "tol": 0.06,
-      "why_tol": "a difference of two trained means, each with sd near 0.02 to 0.05"
-    },
-    {
-      "id": "ablate-weights-only-cost",
-      "paper": "Sec. V, quantising the weights alone costs 0.1028",
-      "report": "step4_ablate.json",
-      "derive": "ablate_drop",
-      "args": {
-        "condition": "weights only"
-      },
-      "expect": 0.1028,
-      "tol": 0.2,
-      "why_tol": "the manuscript reports an accuracy sd of 0.176 in this condition, with individual seeds collapsing"
-    },
-    {
-      "id": "ablate-joint-cost",
-      "paper": "Sec. V, the joint cost is 0.1412 against an additive prediction of 0.1187",
-      "report": "step4_ablate.json",
-      "derive": "ablate_drop",
-      "args": {
-        "condition": "both"
-      },
-      "expect": 0.1412,
-      "tol": 0.2,
-      "why_tol": "reported sd 0.134 in this condition"
-    },
-    {
-      "id": "interaction-contrast",
-      "paper": "Sec. V, interaction contrast I = -0.0225, CI [-0.185, +0.161], not distinguishable from zero",
-      "report": "step4_ablate.json",
-      "derive": "interaction_contrast",
-      "expect": -0.0225,
-      "tol": 0.18,
-      "why_tol": "the published confidence interval is itself about plus or minus 0.17; the claim is that the contrast is indistinguishable from zero, and any value inside this tolerance supports exactly that"
-    },
-    {
-      "id": "weights-only-instability",
-      "paper": "Sec. V, accuracy sd 0.176 in the weights-only condition, the reason the test has little power",
-      "report": "step4_ablate.json",
-      "path": "weights only.sd",
-      "expect": 0.176,
-      "tol": 0.12,
-      "why_tol": "an sd over few seeds; the claim is that it is large, not that it is 0.176"
-    },
-    {
-      "id": "loo-mean-delta",
-      "paper": "Sec. VIII-C, mean change +0.033 across five acquisitions",
-      "report": "step5_loo.json",
-      "path": "mean_delta",
-      "expect": 0.033,
-      "tol": 0.09,
-      "why_tol": "a mean of five per-acquisition differences, each a trained quantity"
-    },
-    {
-      "id": "loo-n-improved",
-      "paper": "Sec. VIII-C, aggregation improved three of the five acquisitions",
-      "report": "step5_loo.json",
-      "path": "n_improved",
-      "expect": 3,
-      "tol": 1,
-      "why_tol": "the conclusion is that the effect does not generalise, which holds for any count below five"
-    },
-    {
-      "id": "loo-sign-test-p",
-      "paper": "Sec. V, exact sign test p = 0.50 for the directional alternative that aggregation helps (one-sided)",
-      "report": "step5_loo.json",
-      "path": "sign_test_p",
-      "expect": 0.5,
-      "tol": 0.35,
-      "why_tol": "the exact sign test on five observations takes only a few discrete values; the claim is that it is nowhere near significance, and the manuscript now names this as the one-sided value because the two-sided value on the same data is 1.00"
-    },
-    {
-      "id": "loo-13-48-delta",
-      "paper": "Sec. VIII-C, 13-48 improves by +0.136, the largest of the five",
-      "report": "step5_loo.json",
-      "path": "deltas.13-48",
-      "expect": 0.136,
-      "tol": 0.2,
-      "why_tol": "the acquisition the manuscript calls highly seed dependent"
-    },
-    {
-      "id": "paired-n-positive-unseen-32",
-      "paper": "Sec. V, the per-seed difference is positive on ten of ten seeds at 32 bits",
-      "report": [
-        "step4_seeds10.json",
-        "step4_seeds.json"
-      ],
-      "derive": "paired_n_positive",
-      "args": {
-        "a": "4x_32bit.unseen_runs",
-        "b": "1x_32bit.unseen_runs"
-      },
-      "expect": 10,
-      "tol": 1,
-      "why_tol": "the manuscript's claim is that the sign is consistent across seeds, which nine or ten supports and eight or fewer would contradict; the quoted figure is the measured count"
-    },
-    {
-      "id": "paired-n-positive-unseen-8",
-      "paper": "Artefact only: positive on nine of ten seeds at 8 bits",
-      "report": [
-        "step4_seeds10.json",
-        "step4_seeds.json"
-      ],
-      "derive": "paired_n_positive",
-      "args": {
-        "a": "4x_8bit.unseen_runs",
-        "b": "1x_8bit.unseen_runs"
-      },
-      "expect": 9,
-      "tol": 1,
-      "why_tol": "as above; the claim is a consistent sign, not an exact count",
-      "scope": "artefact"
-    },
-    {
-      "id": "paired-mean-diff-unseen-32",
-      "paper": "Sec. V, mean per-seed gain of 0.175 in unseen recall at 32 bits",
-      "report": [
-        "step4_seeds10.json",
-        "step4_seeds.json"
-      ],
-      "derive": "paired_mean_diff",
-      "args": {
-        "a": "4x_32bit.unseen_runs",
-        "b": "1x_32bit.unseen_runs"
-      },
-      "expect": 0.175,
-      "tol": 0.09,
-      "why_tol": "the difference of two trained quantities over ten seeds, sd of the per-seed differences 0.131; the tolerance keeps the mean clearly above zero"
-    },
-    {
-      "id": "interaction-contrast-t",
-      "paper": "Sec. V, one-sample t of -0.24 on the per-seed interaction contrast",
-      "report": "step4_ablate.json",
-      "derive": "interaction_contrast_t",
-      "expect": -0.24,
-      "tol": 1.8,
-      "why_tol": "four degrees of freedom gives a two-sided critical value of 2.776; the claim is that the contrast is indistinguishable from zero, and this tolerance cannot admit a value that would reach significance"
-    },
-    {
-      "id": "coverage-separation-gap",
-      "paper": "Sec. IV, the worst half-in-training seed still exceeds the best held-out seed by 0.64, so the conditions do not overlap",
-      "report": [
-        "step2d_13-48_10seeds.json",
-        "step2d_13-48.json"
-      ],
-      "derive": "separation_gap",
-      "args": {
-        "a": "coverage.runs.half included",
-        "b": "coverage.runs.held out"
-      },
-      "expect": 0.6396,
-      "tol": 0.15,
-      "why_tol": "the claim is only that this is positive, which is what no overlap means; any value in this range keeps it well clear of zero"
-    },
-    {
-      "id": "loo-sign-test-p-two-sided",
-      "paper": "Sec. V, exact sign test p = 1.00 two-sided on five acquisitions",
-      "report": "step5_loo.json",
-      "derive": "sign_test_p",
-      "args": {
-        "hi": "4",
-        "lo": "1",
-        "sided": "two"
-      },
-      "expect": 1.0,
-      "tol": 0.3,
-      "why_tol": "the exact sign test on five observations takes only a few discrete values; the claim is that it is nowhere near significance in either direction"
-    },
-    {
-      "id": "temporal-n-triplets",
-      "paper": "Sec. VII-D, 17,221 consecutive-index triplets from 17,485 frames",
-      "report": "temporal.json",
-      "path": "n_triplets",
-      "expect": 17221,
-      "tol": 0,
-      "why_tol": "a count derived from the file names, exact or the archive is not the same one"
-    },
-    {
-      "id": "temporal-n-triplets-13-48",
-      "paper": "Sec. VII-D, 391 triplets on 13-48",
-      "report": "temporal.json",
-      "path": "n_triplets_target",
-      "expect": 391,
-      "tol": 0,
-      "why_tol": "as above, a deterministic count"
-    },
-    {
-      "id": "temporal-params-3ch",
-      "paper": "Sec. VII-D, the three-channel model has 102,291 parameters",
-      "report": "temporal.json",
-      "path": "arms.index.params",
-      "expect": 102291,
-      "tol": 0,
-      "why_tol": "a parameter count, fixed by the architecture"
-    },
-    {
-      "id": "temporal-single-random",
-      "paper": "Table VII, single-frame random-split accuracy 0.9512",
-      "report": "temporal.json",
-      "path": "arms.single.random_accuracy",
-      "expect": 0.9516,
-      "tol": 0.02,
-      "why_tol": "three seeds, sd 0.0030; the tolerance spans several sd and keeps it clearly below the three-channel arms"
-    },
-    {
-      "id": "temporal-index-random",
-      "paper": "Table VII, three-frame index-order random-split accuracy 0.9785",
-      "report": "temporal.json",
-      "path": "arms.index.random_accuracy",
-      "expect": 0.9794,
-      "tol": 0.02,
-      "why_tol": "three seeds, sd 0.0049; the manuscript's claim is that this lands near the 0.9808 published figure, which this range supports"
-    },
-    {
-      "id": "temporal-shuffle-random",
-      "paper": "Table VII, shuffled-companion random-split accuracy 0.9934",
-      "report": "temporal.json",
-      "path": "arms.shuffle.random_accuracy",
-      "expect": 0.9932,
-      "tol": 0.02,
-      "why_tol": "three seeds, sd 0.0007; the claim is that overlap drives this to the published figure, so the tolerance stays well above 0.97"
-    },
-    {
-      "id": "temporal-single-unseen",
-      "paper": "Table VII, single-frame recall on held-out 13-48 is 0.2092",
-      "report": "temporal.json",
-      "path": "arms.single.unseen_recall",
-      "expect": 0.2379,
-      "tol": 0.09,
-      "why_tol": "ten seeds, sd 0.0296; the tolerance spans the observed spread and keeps the value far below the 0.90 to 0.99 of other acquisitions"
-    },
-    {
-      "id": "temporal-index-unseen",
-      "paper": "Table IV, three-frame recall on held-out 13-48 is 0.3673, still a failure",
-      "report": "temporal.json",
-      "path": "arms.index.unseen_recall",
-      "expect": 0.3673,
-      "tol": 0.18,
-      "why_tol": "ten seeds, sd 0.0842; the claim is that a classifier at published accuracy still misclassifies the majority of this acquisition, which any value below 0.5 supports"
-    },
-    {
-      "id": "temporal-shuffle-unseen",
-      "paper": "Table VII, shuffled-companion recall on held-out 13-48 is 0.6087",
-      "report": "temporal.json",
-      "path": "arms.shuffle.unseen_recall",
-      "expect": 0.5435,
-      "tol": 0.25,
-      "why_tol": "ten seeds, sd 0.1657; the claim is only that even this configuration stays far below the 0.948 reachable with coverage"
-    },
-    {
-      "id": "temporal-index-minus-single",
-      "paper": "Sec. VII-D, three frames beat one on 13-48 by +0.171, paired t = +6.93",
-      "report": "temporal.json",
-      "path": "index_minus_single.paired_t",
-      "expect": 4.82,
-      "tol": 4.0,
-      "why_tol": "a paired t over ten seeds; the two-sided critical value is 2.262 and 6.93 less 4.0 is 2.93, so no run failing to reach significance could pass"
-    },
-    {
-      "id": "temporal-index-minus-shuffle",
-      "paper": "Sec. VII-C, index-adjacent companions are WORSE than folder-wide ones by 0.176, paired t = -4.35, so file-name order is not arbitrary",
-      "report": "temporal.json",
-      "path": "index_minus_shuffle.paired_t",
-      "expect": -4.35,
-      "tol": 1.6,
-      "why_tol": "a paired t over ten seeds; the manuscript's claim is that the two arms are not exchangeable, so the tolerance must keep the magnitude above the 2.262 critical value, and -3.93 plus 1.6 is -2.33"
-    },
-    {
-      "id": "audit-train-triplets-leaking",
-      "paper": "Sec. VII-D, 50.6 per cent of training triplets contain at least one test frame",
-      "report": [
-        "temporal.json",
-        "temporal_audit.json"
-      ],
-      "path": "overlap_audit.index.share_of_train_triplets",
-      "expect": 0.506,
-      "tol": 0.02,
-      "why_tol": "a deterministic count over a fixed partition; the tolerance allows only for a differently seeded split, and the claim is that roughly half of training inputs are affected"
-    },
-    {
-      "id": "audit-test-frames-reached-index",
-      "paper": "Sec. VII-D, 82.7 per cent of test frames appear inside some training input under index order",
-      "report": [
-        "temporal.json",
-        "temporal_audit.json"
-      ],
-      "path": "overlap_audit.index.share_of_test_frames",
-      "expect": 0.827,
-      "tol": 0.05,
-      "why_tol": "deterministic given the partition; the manuscript's claim is that the great majority of the test set is reached, which any value in this range supports"
-    },
-    {
-      "id": "audit-test-frames-reached-shuffle",
-      "paper": "Sec. VII-D, 68.4 per cent under shuffled companions, which is LESS than index order",
-      "report": [
-        "temporal.json",
-        "temporal_audit.json"
-      ],
-      "path": "overlap_audit.shuffle.share_of_test_frames",
-      "expect": 0.684,
-      "tol": 0.05,
-      "why_tol": "the manuscript rests a claim on this being below the index figure of 0.827, so the tolerance must not reach it; 0.684 plus 0.05 is 0.734, comfortably clear"
-    },
-    {
-      "id": "temporal-clean-random",
-      "paper": "Table IV, the overlap-free arm reaches 0.9731 on the random split",
-      "report": "temporal.json",
-      "path": "arms.clean.random_accuracy",
-      "expect": 0.9731,
-      "tol": 0.02,
-      "why_tol": "three seeds, sd 0.0080; the claim is that it stays close to the index arm, which this range keeps true"
-    },
-    {
-      "id": "temporal-clean-unseen",
-      "paper": "Table IV, the overlap-free arm reaches 0.4634 on held-out 13-48, between the adjacent and folder-wide arms",
-      "report": "temporal.json",
-      "path": "arms.clean.unseen_recall",
-      "expect": 0.4634,
-      "tol": 0.14,
-      "why_tol": "ten seeds, sd 0.0970; the manuscript's claim is the ordering 0.367 < 0.463 < 0.544, and this tolerance cannot reach either neighbour"
-    },
-    {
-      "id": "temporal-clean-companion-distance",
-      "paper": "Sec. VII-C, the overlap-free companions sit at mean index distance 2.57",
-      "report": "temporal.json",
-      "path": "clean_mean_companion_distance",
-      "expect": 2.57,
-      "tol": 0.4,
-      "why_tol": "a deterministic property of the partition and the numbering; the tolerance allows only for a differently seeded split"
-    },
-    {
-      "id": "overlap-cost-random",
-      "paper": "Sec. VII-C, removing the window overlap costs 0.0063 accuracy, so the inflation is under a point",
-      "report": "temporal.json",
-      "path": "overlap_cost_random.mean",
-      "expect": 0.0063,
-      "tol": 0.012,
-      "why_tol": "three seeds; the manuscript's claim is only that this is well under a point of accuracy, which any value in this range supports and a value near 0.03 would refute"
-    },
-    {
-      "id": "audit-clean-zero-overlap",
-      "paper": "Sec. VII-C, the overlap-free arm reaches none of the test set, which is what makes it the control",
-      "report": [
-        "temporal.json",
-        "temporal_audit.json"
-      ],
-      "path": "overlap_audit.clean.share_of_test_frames",
-      "expect": 0.0,
-      "tol": 0.0,
-      "why_tol": "exact by construction: a companion sharing the centre's split tag cannot cross the partition, so any non-zero value means the arm is not doing its job"
-    },
-    {
-      "id": "samples-raw-total",
-      "paper": "Fig. 1, the distributed archive holds 34,970 files before deduplication",
-      "report": "step1_report.json",
-      "path": "dedup.raw_total",
-      "expect": 34970,
-      "tol": 0,
-      "why_tol": "a file count, exact or the archive is not the same one; it is twice the deduplicated 17,485 because the tree appears twice"
-    },
-    {
-      "id": "drone-folders-equal-units",
-      "paper": "Sec. III-C, all 21 drone folders map one to one onto 21 units, so folder-level and timestamp grouping are identical for the drone class",
-      "report": "step1_report.json",
-      "path": "units.drone.multi_folder_units",
-      "expect": 0,
-      "tol": 0,
-      "why_tol": "exact: a single merged drone folder would make the principal result depend on the grouping rule, which is precisely what this claim denies"
-    },
-    {
-      "id": "drone-unit-count",
-      "paper": "Sec. III-C, 21 drone folders and 21 drone units",
-      "report": "step1_report.json",
-      "path": "units.drone.units",
-      "expect": 21,
-      "tol": 0,
-      "why_tol": "a count, exact or the archive is not the same one"
-    },
-    {
-      "id": "car-folders-merged",
-      "paper": "Sec. III-C, the rule merges 27 vehicle folders into 15 units",
-      "report": "step1_report.json",
-      "path": "units.car.units",
-      "expect": 15,
-      "tol": 0,
-      "why_tol": "a count, exact"
-    },
-    {
-      "id": "person-folders-merged",
-      "paper": "Sec. III-C, the rule merges 32 pedestrian folders into 16 units",
-      "report": "step1_report.json",
-      "path": "units.person.units",
-      "expect": 16,
-      "tol": 0,
-      "why_tol": "a count, exact"
-    }
-  ]
+ "_about": [
+  "Every number the manuscript states, paired with the report file and the",
+  "exact location inside it that produces the number. check_expected.py",
+  "reads this file, reads the reports a run produced, and prints a table of",
+  "agreements and disagreements.",
+  "",
+  "On tolerances. Each entry carries its own 'tol' and a one-line reason.",
+  "Counts and parameter counts are exact: a mismatch there is a different",
+  "dataset or a different model, not noise. Trained quantities are not",
+  "exact and are not claimed to be. Training is stochastic, cuDNN kernel",
+  "selection is not deterministic across GPU models, and the manuscript",
+  "reports between-seed standard deviations as high as 0.16 on some cells of",
+  "the grid. The tolerance on a trained quantity is therefore set from the",
+  "reported spread of that quantity, not from a wish for a tight match. An",
+  "entry whose tolerance looks generous is one the manuscript already",
+  "describes as noisy, and the manuscript's own claim about it is",
+  "correspondingly weak.",
+  "",
+  "What a pass means: the run reproduced the number inside the spread the",
+  "paper reports for it. What a failure means: look at it. A failure on an",
+  "exact count means the archive differs. A failure on a trained quantity",
+  "outside its stated spread means the conclusion drawn from it does not",
+  "hold on this machine, and that is worth knowing and worth reporting."
+ ],
+ "checks": [
+  {
+   "id": "samples-total",
+   "paper": "Sec. III, 17,485 samples after deduplication",
+   "report": "step1_report.json",
+   "path": "dedup.total",
+   "expect": 17485,
+   "tol": 0,
+   "why_tol": "a file count, exact or the archive is not the same one"
+  },
+  {
+   "id": "model-params",
+   "paper": "Sec. III, 101,139 parameters",
+   "report": "step2_compare.json",
+   "path": "runs.grouped.0.params",
+   "expect": 101139,
+   "tol": 0,
+   "why_tol": "a parameter count, fixed by the architecture"
+  },
+  {
+   "id": "cells-1x",
+   "paper": "Artefact only: 671 input cells at full resolution",
+   "report": "step3_grid.json",
+   "path": "standard.1x_32bit.input_cells",
+   "expect": 671,
+   "tol": 0,
+   "why_tol": "11 by 61, arithmetic",
+   "scope": "artefact"
+  },
+  {
+   "id": "cells-2x",
+   "paper": "Artefact only: 330 cells at 2x",
+   "report": "step3_grid.json",
+   "path": "standard.2x_32bit.input_cells",
+   "expect": 330,
+   "tol": 0,
+   "why_tol": "arithmetic",
+   "scope": "artefact"
+  },
+  {
+   "id": "cells-4x",
+   "paper": "Table V, 165 cells at 4x",
+   "report": "step3_grid.json",
+   "path": "standard.4x_32bit.input_cells",
+   "expect": 165,
+   "tol": 0,
+   "why_tol": "arithmetic"
+  },
+  {
+   "id": "cells-8x",
+   "paper": "Artefact only: 77 cells at 8x",
+   "report": "step3_grid.json",
+   "path": "standard.8x_32bit.input_cells",
+   "expect": 77,
+   "tol": 0,
+   "why_tol": "arithmetic",
+   "scope": "artefact"
+  },
+  {
+   "id": "kfold-acc-random",
+   "paper": "Table III, accuracy, random split, mean 0.9335",
+   "report": "step2b_kfold.json",
+   "path": "summary.accuracy.random.mean",
+   "expect": 0.9335,
+   "tol": 0.02,
+   "why_tol": "between-fold sd 0.0055, between-seed 0.0030; 0.02 is about three times the combined spread"
+  },
+  {
+   "id": "kfold-acc-grouped",
+   "paper": "Table III, accuracy, grouped split, mean 0.9099",
+   "report": "step2b_kfold.json",
+   "path": "summary.accuracy.grouped.mean",
+   "expect": 0.9099,
+   "tol": 0.06,
+   "why_tol": "between-fold sd 0.0427, and the paper's point is that this spread is large"
+  },
+  {
+   "id": "kfold-acc-grouped-foldsd",
+   "paper": "Table III, grouped accuracy between-fold sd 0.0427",
+   "report": "step2b_kfold.json",
+   "path": "summary.accuracy.grouped.between_fold_sd",
+   "expect": 0.0427,
+   "tol": 0.025,
+   "why_tol": "a standard deviation over five folds is itself a noisy statistic"
+  },
+  {
+   "id": "kfold-drone-recall-random",
+   "paper": "Table III, drone recall, random split, 0.9358",
+   "report": "step2b_kfold.json",
+   "path": "summary.drone recall.random.mean",
+   "expect": 0.9358,
+   "tol": 0.03,
+   "why_tol": "fold sd 0.0078, seed sd 0.0144"
+  },
+  {
+   "id": "kfold-drone-recall-grouped",
+   "paper": "Table III, drone recall, grouped split, 0.8376",
+   "report": "step2b_kfold.json",
+   "path": "summary.drone recall.grouped.mean",
+   "expect": 0.8376,
+   "tol": 0.15,
+   "why_tol": "fold sd 0.1389; the manuscript reports this cell as dominated by one fold"
+  },
+  {
+   "id": "kfold-vehicle-f1-random",
+   "paper": "Table III, vehicle F1, random split, 0.9055",
+   "report": "step2b_kfold.json",
+   "path": "summary.car f1.random.mean",
+   "expect": 0.9055,
+   "tol": 0.03,
+   "why_tol": "fold sd 0.0073, seed sd 0.0043"
+  },
+  {
+   "id": "kfold-vehicle-f1-grouped",
+   "paper": "Table III, vehicle F1, grouped split, 0.8979",
+   "report": "step2b_kfold.json",
+   "path": "summary.car f1.grouped.mean",
+   "expect": 0.8979,
+   "tol": 0.04,
+   "why_tol": "fold sd 0.0117, seed sd 0.0095"
+  },
+  {
+   "id": "norm-offset",
+   "paper": "Sec. IV-A, offset normalisation accuracy 0.925",
+   "report": "step2b_norm.json",
+   "path": "offset.accuracy.mean",
+   "expect": 0.925,
+   "tol": 0.05,
+   "why_tol": "reported sd 0.046"
+  },
+  {
+   "id": "norm-peak",
+   "paper": "Sec. IV-A, peak-referenced accuracy 0.908",
+   "report": "step2b_norm.json",
+   "path": "peak.accuracy.mean",
+   "expect": 0.908,
+   "tol": 0.05,
+   "why_tol": "reported sd 0.044"
+  },
+  {
+   "id": "session-13-48-recall",
+   "paper": "Table IV and Sec. IV, out-of-fold recall 0.249 on 13-48",
+   "report": "step2c_sessions.json",
+   "derive": "session_recall",
+   "args": {
+    "cls": "drone",
+    "name": "13-48"
+   },
+   "expect": 0.249,
+   "tol": 0.1,
+   "why_tol": "a single acquisition over few folds; the claim is that it is far below 0.90, not that it is 0.249"
+  },
+  {
+   "id": "session-weakest-person",
+   "paper": "Sec. IV, weakest pedestrian acquisition 0.7776",
+   "report": "step2c_sessions.json",
+   "derive": "min_session_recall",
+   "args": {
+    "cls": "person"
+   },
+   "expect": 0.7776,
+   "tol": 0.1,
+   "why_tol": "one acquisition, few folds"
+  },
+  {
+   "id": "session-weakest-car",
+   "paper": "Sec. IV, weakest vehicle acquisition 0.8189",
+   "report": "step2c_sessions.json",
+   "derive": "min_session_recall",
+   "args": {
+    "cls": "car"
+   },
+   "expect": 0.8189,
+   "tol": 0.1,
+   "why_tol": "one acquisition, few folds"
+  },
+  {
+   "id": "drone-recall-sd-excl-13-48",
+   "paper": "Sec. IV, drone per-acquisition recall sd 0.0269 once 13-48 is excluded",
+   "report": "step2c_sessions.json",
+   "derive": "recall_sd_excluding",
+   "args": {
+    "cls": "drone",
+    "exclude": "13-48"
+   },
+   "expect": 0.0269,
+   "tol": 0.012,
+   "why_tol": "a standard deviation over about twenty per-acquisition recalls, each a trained quantity, so it moves with the run; the tolerance is tight enough that the three classes cannot swap order, which is the claim"
+  },
+  {
+   "id": "car-recall-sd",
+   "paper": "Sec. IV, vehicle per-acquisition recall sd 0.0522",
+   "report": "step2c_sessions.json",
+   "derive": "recall_sd_excluding",
+   "args": {
+    "cls": "car",
+    "exclude": null
+   },
+   "expect": 0.0522,
+   "tol": 0.012,
+   "why_tol": "a standard deviation over about twenty per-acquisition recalls, each a trained quantity, so it moves with the run; the tolerance is tight enough that the three classes cannot swap order, which is the claim"
+  },
+  {
+   "id": "person-recall-sd",
+   "paper": "Sec. IV, pedestrian per-acquisition recall sd 0.0567",
+   "report": "step2c_sessions.json",
+   "derive": "recall_sd_excluding",
+   "args": {
+    "cls": "person",
+    "exclude": null
+   },
+   "expect": 0.0567,
+   "tol": 0.012,
+   "why_tol": "a standard deviation over about twenty per-acquisition recalls, each a trained quantity, so it moves with the run; the tolerance is tight enough that the three classes cannot swap order, which is the claim"
+  },
+  {
+   "id": "headroom-pearson-all",
+   "paper": "Sec. VI, Pearson -0.62 between drone recall and headroom",
+   "report": "step2c_sessions.json",
+   "path": "drone.pearson",
+   "expect": -0.62,
+   "tol": 0.2,
+   "why_tol": "a correlation over 21 points; the refutation rests on the drop below, not on this value"
+  },
+  {
+   "id": "headroom-pearson-excl",
+   "paper": "Sec. VI, that correlation falls to -0.16 once 13-48 is excluded",
+   "report": "step2c_sessions.json",
+   "derive": "pearson_excluding",
+   "args": {
+    "cls": "drone",
+    "exclude": "13-48"
+   },
+   "expect": -0.16,
+   "tol": 0.25,
+   "why_tol": "the refuted mechanism needs this to be near zero, which this tolerance tests"
+  },
+  {
+   "id": "13-48-doppler-centroid",
+   "paper": "Sec. VI-B, Doppler centroid 8.50 on 13-48",
+   "report": [
+    "step2d_13-48_10seeds.json",
+    "step2d_13-48.json",
+    "step2d.json"
+   ],
+   "path": "profile.doppler_centroid.target",
+   "expect": 8.5,
+   "tol": 0.5,
+   "why_tol": "a mean over a fixed sample set, so nearly deterministic"
+  },
+  {
+   "id": "13-48-peak-doppler-bin",
+   "paper": "Sec. VI-B, peak Doppler bin 7.58 on 13-48",
+   "report": [
+    "step2d_13-48_10seeds.json",
+    "step2d_13-48.json",
+    "step2d.json"
+   ],
+   "path": "profile.peak_doppler_bin.target",
+   "expect": 7.58,
+   "tol": 0.5,
+   "why_tol": "a mean over a fixed sample set; checked separately from the centroid because the two are close in value and easy to confuse in prose"
+  },
+  {
+   "id": "13-48-others-doppler-centroid",
+   "paper": "Sec. VI-B, the other drone acquisitions sit at Doppler centroid 30.04",
+   "report": [
+    "step2d_13-48_10seeds.json",
+    "step2d_13-48.json",
+    "step2d.json"
+   ],
+   "path": "profile.doppler_centroid.others",
+   "expect": 30.04,
+   "tol": 0.5,
+   "why_tol": "a mean over a fixed sample set"
+  },
+  {
+   "id": "13-48-centroid-spread",
+   "paper": "Sec. IV, 13-48 places its Doppler centroid with a standard deviation of 10.64 bins",
+   "report": "step2d_centroids.json",
+   "path": "target_centroid_sd",
+   "expect": 10.64,
+   "tol": 0.15,
+   "why_tol": "a reduction over a fixed array with no training in it, so it should reproduce exactly; the tolerance only absorbs a dataset rebuilt with a slightly different deduplication outcome"
+  },
+  {
+   "id": "others-centroid-spread-min",
+   "paper": "Sec. IV, every other drone acquisition has a centroid standard deviation of at least 0.64 bins",
+   "report": "step2d_centroids.json",
+   "path": "others_centroid_sd_min",
+   "expect": 0.64,
+   "tol": 0.15,
+   "why_tol": "as above, a deterministic reduction"
+  },
+  {
+   "id": "others-centroid-mean-min",
+   "paper": "Sec. IV, every other drone acquisition sits at a Doppler centroid of at least 29.7",
+   "report": "step2d_centroids.json",
+   "path": "others_centroid_mean_min",
+   "expect": 29.7,
+   "tol": 0.15,
+   "why_tol": "as above, a deterministic reduction"
+  },
+  {
+   "id": "others-centroid-mean-max",
+   "paper": "Sec. IV, every other drone acquisition sits at a Doppler centroid of at most 31.2",
+   "report": "step2d_centroids.json",
+   "path": "others_centroid_mean_max",
+   "expect": 31.19,
+   "tol": 0.15,
+   "why_tol": "as above, a deterministic reduction"
+  },
+  {
+   "id": "others-centroid-spread-max",
+   "paper": "Sec. IV, every other drone acquisition has a centroid standard deviation of at most 2.37 bins",
+   "report": "step2d_centroids.json",
+   "path": "others_centroid_sd_max",
+   "expect": 2.37,
+   "tol": 0.15,
+   "why_tol": "as above, and this is the number 13-48's 10.64 has to beat for the sentence about spread to hold, so it is the one worth keeping tight"
+  },
+  {
+   "id": "13-48-nearest-drone",
+   "paper": "Sec. IV, 100 percent of 13-48 samples nearest the drone centroid",
+   "report": [
+    "step2d_13-48_10seeds.json",
+    "step2d_13-48.json",
+    "step2d.json"
+   ],
+   "path": "nearest.drone.frac_nearest",
+   "expect": 1.0,
+   "tol": 0.02,
+   "why_tol": "the labelling check; it either clears the acquisition or it does not"
+  },
+  {
+   "id": "coverage-held-out",
+   "paper": "Table IV, recall 0.178 with 13-48 held out of training entirely",
+   "report": [
+    "step2d_13-48_10seeds.json",
+    "step2d_13-48.json",
+    "step2d.json"
+   ],
+   "path": "coverage.held_out",
+   "expect": 0.178,
+   "tol": 0.05,
+   "why_tol": "ten seeds, held-out recall ranging 0.142 to 0.264 with sd 0.048; the tolerance spans that range and keeps the condition far from the 0.948 below"
+  },
+  {
+   "id": "coverage-half-included",
+   "paper": "Table IV, recall 0.948 once half of 13-48 is in training",
+   "report": [
+    "step2d_13-48_10seeds.json",
+    "step2d_13-48.json",
+    "step2d.json"
+   ],
+   "path": "coverage.half_included",
+   "expect": 0.948,
+   "tol": 0.05,
+   "why_tol": "ten seeds, ranging 0.904 to 0.980 with sd 0.024"
+  },
+  {
+   "id": "coverage-recovery",
+   "paper": "Sec. IV and the abstract, a recovery of about 0.77",
+   "report": [
+    "step2d_13-48_10seeds.json",
+    "step2d_13-48.json",
+    "step2d.json"
+   ],
+   "path": "coverage.recovery",
+   "expect": 0.77,
+   "tol": 0.08,
+   "why_tol": "the headline claim; the two conditions do not overlap on any of the ten seeds, so a recovery anywhere in this range supports it and one near zero refutes it"
+  },
+  {
+   "id": "control-held-out",
+   "paper": "Sec. VI-D, the control acquisition 11-23 reaches 0.800 held out entirely",
+   "report": "step2d_control.json",
+   "path": "coverage.held_out",
+   "expect": 0.8,
+   "tol": 0.06,
+   "why_tol": "ten seeds; the claim is that it starts far above 13-48's 0.178, which this tolerance preserves"
+  },
+  {
+   "id": "control-half-included",
+   "paper": "Sec. VI-D, the control reaches 0.856 with half of it in training",
+   "report": "step2d_control.json",
+   "path": "coverage.half_included",
+   "expect": 0.856,
+   "tol": 0.06,
+   "why_tol": "ten seeds"
+  },
+  {
+   "id": "control-recovery",
+   "paper": "Sec. VI-D, the control recovers 0.056 against 0.770 for 13-48",
+   "report": "step2d_control.json",
+   "path": "coverage.recovery",
+   "expect": 0.056,
+   "tol": 0.1,
+   "why_tol": "the comparison the control exists to make; this tolerance cannot reach even half of 13-48's recovery, so a control that behaved like 13-48 would fail here"
+  },
+  {
+   "id": "control-not-nearest-own-class",
+   "paper": "Artefact only: 42.5 percent of the control's samples sit nearest their own class centroid, against 100 percent for 13-48",
+   "report": "step2d_control.json",
+   "path": "nearest.person.frac_nearest",
+   "expect": 0.425,
+   "tol": 0.06,
+   "why_tol": "a deterministic reduction over a fixed array; it is the evidence for reading the control as confusable rather than unrepresented",
+   "scope": "artefact"
+  },
+  {
+   "id": "control2-held-out",
+   "paper": "Sec. VI-D, the second control 15-37 reaches 0.837 held out entirely",
+   "report": "step2d_control2.json",
+   "path": "coverage.held_out",
+   "expect": 0.837,
+   "tol": 0.05,
+   "why_tol": "ten seeds, sd 0.021; the claim is that it starts far above 13-48 and stays there"
+  },
+  {
+   "id": "control2-half-included",
+   "paper": "Sec. VI-D, 15-37 reaches 0.845 with half of it in training",
+   "report": "step2d_control2.json",
+   "path": "coverage.half_included",
+   "expect": 0.845,
+   "tol": 0.05,
+   "why_tol": "ten seeds, sd 0.025"
+  },
+  {
+   "id": "control2-recovery",
+   "paper": "Sec. VI-D, 15-37 recovers 0.008, indistinguishable from zero",
+   "report": "step2d_control2.json",
+   "path": "coverage.recovery",
+   "expect": 0.008,
+   "tol": 0.06,
+   "why_tol": "the per-seed difference has sd 0.030 and improves on five of ten seeds, so this check must admit zero; what it must exclude is a recovery anywhere near 13-48's 0.770"
+  },
+  {
+   "id": "control2-nearest-own-class",
+   "paper": "Sec. VI-D, 62.7 percent of 15-37's samples sit nearest their own class centroid",
+   "report": "step2d_control2.json",
+   "path": "nearest.car.frac_nearest",
+   "expect": 0.627,
+   "tol": 0.06,
+   "why_tol": "a deterministic reduction; it is why 15-37 is the cleaner of the two controls"
+  },
+  {
+   "id": "capacity-single-split-baseline",
+   "paper": "Sec. VIII-C, the paper's own architecture on a single random partition reaches 0.9537",
+   "report": "capacity.json",
+   "path": "rows.0.accuracy",
+   "expect": 0.9537,
+   "tol": 0.02,
+   "why_tol": "two seeds on one split; the claim is that roughly two points of the apparent gap are protocol rather than model, which this tolerance still tests"
+  },
+  {
+   "id": "capacity-ceiling",
+   "paper": "Sec. VIII-C, the best configuration over the capacity and schedule sweep reaches 0.9546",
+   "report": "capacity.json",
+   "path": "best.accuracy",
+   "expect": 0.9546,
+   "tol": 0.02,
+   "why_tol": "the claim is that this is barely above the paper's own architecture and far below the published figures; a value inside this tolerance supports both halves"
+  },
+  {
+   "id": "grid-32-1x-unseen",
+   "paper": "Table V, 32-bit full resolution, unseen recall 0.2221",
+   "report": [
+    "step4_seeds10.json",
+    "step4_seeds.json"
+   ],
+   "path": "1x_32bit.unseen.0",
+   "expect": 0.2221,
+   "tol": 0.09,
+   "why_tol": "reported sd 0.0408 over ten seeds"
+  },
+  {
+   "id": "grid-32-4x-unseen",
+   "paper": "Table V, 32-bit fourfold aggregation, unseen recall 0.3975",
+   "report": [
+    "step4_seeds10.json",
+    "step4_seeds.json"
+   ],
+   "path": "4x_32bit.unseen.0",
+   "expect": 0.3975,
+   "tol": 0.26,
+   "why_tol": "reported sd 0.1264 over ten seeds; the manuscript states this cell is highly seed dependent"
+  },
+  {
+   "id": "grid-32-8x-unseen",
+   "paper": "Table V, 32-bit eightfold aggregation, unseen recall 0.1916",
+   "report": [
+    "step4_seeds10.json",
+    "step4_seeds.json"
+   ],
+   "path": "8x_32bit.unseen.0",
+   "expect": 0.1916,
+   "tol": 0.08,
+   "why_tol": "reported sd 0.0267"
+  },
+  {
+   "id": "grid-8-1x-unseen",
+   "paper": "Table V, 8-bit full resolution, unseen recall 0.2341",
+   "report": [
+    "step4_seeds10.json",
+    "step4_seeds.json"
+   ],
+   "path": "1x_8bit.unseen.0",
+   "expect": 0.2341,
+   "tol": 0.1,
+   "why_tol": "reported sd 0.0468"
+  },
+  {
+   "id": "grid-8-4x-unseen",
+   "paper": "Table V, 8-bit fourfold aggregation, unseen recall 0.3944",
+   "report": [
+    "step4_seeds10.json",
+    "step4_seeds.json"
+   ],
+   "path": "4x_8bit.unseen.0",
+   "expect": 0.3944,
+   "tol": 0.32,
+   "why_tol": "reported sd 0.1579"
+  },
+  {
+   "id": "grid-32-1x-standard",
+   "paper": "Table V, 32-bit full resolution, standard recall 0.9210",
+   "report": [
+    "step4_seeds10.json",
+    "step4_seeds.json"
+   ],
+   "path": "1x_32bit.standard.0",
+   "expect": 0.921,
+   "tol": 0.09,
+   "why_tol": "reported sd 0.0414"
+  },
+  {
+   "id": "grid-32-4x-standard",
+   "paper": "Table V, 32-bit fourfold aggregation, standard recall 0.9056",
+   "report": [
+    "step4_seeds10.json",
+    "step4_seeds.json"
+   ],
+   "path": "4x_32bit.standard.0",
+   "expect": 0.9056,
+   "tol": 0.1,
+   "why_tol": "reported sd 0.0457"
+  },
+  {
+   "id": "paired-4x-vs-1x-unseen-32",
+   "paper": "Sec. V, paired t = +4.24 for 4x against 1x on the unseen regime at 32 bits",
+   "report": [
+    "step4_seeds10.json",
+    "step4_seeds.json"
+   ],
+   "derive": "paired_t",
+   "args": {
+    "a": "4x_32bit.unseen_runs",
+    "b": "1x_32bit.unseen_runs"
+   },
+   "expect": 4.24,
+   "tol": 1.9,
+   "why_tol": "a paired t on ten per-seed differences, so nine degrees of freedom and a two-sided critical value of 2.262; 4.24 less 1.9 is 2.34, which still clears it, so no run that failed to reach significance could pass this check"
+  },
+  {
+   "id": "paired-4x-vs-1x-unseen-8",
+   "paper": "Artefact only: paired t = +4.08 at 8 bits",
+   "report": [
+    "step4_seeds10.json",
+    "step4_seeds.json"
+   ],
+   "derive": "paired_t",
+   "args": {
+    "a": "4x_8bit.unseen_runs",
+    "b": "1x_8bit.unseen_runs"
+   },
+   "expect": 4.08,
+   "tol": 1.75,
+   "why_tol": "as above; 4.08 less 1.75 is 2.33, still above the 2.262 critical value at nine degrees of freedom",
+   "scope": "artefact"
+  },
+  {
+   "id": "paired-4x-vs-1x-standard-32",
+   "paper": "Sec. V, paired t of 1.05 on the standard split at 32 bits, no detected change",
+   "report": [
+    "step4_seeds10.json",
+    "step4_seeds.json"
+   ],
+   "derive": "paired_t_abs",
+   "args": {
+    "a": "4x_32bit.standard_runs",
+    "b": "1x_32bit.standard_runs"
+   },
+   "expect": 1.05,
+   "tol": 1.2,
+   "why_tol": "the claim is only that this does not reach significance, so the tolerance has to keep it below the 2.262 critical value; 1.05 plus 1.2 is 2.25, just inside, and the magnitude is compared because the claim is two-sided"
+  },
+  {
+   "id": "paired-4x-vs-1x-standard-8",
+   "paper": "Sec. V, paired t of 0.17 on the standard split at 8 bits",
+   "report": [
+    "step4_seeds10.json",
+    "step4_seeds.json"
+   ],
+   "derive": "paired_t_abs",
+   "args": {
+    "a": "4x_8bit.standard_runs",
+    "b": "1x_8bit.standard_runs"
+   },
+   "expect": 0.17,
+   "tol": 1.2,
+   "why_tol": "as for the 32-bit row: the tolerance keeps the value below the 2.262 critical value, and the magnitude is compared because the claim is two-sided"
+  },
+  {
+   "id": "augment-baseline",
+   "paper": "Sec. VI, shift-augmentation baseline 0.2214",
+   "report": "step4_augment.json",
+   "derive": "augment_value",
+   "args": {
+    "key": "baseline"
+   },
+   "expect": 0.2214,
+   "tol": 0.09,
+   "why_tol": "same quantity as the 1x grid cell"
+  },
+  {
+   "id": "augment-shift-4",
+   "paper": "Sec. VI, plus or minus 4 bins gives 0.1608, below baseline",
+   "report": "step4_augment.json",
+   "derive": "augment_value",
+   "args": {
+    "key": "shift4"
+   },
+   "expect": 0.1608,
+   "tol": 0.1,
+   "why_tol": "the refutation needs this at or below baseline, which the tolerance still tests"
+  },
+  {
+   "id": "ablate-input-only-cost",
+   "paper": "Sec. V, quantising the input alone costs 0.0159 in accuracy",
+   "report": "step4_ablate.json",
+   "derive": "ablate_drop",
+   "args": {
+    "condition": "input only"
+   },
+   "expect": 0.0159,
+   "tol": 0.06,
+   "why_tol": "a difference of two trained means, each with sd near 0.02 to 0.05"
+  },
+  {
+   "id": "ablate-weights-only-cost",
+   "paper": "Sec. V, quantising the weights alone costs 0.1028",
+   "report": "step4_ablate.json",
+   "derive": "ablate_drop",
+   "args": {
+    "condition": "weights only"
+   },
+   "expect": 0.1028,
+   "tol": 0.2,
+   "why_tol": "the manuscript reports an accuracy sd of 0.176 in this condition, with individual seeds collapsing"
+  },
+  {
+   "id": "ablate-joint-cost",
+   "paper": "Sec. V, the joint cost is 0.1412 against an additive prediction of 0.1187",
+   "report": "step4_ablate.json",
+   "derive": "ablate_drop",
+   "args": {
+    "condition": "both"
+   },
+   "expect": 0.1412,
+   "tol": 0.2,
+   "why_tol": "reported sd 0.134 in this condition"
+  },
+  {
+   "id": "interaction-contrast",
+   "paper": "Sec. V, interaction contrast I = -0.0225, CI [-0.185, +0.161], not distinguishable from zero",
+   "report": "step4_ablate.json",
+   "derive": "interaction_contrast",
+   "expect": -0.0225,
+   "tol": 0.18,
+   "why_tol": "the published confidence interval is itself about plus or minus 0.17; the claim is that the contrast is indistinguishable from zero, and any value inside this tolerance supports exactly that"
+  },
+  {
+   "id": "weights-only-instability",
+   "paper": "Sec. V, accuracy sd 0.176 in the weights-only condition, the reason the test has little power",
+   "report": "step4_ablate.json",
+   "path": "weights only.sd",
+   "expect": 0.176,
+   "tol": 0.12,
+   "why_tol": "an sd over few seeds; the claim is that it is large, not that it is 0.176"
+  },
+  {
+   "id": "loo-mean-delta",
+   "paper": "Sec. VIII-C, mean change +0.033 across five acquisitions",
+   "report": "step5_loo.json",
+   "path": "mean_delta",
+   "expect": 0.033,
+   "tol": 0.09,
+   "why_tol": "a mean of five per-acquisition differences, each a trained quantity"
+  },
+  {
+   "id": "loo-n-improved",
+   "paper": "Sec. VIII-C, aggregation improved three of the five acquisitions",
+   "report": "step5_loo.json",
+   "path": "n_improved",
+   "expect": 3,
+   "tol": 1,
+   "why_tol": "the conclusion is that the effect does not generalise, which holds for any count below five"
+  },
+  {
+   "id": "loo-sign-test-p",
+   "paper": "Sec. V, exact sign test p = 0.50 for the directional alternative that aggregation helps (one-sided)",
+   "report": "step5_loo.json",
+   "path": "sign_test_p",
+   "expect": 0.5,
+   "tol": 0.35,
+   "why_tol": "the exact sign test on five observations takes only a few discrete values; the claim is that it is nowhere near significance, and the manuscript now names this as the one-sided value because the two-sided value on the same data is 1.00"
+  },
+  {
+   "id": "loo-13-48-delta",
+   "paper": "Sec. VIII-C, 13-48 improves by +0.136, the largest of the five",
+   "report": "step5_loo.json",
+   "path": "deltas.13-48",
+   "expect": 0.136,
+   "tol": 0.2,
+   "why_tol": "the acquisition the manuscript calls highly seed dependent"
+  },
+  {
+   "id": "paired-n-positive-unseen-32",
+   "paper": "Sec. V, the per-seed difference is positive on ten of ten seeds at 32 bits",
+   "report": [
+    "step4_seeds10.json",
+    "step4_seeds.json"
+   ],
+   "derive": "paired_n_positive",
+   "args": {
+    "a": "4x_32bit.unseen_runs",
+    "b": "1x_32bit.unseen_runs"
+   },
+   "expect": 10,
+   "tol": 1,
+   "why_tol": "the manuscript's claim is that the sign is consistent across seeds, which nine or ten supports and eight or fewer would contradict; the quoted figure is the measured count"
+  },
+  {
+   "id": "paired-n-positive-unseen-8",
+   "paper": "Artefact only: positive on nine of ten seeds at 8 bits",
+   "report": [
+    "step4_seeds10.json",
+    "step4_seeds.json"
+   ],
+   "derive": "paired_n_positive",
+   "args": {
+    "a": "4x_8bit.unseen_runs",
+    "b": "1x_8bit.unseen_runs"
+   },
+   "expect": 9,
+   "tol": 1,
+   "why_tol": "as above; the claim is a consistent sign, not an exact count",
+   "scope": "artefact"
+  },
+  {
+   "id": "paired-mean-diff-unseen-32",
+   "paper": "Sec. V, mean per-seed gain of 0.175 in unseen recall at 32 bits",
+   "report": [
+    "step4_seeds10.json",
+    "step4_seeds.json"
+   ],
+   "derive": "paired_mean_diff",
+   "args": {
+    "a": "4x_32bit.unseen_runs",
+    "b": "1x_32bit.unseen_runs"
+   },
+   "expect": 0.175,
+   "tol": 0.09,
+   "why_tol": "the difference of two trained quantities over ten seeds, sd of the per-seed differences 0.131; the tolerance keeps the mean clearly above zero"
+  },
+  {
+   "id": "interaction-contrast-t",
+   "paper": "Sec. V, one-sample t of -0.24 on the per-seed interaction contrast",
+   "report": "step4_ablate.json",
+   "derive": "interaction_contrast_t",
+   "expect": -0.24,
+   "tol": 1.8,
+   "why_tol": "four degrees of freedom gives a two-sided critical value of 2.776; the claim is that the contrast is indistinguishable from zero, and this tolerance cannot admit a value that would reach significance"
+  },
+  {
+   "id": "coverage-separation-gap",
+   "paper": "Sec. IV, the worst half-in-training seed still exceeds the best held-out seed by 0.64, so the conditions do not overlap",
+   "report": [
+    "step2d_13-48_10seeds.json",
+    "step2d_13-48.json"
+   ],
+   "derive": "separation_gap",
+   "args": {
+    "a": "coverage.runs.half included",
+    "b": "coverage.runs.held out"
+   },
+   "expect": 0.6396,
+   "tol": 0.15,
+   "why_tol": "the claim is only that this is positive, which is what no overlap means; any value in this range keeps it well clear of zero"
+  },
+  {
+   "id": "loo-sign-test-p-two-sided",
+   "paper": "Sec. V, exact sign test p = 1.00 two-sided on five acquisitions",
+   "report": "step5_loo.json",
+   "derive": "sign_test_p",
+   "args": {
+    "hi": "4",
+    "lo": "1",
+    "sided": "two"
+   },
+   "expect": 1.0,
+   "tol": 0.3,
+   "why_tol": "the exact sign test on five observations takes only a few discrete values; the claim is that it is nowhere near significance in either direction"
+  },
+  {
+   "id": "temporal-n-triplets",
+   "paper": "Sec. VII-D, 17,221 consecutive-index triplets from 17,485 frames",
+   "report": "temporal.json",
+   "path": "n_triplets",
+   "expect": 17221,
+   "tol": 0,
+   "why_tol": "a count derived from the file names, exact or the archive is not the same one"
+  },
+  {
+   "id": "temporal-n-triplets-13-48",
+   "paper": "Sec. VII-D, 391 triplets on 13-48",
+   "report": "temporal.json",
+   "path": "n_triplets_target",
+   "expect": 391,
+   "tol": 0,
+   "why_tol": "as above, a deterministic count"
+  },
+  {
+   "id": "temporal-params-3ch",
+   "paper": "Sec. VII-D, the three-channel model has 102,291 parameters",
+   "report": "temporal.json",
+   "path": "arms.index.params",
+   "expect": 102291,
+   "tol": 0,
+   "why_tol": "a parameter count, fixed by the architecture"
+  },
+  {
+   "id": "temporal-single-random",
+   "paper": "Table VII, single-frame random-split accuracy 0.9512",
+   "report": "temporal.json",
+   "path": "arms.single.random_accuracy",
+   "expect": 0.9516,
+   "tol": 0.02,
+   "why_tol": "three seeds, sd 0.0030; the tolerance spans several sd and keeps it clearly below the three-channel arms"
+  },
+  {
+   "id": "temporal-index-random",
+   "paper": "Table VII, three-frame index-order random-split accuracy 0.9785",
+   "report": "temporal.json",
+   "path": "arms.index.random_accuracy",
+   "expect": 0.9794,
+   "tol": 0.02,
+   "why_tol": "three seeds, sd 0.0049; the manuscript's claim is that this lands near the 0.9808 published figure, which this range supports"
+  },
+  {
+   "id": "temporal-shuffle-random",
+   "paper": "Table VII, shuffled-companion random-split accuracy 0.9934",
+   "report": "temporal.json",
+   "path": "arms.shuffle.random_accuracy",
+   "expect": 0.9932,
+   "tol": 0.02,
+   "why_tol": "three seeds, sd 0.0007; the claim is that overlap drives this to the published figure, so the tolerance stays well above 0.97"
+  },
+  {
+   "id": "temporal-single-unseen",
+   "paper": "Table VII, single-frame recall on held-out 13-48 is 0.2092",
+   "report": "temporal.json",
+   "path": "arms.single.unseen_recall",
+   "expect": 0.2379,
+   "tol": 0.09,
+   "why_tol": "ten seeds, sd 0.0296; the tolerance spans the observed spread and keeps the value far below the 0.90 to 0.99 of other acquisitions"
+  },
+  {
+   "id": "temporal-index-unseen",
+   "paper": "Table IV, three-frame recall on held-out 13-48 is 0.3673, still a failure",
+   "report": "temporal.json",
+   "path": "arms.index.unseen_recall",
+   "expect": 0.3673,
+   "tol": 0.18,
+   "why_tol": "ten seeds, sd 0.0842; the claim is that a classifier at published accuracy still misclassifies the majority of this acquisition, which any value below 0.5 supports"
+  },
+  {
+   "id": "temporal-shuffle-unseen",
+   "paper": "Table VII, shuffled-companion recall on held-out 13-48 is 0.6087",
+   "report": "temporal.json",
+   "path": "arms.shuffle.unseen_recall",
+   "expect": 0.5435,
+   "tol": 0.25,
+   "why_tol": "ten seeds, sd 0.1657; the claim is only that even this configuration stays far below the 0.948 reachable with coverage"
+  },
+  {
+   "id": "temporal-index-minus-single",
+   "paper": "Sec. VII-D, three frames beat one on 13-48 by +0.171, paired t = +6.93",
+   "report": "temporal.json",
+   "path": "index_minus_single.paired_t",
+   "expect": 4.82,
+   "tol": 4.0,
+   "why_tol": "a paired t over ten seeds; the two-sided critical value is 2.262 and 6.93 less 4.0 is 2.93, so no run failing to reach significance could pass"
+  },
+  {
+   "id": "temporal-index-minus-shuffle",
+   "paper": "Sec. VII-C, index-adjacent companions are WORSE than folder-wide ones by 0.176, paired t = -4.35, so file-name order is not arbitrary",
+   "report": "temporal.json",
+   "path": "index_minus_shuffle.paired_t",
+   "expect": -4.35,
+   "tol": 1.6,
+   "why_tol": "a paired t over ten seeds; the manuscript's claim is that the two arms are not exchangeable, so the tolerance must keep the magnitude above the 2.262 critical value, and -3.93 plus 1.6 is -2.33"
+  },
+  {
+   "id": "audit-train-triplets-leaking",
+   "paper": "Sec. VII-D, 50.6 per cent of training triplets contain at least one test frame",
+   "report": [
+    "temporal.json",
+    "temporal_audit.json"
+   ],
+   "path": "overlap_audit.index.share_of_train_triplets",
+   "expect": 0.506,
+   "tol": 0.02,
+   "why_tol": "a deterministic count over a fixed partition; the tolerance allows only for a differently seeded split, and the claim is that roughly half of training inputs are affected"
+  },
+  {
+   "id": "audit-test-frames-reached-index",
+   "paper": "Sec. VII-D, 82.7 per cent of test frames appear inside some training input under index order",
+   "report": [
+    "temporal.json",
+    "temporal_audit.json"
+   ],
+   "path": "overlap_audit.index.share_of_test_frames",
+   "expect": 0.827,
+   "tol": 0.05,
+   "why_tol": "deterministic given the partition; the manuscript's claim is that the great majority of the test set is reached, which any value in this range supports"
+  },
+  {
+   "id": "audit-test-frames-reached-shuffle",
+   "paper": "Sec. VII-D, 68.4 per cent under shuffled companions, which is LESS than index order",
+   "report": [
+    "temporal.json",
+    "temporal_audit.json"
+   ],
+   "path": "overlap_audit.shuffle.share_of_test_frames",
+   "expect": 0.684,
+   "tol": 0.05,
+   "why_tol": "the manuscript rests a claim on this being below the index figure of 0.827, so the tolerance must not reach it; 0.684 plus 0.05 is 0.734, comfortably clear"
+  },
+  {
+   "id": "temporal-clean-random",
+   "paper": "Table IV, the overlap-free arm reaches 0.9731 on the random split",
+   "report": "temporal.json",
+   "path": "arms.clean.random_accuracy",
+   "expect": 0.9731,
+   "tol": 0.02,
+   "why_tol": "three seeds, sd 0.0080; the claim is that it stays close to the index arm, which this range keeps true"
+  },
+  {
+   "id": "temporal-clean-unseen",
+   "paper": "Table IV, the overlap-free arm reaches 0.4634 on held-out 13-48, between the adjacent and folder-wide arms",
+   "report": "temporal.json",
+   "path": "arms.clean.unseen_recall",
+   "expect": 0.4634,
+   "tol": 0.14,
+   "why_tol": "ten seeds, sd 0.0970; the manuscript's claim is the ordering 0.367 < 0.463 < 0.544, and this tolerance cannot reach either neighbour"
+  },
+  {
+   "id": "temporal-clean-companion-distance",
+   "paper": "Sec. VII-C, the overlap-free companions sit at mean index distance 2.57",
+   "report": "temporal.json",
+   "path": "clean_mean_companion_distance",
+   "expect": 2.57,
+   "tol": 0.4,
+   "why_tol": "a deterministic property of the partition and the numbering; the tolerance allows only for a differently seeded split"
+  },
+  {
+   "id": "overlap-cost-random",
+   "paper": "Sec. VII-C, removing the window overlap costs 0.0063 accuracy, so the inflation is under a point",
+   "report": "temporal.json",
+   "path": "overlap_cost_random.mean",
+   "expect": 0.0063,
+   "tol": 0.012,
+   "why_tol": "three seeds; the manuscript's claim is only that this is well under a point of accuracy, which any value in this range supports and a value near 0.03 would refute"
+  },
+  {
+   "id": "audit-clean-zero-overlap",
+   "paper": "Sec. VII-C, the overlap-free arm reaches none of the test set, which is what makes it the control",
+   "report": [
+    "temporal.json",
+    "temporal_audit.json"
+   ],
+   "path": "overlap_audit.clean.share_of_test_frames",
+   "expect": 0.0,
+   "tol": 0.0,
+   "why_tol": "exact by construction: a companion sharing the centre's split tag cannot cross the partition, so any non-zero value means the arm is not doing its job"
+  },
+  {
+   "id": "samples-raw-total",
+   "paper": "Fig. 1, the distributed archive holds 34,970 files before deduplication",
+   "report": "step1_report.json",
+   "path": "dedup.raw_total",
+   "expect": 34970,
+   "tol": 0,
+   "why_tol": "a file count, exact or the archive is not the same one; it is twice the deduplicated 17,485 because the tree appears twice"
+  },
+  {
+   "id": "drone-folders-equal-units",
+   "paper": "Sec. III-C, all 21 drone folders map one to one onto 21 units, so folder-level and timestamp grouping are identical for the drone class",
+   "report": "step1_report.json",
+   "path": "units.drone.multi_folder_units",
+   "expect": 0,
+   "tol": 0,
+   "why_tol": "exact: a single merged drone folder would make the principal result depend on the grouping rule, which is precisely what this claim denies"
+  },
+  {
+   "id": "drone-unit-count",
+   "paper": "Sec. III-C, 21 drone folders and 21 drone units",
+   "report": "step1_report.json",
+   "path": "units.drone.units",
+   "expect": 21,
+   "tol": 0,
+   "why_tol": "a count, exact or the archive is not the same one"
+  },
+  {
+   "id": "car-folders-merged",
+   "paper": "Sec. III-C, the rule merges 27 vehicle folders into 15 units",
+   "report": "step1_report.json",
+   "path": "units.car.units",
+   "expect": 15,
+   "tol": 0,
+   "why_tol": "a count, exact"
+  },
+  {
+   "id": "person-folders-merged",
+   "paper": "Sec. III-C, the rule merges 32 pedestrian folders into 16 units",
+   "report": "step1_report.json",
+   "path": "units.person.units",
+   "expect": 16,
+   "tol": 0,
+   "why_tol": "a count, exact"
+  },
+  {
+   "id": "norm-global",
+   "paper": "Sec. 4.2, global standardisation accuracy 0.9216",
+   "report": "step2b_norm.json",
+   "path": "global.accuracy.mean",
+   "expect": 0.9216,
+   "tol": 0.02,
+   "why_tol": "a grouped five-fold mean; the paper reports between-fold sd of 0.045 for every scheme and claims no ordering beyond that spread"
+  },
+  {
+   "id": "norm-peak-level",
+   "paper": "Sec. 4.2, two-channel peak-plus-level accuracy 0.9215",
+   "report": "step2b_norm.json",
+   "path": "peak_level.accuracy.mean",
+   "expect": 0.9215,
+   "tol": 0.02,
+   "why_tol": "same five-fold mean and same spread as the other three schemes"
+  },
+  {
+   "id": "norm-offset-drone-f1",
+   "paper": "Sec. 4.2, offset drone F1 0.8887 against 0.8454 for peak",
+   "report": "step2b_norm.json",
+   "path": "offset.drone_f1.mean",
+   "expect": 0.8887,
+   "tol": 0.05,
+   "why_tol": "drone F1 is the noisiest of the reported means, between-fold sd 0.078 for this scheme"
+  },
+  {
+   "id": "norm-peak-drone-f1",
+   "paper": "Sec. 4.2, peak-referenced drone F1 0.8454",
+   "report": "step2b_norm.json",
+   "path": "peak.drone_f1.mean",
+   "expect": 0.8454,
+   "tol": 0.05,
+   "why_tol": "between-fold sd 0.098 for this scheme, the widest in the ablation"
+  },
+  {
+   "id": "capacity-params-2x",
+   "paper": "Sec. 4.4, width multiplier two gives 391,715 parameters",
+   "report": "capacity.json",
+   "path": "rows.2.params",
+   "expect": 391715,
+   "tol": 0,
+   "why_tol": "a parameter count, fixed by the widths"
+  },
+  {
+   "id": "capacity-params-3x",
+   "paper": "Sec. 4.4, width multiplier three gives 871,731 parameters",
+   "report": "capacity.json",
+   "path": "rows.4.params",
+   "expect": 871731,
+   "tol": 0,
+   "why_tol": "a parameter count, fixed by the widths"
+  },
+  {
+   "id": "grid-1x-32-standard",
+   "paper": "Sec. 7.2, full resolution full precision scores 0.9357 on the standard split",
+   "report": "step3_grid.json",
+   "path": "standard.1x_32bit.accuracy",
+   "expect": 0.9357,
+   "tol": 0.03,
+   "why_tol": "three seeds on one grouped fold; the grid's own accuracy_sd reaches 0.033 on the worst cell"
+  },
+  {
+   "id": "grid-4x-16-standard",
+   "paper": "Sec. 7.2, fourfold aggregation at 16 bits scores 0.9475",
+   "report": "step3_grid.json",
+   "path": "standard.4x_16bit.accuracy",
+   "expect": 0.9475,
+   "tol": 0.03,
+   "why_tol": "three seeds on one grouped fold, same spread as the rest of the grid"
+  },
+  {
+   "id": "grid-1x-4bit-standard",
+   "paper": "Sec. 7.2, the 4-bit column breaks the band: 0.8229 at 1x",
+   "report": "step3_grid.json",
+   "path": "standard.1x_4bit.accuracy",
+   "expect": 0.8229,
+   "tol": 0.05,
+   "why_tol": "4-bit cells are the unstable ones; this cell's own sd is 0.033 and the claim is only that it falls outside the band"
+  },
+  {
+   "id": "grid-4x-4bit-standard",
+   "paper": "Sec. 7.2, 0.7504 at 4x and 4 bits, the worst cell in the grid",
+   "report": "step3_grid.json",
+   "path": "standard.4x_4bit.accuracy",
+   "expect": 0.7504,
+   "tol": 0.08,
+   "why_tol": "the single most unstable cell of the sixteen; the claim it supports is qualitative, that 4-bit breaks the band"
+  },
+  {
+   "id": "grid-8x-32-standard",
+   "paper": "Sec. 7.2, 0.9185 at 8x and 32 bits, the lowest cell keeping 8 or more bits",
+   "report": "step3_grid.json",
+   "path": "standard.8x_32bit.accuracy",
+   "expect": 0.9185,
+   "tol": 0.03,
+   "why_tol": "three seeds on one grouped fold; it sets the lower end of the stated band"
+  },
+  {
+   "id": "grid-2x-32-standard",
+   "paper": "Sec. 7.2, 0.9479 at 2x and 32 bits, the highest cell in the grid",
+   "report": "step3_grid.json",
+   "path": "standard.2x_32bit.accuracy",
+   "expect": 0.9479,
+   "tol": 0.03,
+   "why_tol": "three seeds on one grouped fold; it sets the upper end of the stated band"
+  },
+  {
+   "id": "grid-1x-32-unseen",
+   "paper": "Sec. 7.2, held-out 13-48 at 0.1934 before aggregation",
+   "report": "step3_grid.json",
+   "path": "unseen.1x_32bit.accuracy",
+   "expect": 0.1934,
+   "tol": 0.08,
+   "why_tol": "a single acquisition at three seeds; the grid reports unseen sd up to 0.21 and the paper says so in the caption"
+  },
+  {
+   "id": "grid-4x-32-unseen",
+   "paper": "Sec. 7.2, held-out 13-48 rises to 0.4898 at fourfold aggregation",
+   "report": "step3_grid.json",
+   "path": "unseen.4x_32bit.accuracy",
+   "expect": 0.4898,
+   "tol": 0.15,
+   "why_tol": "single acquisition, three seeds, sd 0.106 on this cell; the claim is the direction, not the value"
+  },
+  {
+   "id": "grid-4x-16-unseen-max",
+   "paper": "Sec. 7.2 and the conclusion, no grid cell takes 13-48 above 0.578",
+   "report": "step3_grid.json",
+   "path": "unseen.4x_16bit.accuracy",
+   "expect": 0.5776,
+   "tol": 0.12,
+   "why_tol": "the largest of the sixteen unseen cells, sd 0.069; the conclusion's claim is that even this best cell leaves the acquisition failing"
+  },
+  {
+   "id": "grid-8x-32-unseen",
+   "paper": "Sec. 7.2, the effect reverses at 8x, back to 0.1934",
+   "report": "step3_grid.json",
+   "path": "unseen.8x_32bit.accuracy",
+   "expect": 0.1934,
+   "tol": 0.08,
+   "why_tol": "single acquisition at three seeds, though this cell is among the tightest at sd 0.013"
+  },
+  {
+   "id": "gap-32-2x",
+   "paper": "Sec. 7.3, standard-to-unseen gap 0.6027 at 2x and 32 bits",
+   "report": [
+    "step4_seeds10.json",
+    "step4_seeds.json"
+   ],
+   "path": "2x_32bit.gap",
+   "expect": 0.6027,
+   "tol": 0.15,
+   "why_tol": "a difference of two ten-seed means, the unseen one with sd 0.14"
+  },
+  {
+   "id": "gap-32-4x",
+   "paper": "Sec. 7.3, the gap narrows to 0.5082 at 4x",
+   "report": [
+    "step4_seeds10.json",
+    "step4_seeds.json"
+   ],
+   "path": "4x_32bit.gap",
+   "expect": 0.5082,
+   "tol": 0.15,
+   "why_tol": "difference of two ten-seed means, unseen sd 0.13; the claim is the ordering across the four factors"
+  },
+  {
+   "id": "gap-32-8x",
+   "paper": "Sec. 7.3, the gap widens again to 0.7095 at 8x",
+   "report": [
+    "step4_seeds10.json",
+    "step4_seeds.json"
+   ],
+   "path": "8x_32bit.gap",
+   "expect": 0.7095,
+   "tol": 0.12,
+   "why_tol": "difference of two ten-seed means; the unseen arm is tight here at sd 0.027"
+  },
+  {
+   "id": "gap-32-1x",
+   "paper": "Sec. 7.3, the gap is 0.6988 at full resolution",
+   "report": [
+    "step4_seeds10.json",
+    "step4_seeds.json"
+   ],
+   "path": "1x_32bit.gap",
+   "expect": 0.6988,
+   "tol": 0.12,
+   "why_tol": "difference of two ten-seed means, unseen sd 0.041"
+  },
+  {
+   "id": "gap-8-1x",
+   "paper": "Sec. 7.3, the 8-bit row tracks it: 0.6894 at 1x",
+   "report": [
+    "step4_seeds10.json",
+    "step4_seeds.json"
+   ],
+   "path": "1x_8bit.gap",
+   "expect": 0.6894,
+   "tol": 0.12,
+   "why_tol": "difference of two ten-seed means; the claim is that the 8-bit row repeats the 32-bit ordering"
+  },
+  {
+   "id": "gap-8-2x",
+   "paper": "Sec. 7.3, 0.6082 at 2x and 8 bits",
+   "report": [
+    "step4_seeds10.json",
+    "step4_seeds.json"
+   ],
+   "path": "2x_8bit.gap",
+   "expect": 0.6082,
+   "tol": 0.15,
+   "why_tol": "difference of two ten-seed means, unseen sd 0.11"
+  },
+  {
+   "id": "gap-8-4x",
+   "paper": "Sec. 7.3, 0.5268 at 4x and 8 bits, the narrowest of the 8-bit row",
+   "report": [
+    "step4_seeds10.json",
+    "step4_seeds.json"
+   ],
+   "path": "4x_8bit.gap",
+   "expect": 0.5268,
+   "tol": 0.16,
+   "why_tol": "difference of two ten-seed means, unseen sd 0.16 on this cell, the widest in the subset"
+  },
+  {
+   "id": "gap-8-8x",
+   "paper": "Sec. 7.3, 0.7217 at 8x and 8 bits",
+   "report": [
+    "step4_seeds10.json",
+    "step4_seeds.json"
+   ],
+   "path": "8x_8bit.gap",
+   "expect": 0.7217,
+   "tol": 0.12,
+   "why_tol": "difference of two ten-seed means; the unseen arm is tight here at sd 0.037"
+  },
+  {
+   "id": "augment-shift-8",
+   "paper": "Sec. 8, plus or minus 8 bins gives 0.1613 on held-out 13-48",
+   "report": "step4_augment.json",
+   "path": "1x + shift +/-8 bins.mean",
+   "expect": 0.1613,
+   "tol": 0.06,
+   "why_tol": "five seeds on one acquisition; this arm's own sd is 0.012 but the unaugmented baseline it is compared against has sd 0.061"
+  },
+  {
+   "id": "augment-shift-16",
+   "paper": "Sec. 8, plus or minus 16 bins gives 0.1603, still below the baseline",
+   "report": "step4_augment.json",
+   "path": "1x + shift +/-16 bins.mean",
+   "expect": 0.1603,
+   "tol": 0.06,
+   "why_tol": "five seeds on one acquisition, compared against a baseline whose sd is 0.061"
+  },
+  {
+   "id": "augment-4x-same-protocol",
+   "paper": "Sec. 8, fourfold aggregation reaches 0.4641 where no shift strength exceeds 0.17",
+   "report": "step4_augment.json",
+   "path": "4x aggregation.mean",
+   "expect": 0.4641,
+   "tol": 0.25,
+   "why_tol": "five seeds on one acquisition with a reported sd of 0.236; the paper uses it only as the contrast that every shift arm falls far below"
+  },
+  {
+   "id": "13-48-headroom",
+   "paper": "Sec. 8, 13-48 has the largest headroom of any drone acquisition. The 42.5 dB the prose quotes is the median in Table 2, which tools/make_tables.py generates from step2c_sessions.json; this check guards the per-sample mean the profile reports for the same acquisition, which the median must sit near.",
+   "report": [
+    "step2d_13-48_10seeds.json",
+    "step2d_13-48.json"
+   ],
+   "path": "profile.headroom_dB.target",
+   "expect": 43.74,
+   "tol": 1.5,
+   "why_tol": "a per-sample mean over one acquisition, not a trained quantity. The 1.5 dB covers the mean-against-median difference, which is 1.2 dB here, and nothing else."
+  },
+  {
+   "id": "units-above-090",
+   "paper": "Fig. 2 caption, forty-three of the 52 units sit above 0.90",
+   "report": "step2c_sessions.json",
+   "derive": "units_above",
+   "expect": 43,
+   "tol": 0,
+   "why_tol": "a count over a fixed table of recalls; the caption previously said forty-nine and nothing could catch it",
+   "args": {
+    "above": 0.9
+   }
+  },
+  {
+   "id": "units-above-078",
+   "paper": "Fig. 2 caption, fifty of the 52 units sit above 0.78",
+   "report": "step2c_sessions.json",
+   "derive": "units_above",
+   "expect": 50,
+   "tol": 0,
+   "why_tol": "a count; the caption previously claimed all but one, which 11-23 at 0.7776 falsifies",
+   "args": {
+    "above": 0.78
+   }
+  },
+  {
+   "id": "units-above-075",
+   "paper": "Sec. 6.2, only one unit in the dataset falls below 0.75",
+   "report": "step2c_sessions.json",
+   "derive": "units_above",
+   "expect": 51,
+   "tol": 0,
+   "why_tol": "a count; 51 of 52 above 0.75 is the same statement as one below it",
+   "args": {
+    "above": 0.75
+   }
+  },
+  {
+   "id": "drone-units-above-090",
+   "paper": "Abstract and Sec. 6.2, twenty of the twenty-one drone units are above 0.90",
+   "report": "step2c_sessions.json",
+   "derive": "units_above",
+   "expect": 20,
+   "tol": 0,
+   "why_tol": "a count within one class",
+   "args": {
+    "cls": "drone",
+    "above": 0.9
+   }
+  },
+  {
+   "id": "drone-band-min",
+   "paper": "Sec. 6.2, the other drone acquisitions start at 0.9006",
+   "report": "step2c_sessions.json",
+   "derive": "session_recall_extreme",
+   "expect": 0.9006,
+   "tol": 0.03,
+   "why_tol": "a per-acquisition recall at three seeds; the weakest unit's own seed sd is 0.022",
+   "args": {
+    "cls": "drone",
+    "exclude": "13-48",
+    "which": "min"
+   }
+  },
+  {
+   "id": "drone-band-max",
+   "paper": "Sec. 6.2, and end at 0.9929, which is why the band is not quoted as 0.90 to 0.99",
+   "report": "step2c_sessions.json",
+   "derive": "session_recall_extreme",
+   "expect": 0.9929,
+   "tol": 0.02,
+   "why_tol": "a per-acquisition recall at three seeds; this unit is near ceiling so its spread is small",
+   "args": {
+    "cls": "drone",
+    "exclude": "13-48",
+    "which": "max"
+   }
+  },
+  {
+   "id": "13-48-energy-extent-d",
+   "paper": "Sec. 6.3, energy extent is unremarkable on 13-48 at |d| below 0.8",
+   "report": [
+    "step2d_13-48_10seeds.json",
+    "step2d_13-48.json"
+   ],
+   "path": "profile.cells_within_20dB.z",
+   "expect": -0.77,
+   "tol": 0.15,
+   "why_tol": "a descriptive effect size over fixed samples, not a trained quantity; the tolerance only covers the bound the paper states, which is 0.8"
+  },
+  {
+   "id": "13-48-range-spread-d",
+   "paper": "Sec. 6.3, range spread is unremarkable on 13-48",
+   "report": [
+    "step2d_13-48_10seeds.json",
+    "step2d_13-48.json"
+   ],
+   "path": "profile.range_spread.z",
+   "expect": 0.7,
+   "tol": 0.15,
+   "why_tol": "a descriptive effect size over fixed samples; checked because it sits closest to the stated bound"
+  },
+  {
+   "id": "control-energy-extent-d",
+   "paper": "Sec. 6.6, 11-23 is an outlier in energy extent at d = +3.4",
+   "report": "step2d_control.json",
+   "path": "profile.cells_within_20dB.z",
+   "expect": 3.43,
+   "tol": 0.3,
+   "why_tol": "a descriptive effect size over fixed samples; the paper quotes it to one decimal"
+  },
+  {
+   "id": "control2-largest-d",
+   "paper": "Sec. 6.6, no property separates 15-37, the largest |d| being 0.25",
+   "report": "step2d_control2.json",
+   "path": "profile.mean_dB.z",
+   "expect": -0.25,
+   "tol": 0.1,
+   "why_tol": "a descriptive effect size; the claim is that it is small, and 0.1 keeps it far from the 15.67 it is contrasted with"
+  },
+  {
+   "id": "control2-seed-sd",
+   "paper": "Sec. 6.6, 15-37's per-seed difference has sd 0.030",
+   "report": "step2d_control2.json",
+   "derive": "paired_t_abs",
+   "expect": 0.86,
+   "tol": 0.9,
+   "why_tol": "ten paired seeds on one acquisition whose recovery the paper calls indistinguishable from zero; the wide tolerance is the point, a |t| this small is the claim",
+   "args": {
+    "a": "coverage.runs.half included",
+    "b": "coverage.runs.held out"
+   }
+  }
+ ]
 }

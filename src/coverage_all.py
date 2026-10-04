@@ -170,6 +170,14 @@ def main():
             "held_out": cov["held_out"],
             "half_included": cov["half_included"],
             "recovery": cov["recovery"],
+            "n_test": cov.get("n_test", 0),
+            # which wrong class the held-out samples go to, and how that
+            # changes once the acquisition is represented. For 13-48 the
+            # paper quotes 79 per cent to pedestrian falling to 3 per cent;
+            # recording it for all 52 units says whether that redirection is
+            # particular to this acquisition or is what coverage failure
+            # looks like in general.
+            "predicted_fraction": cov.get("predicted_fraction", {}),
             "runs": cov.get("runs", {})}
         os.makedirs(os.path.dirname(os.path.abspath(args.out)), exist_ok=True)
         json.dump(out, open(args.out, "w"), indent=2)

@@ -212,7 +212,7 @@ def coverage_test(X, y, unit, target, seeds, epochs):
     print("\n" + "=" * 76)
     print("[C] COVERAGE TEST for %s" % target)
     print("=" * 76)
-    res = {}
+    res, dists, n_test = {}, {}, {}
     for seed in seeds:
         rng = np.random.default_rng(seed)
         perm = rng.permutation(tidx)
@@ -238,6 +238,12 @@ def coverage_test(X, y, unit, target, seeds, epochs):
             rec = float((pred == true).mean())
             dist = {CLASSES[i]: int((pred == i).sum()) for i in range(3)}
             res.setdefault(name, []).append(rec)
+            # The paper states which wrong class the held-out samples go to,
+            # and that statement was only ever printed here, never saved, so
+            # check_expected.py could not reach it. Keep it, and the test
+            # size it is a fraction of, in the report.
+            dists.setdefault(name, []).append(dist)
+            n_test[name] = int(te.sum())
             print("    seed %d  %-14s recall on held-back half: %.4f   %s"
                   % (seed, name, rec, dist))
 
@@ -258,7 +264,21 @@ def coverage_test(X, y, unit, target, seeds, epochs):
         print("    Little recovery. Not a coverage problem. The recording is")
         print("    intrinsically hard or mislabelled -- check [A] and [B]")
         print("    before drawing any conclusion from it.")
+    # Mean fraction of the held-back half sent to each class, per condition.
+    # The paper's "79 per cent go to the pedestrian class, 3 per cent once
+    # half is in training" is this, and until now it existed only in console
+    # output, so no checker could verify it.
+    frac = {}
+    for name, ds in dists.items():
+        n = max(1, n_test.get(name, 0))
+        frac[name] = {c: float(sum(d[c] for d in ds)) / (len(ds) * n)
+                      for c in CLASSES}
+        print("    %-14s predicted-class fractions: %s"
+              % (name, {c: round(v, 4) for c, v in frac[name].items()}))
+
     return {"held_out": a, "half_included": b, "recovery": b - a,
+            "n_test": n_test.get("held out", 0),
+            "predicted_fraction": frac,
             "runs": {k: [float(x) for x in v] for k, v in res.items()}}
 
 
