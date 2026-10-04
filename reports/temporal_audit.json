@@ -1,0 +1,36 @@
+{
+  "n_frames": 17485,
+  "n_triplets": 17221,
+  "n_triplets_target": 391,
+  "shuffle_fallbacks": 0,
+  "epochs": 40,
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "arms": {},
+  "overlap_audit": {
+    "index": {
+      "train_triplets": 10239,
+      "train_triplets_touching_a_test_frame": 5183,
+      "share_of_train_triplets": 0.5062017775173356,
+      "distinct_test_frames_inside_training_inputs": 4341,
+      "share_of_test_frames": 0.8274876096073198
+    },
+    "shuffle": {
+      "train_triplets": 10239,
+      "train_triplets_touching_a_test_frame": 5181,
+      "share_of_train_triplets": 0.5060064459419865,
+      "distinct_test_frames_inside_training_inputs": 3590,
+      "share_of_test_frames": 0.6843309187952726
+    }
+  }
+}
