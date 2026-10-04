@@ -10,7 +10,7 @@ shape as well, so both survive greyscale printing.
 
     python tools/make_figures.py --reports reports --out figures
 """
-import argparse, json, os
+import argparse, json, os, shutil
 import numpy as np
 import matplotlib
 matplotlib.use("Agg")
@@ -96,10 +96,23 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--reports", default="reports")
     ap.add_argument("--out", default="figures")
+    ap.add_argument("--also", default="paper/figures",
+                    help="second directory to copy into, so the copy the "
+                         "paper compiles against cannot go stale behind the "
+                         "one this script writes. Pass an empty string to "
+                         "skip.")
     a = ap.parse_args()
     os.makedirs(a.out, exist_ok=True)
     fig_recall(json.load(open(os.path.join(a.reports, "step2c_sessions.json"))), a.out)
     fig_doppler(json.load(open(os.path.join(a.reports, "step2d_centroids.json"))), a.out)
+
+    if a.also and os.path.isdir(os.path.dirname(a.also.rstrip("/")) or "."):
+        os.makedirs(a.also, exist_ok=True)
+        for name in ("recall_by_acquisition.png", "doppler_by_acquisition.png"):
+            src = os.path.join(a.out, name)
+            if os.path.exists(src):
+                shutil.copyfile(src, os.path.join(a.also, name))
+        print("  copied both into %s" % a.also)
 
 
 if __name__ == "__main__":
