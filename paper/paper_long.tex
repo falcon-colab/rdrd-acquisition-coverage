@@ -513,7 +513,7 @@ These results establish a benchmark-specific case study rather than a general la
 
 \section*{Reproducibility}
 
-The repository contains the preparation pipeline, the exact partition files, the per-stage JSON reports from which every number in this paper is taken, and \texttt{check\_expected.py}, which re-reads those reports and verifies each reported figure against a stated tolerance with a recorded justification for that tolerance. Tables~\ref{tab:acq} and~\ref{tab:compress} are generated from their reports by \texttt{tools/make\_tables.py} rather than typed, so a transcription error cannot enter them. Running the checker on a fresh clone reproduces the verification without a GPU.
+The repository contains the preparation pipeline, the exact partition files, the per-stage JSON reports from which every number in this paper is taken, and \texttt{check\_expected.py}, which re-reads those reports and verifies 136 reported figures against a stated tolerance, each with a recorded justification for that tolerance. The counts, the band edges and the effect sizes are checked as well as the trained quantities, since a count quoted in a caption is as easy to get wrong as a mean and harder to notice. Tables~\ref{tab:acq} and~\ref{tab:compress} are generated from their reports by \texttt{tools/make\_tables.py} rather than typed, so a transcription error cannot enter them. Running the checker on a fresh clone reproduces the verification without a GPU.
 
 % =====================================================================
 {\small
