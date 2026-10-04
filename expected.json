@@ -1029,6 +1029,42 @@
       "expect": 34970,
       "tol": 0,
       "why_tol": "a file count, exact or the archive is not the same one; it is twice the deduplicated 17,485 because the tree appears twice"
+    },
+    {
+      "id": "drone-folders-equal-units",
+      "paper": "Sec. III-C, all 21 drone folders map one to one onto 21 units, so folder-level and timestamp grouping are identical for the drone class",
+      "report": "step1_report.json",
+      "path": "units.drone.multi_folder_units",
+      "expect": 0,
+      "tol": 0,
+      "why_tol": "exact: a single merged drone folder would make the principal result depend on the grouping rule, which is precisely what this claim denies"
+    },
+    {
+      "id": "drone-unit-count",
+      "paper": "Sec. III-C, 21 drone folders and 21 drone units",
+      "report": "step1_report.json",
+      "path": "units.drone.units",
+      "expect": 21,
+      "tol": 0,
+      "why_tol": "a count, exact or the archive is not the same one"
+    },
+    {
+      "id": "car-folders-merged",
+      "paper": "Sec. III-C, the rule merges 27 vehicle folders into 15 units",
+      "report": "step1_report.json",
+      "path": "units.car.units",
+      "expect": 15,
+      "tol": 0,
+      "why_tol": "a count, exact"
+    },
+    {
+      "id": "person-folders-merged",
+      "paper": "Sec. III-C, the rule merges 32 pedestrian folders into 16 units",
+      "report": "step1_report.json",
+      "path": "units.person.units",
+      "expect": 16,
+      "tol": 0,
+      "why_tol": "a count, exact"
     }
   ]
 }
