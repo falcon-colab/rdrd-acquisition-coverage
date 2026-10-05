@@ -92,6 +92,64 @@ def fig_doppler(cen, out):
     print("  doppler_by_acquisition.png  %d drone acquisitions" % len(rows))
 
 
+
+def fig_recovery(cov, out):
+    """Recovery against baseline recall, all 52 acquisitions.
+
+    This is the figure that retires the paper's worst design weakness. The
+    coverage claim used to rest on one acquisition plus two controls picked
+    after seeing which acquisitions scored worst, which is selection on the
+    dependent variable. Running the identical experiment on every unit
+    replaces that with a distribution, and the distribution is not subtle:
+    13-48 recovers 0.760 while no other unit of the 51 recovers even 0.05.
+
+    The x axis carries the regression-to-the-mean check. If low baseline
+    recall predicted recovery in general, the other 51 points would trend
+    upward to the left and 13-48 would be the end of that trend rather than
+    a separate case. They do not: r = -0.28 among them, 8 per cent of the
+    variance.
+    """
+    rows = [(k, v["class"], v["held_out"], v["recovery"])
+            for k, v in cov["units"].items()]
+    fig, ax = plt.subplots(figsize=(7.4, 3.5))
+    for cls, (col, mk) in STYLE.items():
+        pts = [r for r in rows if r[1] == cls and not r[0].endswith("13-48")]
+        ax.scatter([p[2] for p in pts], [p[3] for p in pts],
+                   s=58, c=col, marker=mk, alpha=0.88, zorder=3,
+                   edgecolors="white", linewidths=0.8,
+                   label="%s (%d)" % (LABEL[cls], len(pts)))
+    tgt = [r for r in rows if r[0].endswith("13-48")][0]
+    ax.scatter([tgt[2]], [tgt[3]], s=190, c=VERM, marker="D", zorder=5,
+               edgecolors="white", linewidths=1.4)
+    ax.annotate("13-48\n%+.3f" % tgt[3], (tgt[2], tgt[3]),
+                textcoords="offset points", xytext=(14, -4),
+                fontsize=11, color=VERM, fontweight="bold", va="center")
+
+    other = [r[3] for r in rows if not r[0].endswith("13-48")]
+    ax.axhspan(min(other), max(other), color="#000000", alpha=0.055, zorder=1)
+    ax.annotate("every other acquisition: %+.3f to %+.3f" % (min(other), max(other)),
+                xy=(0.985, max(other)), xycoords=("axes fraction", "data"),
+                textcoords="offset points", xytext=(0, 9), ha="right",
+                fontsize=9.5, color="#555555")
+    ax.axhline(0, color=GRID, linewidth=1, zorder=2)
+
+    ax.set_xlabel("recall with the acquisition held out of training")
+    ax.set_ylabel("recovery once half of it is added")
+    ax.set_ylim(-0.08, 0.86)
+    ax.set_xlim(0.08, 1.03)
+    ax.grid(True, color=GRID, linewidth=0.5, zorder=0)
+    ax.set_axisbelow(True)
+    for sp in ("top", "right"):
+        ax.spines[sp].set_visible(False)
+    ax.legend(frameon=False, loc="center", ncol=3, fontsize=10)
+    fig.tight_layout(pad=0.3)
+    fig.savefig(os.path.join(out, "recovery_by_acquisition.png"),
+                bbox_inches="tight")
+    plt.close(fig)
+    print("  recovery_by_acquisition.png  %d units, 13-48 at %+.4f"
+          % (len(rows), tgt[3]))
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--reports", default="reports")
@@ -105,10 +163,16 @@ def main():
     os.makedirs(a.out, exist_ok=True)
     fig_recall(json.load(open(os.path.join(a.reports, "step2c_sessions.json"))), a.out)
     fig_doppler(json.load(open(os.path.join(a.reports, "step2d_centroids.json"))), a.out)
+    cov = os.path.join(a.reports, "coverage_all.json")
+    if os.path.exists(cov):
+        fig_recovery(json.load(open(cov)), a.out)
+    else:
+        print("  (no coverage_all.json yet; skipping the recovery figure)")
 
     if a.also and os.path.isdir(os.path.dirname(a.also.rstrip("/")) or "."):
         os.makedirs(a.also, exist_ok=True)
-        for name in ("recall_by_acquisition.png", "doppler_by_acquisition.png"):
+        for name in ("recall_by_acquisition.png", "doppler_by_acquisition.png",
+                     "recovery_by_acquisition.png"):
             src = os.path.join(a.out, name)
             if os.path.exists(src):
                 shutil.copyfile(src, os.path.join(a.also, name))

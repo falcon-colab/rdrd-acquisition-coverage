@@ -5,6 +5,13 @@
   "reads this file, reads the reports a run produced, and prints a table of",
   "agreements and disagreements.",
   "",
+  "On 'the manuscript'. There are two: paper/paper_main.tex, the six-page",
+  "IEEEtran submission, and paper/paper_long.tex, a twelve-page single-column",
+  "variant kept as a source of material. A number printed in either one is",
+  "checked here. The six-page version summarises the input-resolution study",
+  "and points to this artefact for it, so several grid and gap checks guard",
+  "numbers only the twelve-page version prints; they still have to agree.",
+  "",
   "On tolerances. Each entry carries its own 'tol' and a one-line reason.",
   "Counts and parameter counts are exact: a mismatch there is a different",
   "dataset or a different model, not noise. Trained quantities are not",
@@ -1476,6 +1483,108 @@
     "a": "coverage.runs.half included",
     "b": "coverage.runs.held out"
    }
+  },
+  {
+   "id": "all52-13-48-recovery",
+   "paper": "Sec. VI-D, 13-48 recovers 0.760 in the 52-unit sweep at three seeds",
+   "report": "coverage_all.json",
+   "derive": "recovery_of",
+   "args": {
+    "unit": "drone/13-48"
+   },
+   "expect": 0.7597,
+   "tol": 0.12,
+   "why_tol": "one acquisition at three seeds; the ten-seed version of the same experiment gives 0.7701, so the tolerance spans both and still excludes everything else in the sweep by a factor of two"
+  },
+  {
+   "id": "all52-max-recovery-excl",
+   "paper": "Sec. VI-D and the abstract, no other unit recovers as much as 0.05; the largest is +0.0496",
+   "report": "coverage_all.json",
+   "derive": "recovery_extreme",
+   "args": {
+    "exclude": "13-48",
+    "which": "max"
+   },
+   "expect": 0.0496,
+   "tol": 0.03,
+   "why_tol": "a maximum over 51 trained quantities, so it moves with the run; the tolerance keeps it below 0.08 and therefore an order of magnitude under 13-48, which is the claim"
+  },
+  {
+   "id": "all52-min-recovery-excl",
+   "paper": "Sec. VI-D, the other 51 span down to -0.039",
+   "report": "coverage_all.json",
+   "derive": "recovery_extreme",
+   "args": {
+    "exclude": "13-48",
+    "which": "min"
+   },
+   "expect": -0.0387,
+   "tol": 0.04,
+   "why_tol": "a minimum over 51 trained quantities; the claim is only that the band straddles zero"
+  },
+  {
+   "id": "all52-recovery-sd-excl",
+   "paper": "Sec. VI-D, the other 51 have recovery sd 0.017",
+   "report": "coverage_all.json",
+   "path": "summary.recovery_sd_excl_13_48",
+   "expect": 0.0167,
+   "tol": 0.01,
+   "why_tol": "a standard deviation over 51 trained quantities; it sets the 45-sd separation, which any value in this range leaves far above 10"
+  },
+  {
+   "id": "all52-pearson-all",
+   "paper": "Sec. VI-D, Pearson(baseline recall, recovery) = -0.927 over all 52",
+   "report": "coverage_all.json",
+   "path": "baseline_recovery_pearson",
+   "expect": -0.927,
+   "tol": 0.08,
+   "why_tol": "a correlation dominated by one extreme point, so it is stable; the paper uses it only to show that 13-48 alone produces it"
+  },
+  {
+   "id": "all52-pearson-excl",
+   "paper": "Sec. VI-D, that correlation is -0.282 among the other 51, the regression-to-the-mean check",
+   "report": "coverage_all.json",
+   "path": "baseline_recovery_pearson_excl_13_48",
+   "expect": -0.282,
+   "tol": 0.25,
+   "why_tol": "this is the check that could have damaged the paper, so the tolerance is set by what would change the conclusion: anything weaker than about -0.55 leaves regression to the mean unable to account for a recovery of 0.760"
+  },
+  {
+   "id": "all52-unit-count",
+   "paper": "Sec. VI-D, the sweep covers all 52 units",
+   "report": "coverage_all.json",
+   "path": "summary.n_units",
+   "expect": 52,
+   "tol": 0,
+   "why_tol": "a count of units, exact or the sweep did not finish"
+  },
+  {
+   "id": "all52-13-48-to-person",
+   "paper": "Sec. VI-C, held out, 13-48 goes to the pedestrian class",
+   "report": "coverage_all.json",
+   "derive": "predicted_fraction",
+   "args": {
+    "unit": "drone/13-48",
+    "cond": "held out",
+    "cls": "person"
+   },
+   "expect": 0.7953,
+   "tol": 0.1,
+   "why_tol": "a mean over three seeds on one acquisition; the ten-seed run of the same experiment gave 0.79, so the tolerance spans both"
+  },
+  {
+   "id": "all52-13-48-person-repaired",
+   "paper": "Sec. VI-C, that misassignment falls below 0.05 once half the acquisition is in training",
+   "report": "coverage_all.json",
+   "derive": "predicted_fraction",
+   "args": {
+    "unit": "drone/13-48",
+    "cond": "half included",
+    "cls": "person"
+   },
+   "expect": 0.0474,
+   "tol": 0.04,
+   "why_tol": "three seeds on one acquisition; the claim is that the misassignment collapses, which any value in this range supports"
   }
  ]
 }

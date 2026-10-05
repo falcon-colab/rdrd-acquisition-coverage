@@ -91,6 +91,27 @@ def d_min_session_recall(rep, a):
     return min(s["recall"] for s in rep[a["cls"]]["sessions"])
 
 
+def d_recovery_extreme(rep, a):
+    """The largest or smallest recovery over the 52-unit sweep.
+
+    The paper's strongest claim is now a bound rather than a comparison:
+    no acquisition other than 13-48 recovers as much as 0.05. A bound is
+    exactly the kind of statement that rots silently when a rerun shifts
+    one unit, so it gets a check of its own.
+    """
+    vals = [u["recovery"] for k, u in rep["units"].items()
+            if not k.endswith(a.get("exclude", "\x00"))]
+    return max(vals) if a.get("which", "max") == "max" else min(vals)
+
+
+def d_recovery_of(rep, a):
+    return rep["units"][a["unit"]]["recovery"]
+
+
+def d_predicted_fraction(rep, a):
+    return rep["units"][a["unit"]]["predicted_fraction"][a["cond"]][a["cls"]]
+
+
 def d_units_above(rep, a):
     """How many of the 52 units clear a threshold.
 
@@ -308,6 +329,9 @@ DERIVATIONS = {
     "session_recall": d_session_recall,
     "min_session_recall": d_min_session_recall,
     "units_above": d_units_above,
+    "recovery_extreme": d_recovery_extreme,
+    "recovery_of": d_recovery_of,
+    "predicted_fraction": d_predicted_fraction,
     "session_recall_extreme": d_session_recall_extreme,
     "recall_sd_excluding": d_recall_sd_excluding,
     "pearson_excluding": d_pearson_excluding,
