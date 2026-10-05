@@ -1,11 +1,21 @@
 %% ---------------------------------------------------------------------
-%% Session-grouped evaluation of a public radar target recognition dataset
-%% IEEE conference format. Compile on Overleaf with IEEEtran.
+%% Session-grouped evaluation of a public radar target recognition dataset.
 %%
-%% FIGURES: this paper uses one, session_13-48_vs_others.png. It must sit
-%% in a figures/ subdirectory alongside this file, which is what
-%% \graphicspath{{figures/}} below expects. Four others are in the
-%% repository's figures/ folder and are not referenced here.
+%% THIS IS THE SUBMISSION VERSION: IEEEtran two-column conference format,
+%% 6 pages including references, which is what the Pakistani conferences
+%% under consideration (ICIC at UMT, ICCII at Riphah, ICOSST at UET) all
+%% require. paper_long.tex is a 12-page single-column variant kept as a
+%% source of material; the two share no text, so a number corrected in one
+%% must be corrected in the other.
+%%
+%% BLIND REVIEW. Set \blindtrue below if the venue reviews double-blind.
+%% ICIC states only "a blind peer review process" and requires the first
+%% author's surname in the filename, which reads as single-blind, so the
+%% default here is \blindfalse. Confirm with the venue before submitting:
+%% an author name in a double-blind submission is a desk reject.
+%%
+%% FIGURES must sit in a figures/ subdirectory alongside this file, which
+%% is what \graphicspath{{figures/}} expects.
 %%
 %% Every number in this file comes from a measured run and is checked
 %% against the released reports by check_expected.py in the repository
@@ -36,12 +46,27 @@
 
 \title{Aggregate Accuracy Conceals an Acquisition-Level Failure in a Public Radar Target Recognition Benchmark}
 
-\author{\IEEEauthorblockN{Ghulam Mustafa, Ghulam Murtaza, Ali Nawaz, Zohaib Ahmad Khan}
-\IEEEauthorblockA{\textit{College of Aeronautical Engineering} \\
-\textit{National University of Sciences and Technology}\\
-Islamabad, Pakistan \\
-gmustafa.ms19avecae@student.nust.edu.pk; murtaza.sab2@gmail.com; alinawaz1302@gmail.com; zakhan@cae.nust.edu.pk}
-}
+%% One source, two versions. Keeping two files is how an author name ends
+%% up in a double-blind submission; tools/build_paper.sh flips this switch
+%% and names the two PDFs differently so the file you upload is never the
+%% one you last previewed by hand.
+\newif\ifblind
+\blindfalse
+
+\ifblind
+  \newcommand{\anon}[1]{\textsc{[anonymised]}}
+  \newcommand{\codeurl}{a repository archived with the submission}
+  \author{\IEEEauthorblockN{}\IEEEauthorblockA{}}
+\else
+  \newcommand{\anon}[1]{#1}
+  \newcommand{\codeurl}{\url{github.com/falcon-colab/rdrd-acquisition-coverage}}
+  \author{\IEEEauthorblockN{Ghulam Mustafa, Ghulam Murtaza, Ali Nawaz, Zohaib Ahmad Khan}
+  \IEEEauthorblockA{\textit{College of Aeronautical Engineering} \\
+  \textit{National University of Sciences and Technology}\\
+  Islamabad, Pakistan \\
+  gmustafa.ms19avecae@student.nust.edu.pk; murtaza.sab2@gmail.com; alinawaz1302@gmail.com; zakhan@cae.nust.edu.pk}
+  }
+\fi
 
 \maketitle
 
@@ -264,7 +289,7 @@ What does separate the arms is how far the companions sit from the centre. Recal
 
 On the Real Doppler RAD-DAR benchmark, grouping by inferred acquisition exposes heterogeneity that aggregate frame-level accuracy does not show. One drone acquisition of twenty-one attains 0.249 out-of-fold recall against 0.90 or better for the other twenty; excluded from training entirely it reaches 0.178 on a held-back half and 0.948 once the other half is added, while the weakest acquisition of each other class recovers only 0.056 and 0.008. It differs sharply in Doppler position and variability, though the release carries no metadata separating flight dynamics from a recording-specific processing condition, and the failure survives an approximate three-frame input.
 
-These results establish a benchmark-specific case study rather than a general law. They do support reporting acquisition-level performance wherever a dataset is assembled from continuous recordings, since it costs one cross-validation pass. Code, partition files, per-stage reports and a script that rechecks every number reported here against its own tolerance are released at \url{github.com/falcon-colab/rdrd-acquisition-coverage} and archived at~\cite{dataset2026}.
+These results establish a benchmark-specific case study rather than a general law. They do support reporting acquisition-level performance wherever a dataset is assembled from continuous recordings, since it costs one cross-validation pass. Code, partition files, per-stage reports and a script that rechecks every number reported here against its own tolerance are released at \codeurl{}~\cite{dataset2026}.
 
 % =====================================================================
 \begin{thebibliography}{00}
@@ -291,7 +316,11 @@ These results establish a benchmark-specific case study rather than a general la
 
 \bibitem{tran2022} C.~Tran, F.~Fioretto, J.-E.~Kim and R.~Naidu, ``Pruning has a disparate impact on model accuracy,'' in \emph{Advances in Neural Information Processing Systems}, vol.~35, 2022, pp.~17652--17664.
 
+\ifblind
+\bibitem{dataset2026} \anon{} ``Code and analysis for this paper,'' archived artefact, 2026. Withheld for blind review.
+\else
 \bibitem{dataset2026} G.~Mustafa, ``Code and analysis for this paper,'' Zenodo, 2026, doi:10.5281/zenodo.23118075.
+\fi
 
 \end{thebibliography}
 
