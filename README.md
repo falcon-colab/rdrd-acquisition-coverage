@@ -217,11 +217,20 @@ text, so a number corrected in one has to be corrected in the other.
 `check_expected.py` verifies the numbers common to both, which is what
 stops them drifting apart without anyone noticing.
 
-Its preamble is `article` at 10pt with 2.4cm margins, which is looser than
-the publisher classes it would be retargeted to, so 12 pages is an upper
-bound. The header of `paper_long.tex` gives the one-line class swap for
-IEEEtran in one column, elsarticle, MDPI and Springer; nothing in the body
-needs to change.
+It targets ICCI-2026: A4, single column, 11pt, 1 inch margins, 12 pages
+maximum including references, and **double-blind review**. The source
+carries a `\blindtrue` switch so one file produces both the anonymous
+submission and the camera-ready, because keeping two files is how an author
+name ends up in a blind submission. Build both with:
+
+```
+sh tools/build_paper.sh
+```
+
+which regenerates the tables and figures, builds both PDFs, and checks the
+page count, the anonymity of the blind one and that every font is embedded.
+Build it this way rather than running `pdflatex` by hand, since the switch
+decides whether your name is in the file you upload.
 
 ## A note on the figures and tables
 
