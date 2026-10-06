@@ -104,6 +104,19 @@ def d_recovery_extreme(rep, a):
     return max(vals) if a.get("which", "max") == "max" else min(vals)
 
 
+def d_recovery_sd_excluding(rep, a):
+    """Spread of recovery over the sweep with one unit left out.
+
+    Derived rather than read from the report, because coverage_all.py
+    writes the summary over all units and the paper's claim is about the
+    others. Deriving it also means the check works against the file the
+    script actually writes rather than against a field added by hand.
+    """
+    vals = [u["recovery"] for k, u in rep["units"].items()
+            if not k.endswith(a["exclude"])]
+    return sd(vals)
+
+
 def d_recovery_of(rep, a):
     return rep["units"][a["unit"]]["recovery"]
 
@@ -330,6 +343,7 @@ DERIVATIONS = {
     "min_session_recall": d_min_session_recall,
     "units_above": d_units_above,
     "recovery_extreme": d_recovery_extreme,
+    "recovery_sd_excluding": d_recovery_sd_excluding,
     "recovery_of": d_recovery_of,
     "predicted_fraction": d_predicted_fraction,
     "session_recall_extreme": d_session_recall_extreme,

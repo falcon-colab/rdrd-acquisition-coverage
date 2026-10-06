@@ -1526,10 +1526,13 @@
    "id": "all52-recovery-sd-excl",
    "paper": "Sec. VI-D, the other 51 have recovery sd 0.017",
    "report": "coverage_all.json",
-   "path": "summary.recovery_sd_excl_13_48",
    "expect": 0.0167,
    "tol": 0.01,
-   "why_tol": "a standard deviation over 51 trained quantities; it sets the 45-sd separation, which any value in this range leaves far above 10"
+   "why_tol": "a standard deviation over 51 trained quantities; it sets the 45-sd separation, which any value in this range leaves far above 10",
+   "derive": "recovery_sd_excluding",
+   "args": {
+    "exclude": "13-48"
+   }
   },
   {
    "id": "all52-pearson-all",

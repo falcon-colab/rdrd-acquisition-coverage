@@ -123,8 +123,15 @@ def summarise(out):
         print("  in general, and that 13-48 is an extreme of a trend rather")
         print("  than a separate case. A weak value means it is separate.")
 
+    others = [r[5] for r in rows if not r[0].endswith("13-48")]
     out["summary"] = {
         "n_units": len(rows),
+        # the paper's claim is about the OTHER units, so record their
+        # spread alongside the overall one rather than leaving a reader
+        # (or a checker) to recompute it
+        "recovery_sd_excl_13_48": (float(np.std(others, ddof=1))
+                                   if len(others) > 1 else 0.0),
+        "recovery_max_excl_13_48": float(max(others)) if others else 0.0,
         "recovery_median": float(np.median(rec)),
         "recovery_mean": float(rec.mean()),
         "recovery_sd": float(rec.std(ddof=1)),
