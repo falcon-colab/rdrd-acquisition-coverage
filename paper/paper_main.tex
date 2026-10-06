@@ -71,7 +71,7 @@
 \maketitle
 
 \begin{abstract}
-Public radar target recognition datasets are commonly evaluated with random train/test partitions over individual range--Doppler frames. Because frames come from continuous recordings, this never asks whether a classifier generalises to an acquisition it has not seen. We report an acquisition-level audit of the Real Doppler RAD-DAR database, reconstructing its structure into 52 grouping units from 80 folders. A session-grouped protocol lowers mean accuracy from 0.934 to 0.910 and mean drone recall from 0.936 to 0.838, dominated by one fold rather than spread evenly. The per-acquisition breakdown is the more informative view: twenty-one drone acquisitions, twenty attain out-of-fold recall above 0.90 while one attains 0.249. Excluding that acquisition from training entirely leaves recall on a held-back half at 0.178 over ten seeds; adding the other half raises it to 0.948, with no overlap between the conditions on any seed. Running the identical experiment on all 52 units shows the effect is confined to it: no other unit recovers as much as 0.05, against 0.760 for this one, and among the other 51 a low starting recall does not predict recovery ($r=-0.28$). The acquisition is distinguished from all others by the Doppler position of its target energy. A three-frame approximation to the published baseline's temporal input raises aggregate accuracy to 0.979 and still leaves that acquisition at 0.367, so the failure does not follow from the single-frame input. We present this as a single-acquisition case study of one benchmark and argue that acquisition-level breakdowns should accompany aggregate accuracy on benchmarks assembled from continuous recordings.
+Public radar target recognition datasets are commonly evaluated with random train/test partitions over individual range--Doppler frames. Because frames come from continuous recordings, this never asks whether a classifier generalises to an acquisition it has not seen. We report an acquisition-level audit of the Real Doppler RAD-DAR database, reconstructing its structure into 52 grouping units from 80 folders. A session-grouped protocol lowers mean accuracy from 0.934 to 0.910 and mean drone recall from 0.936 to 0.838, dominated by one fold rather than spread evenly. The per-acquisition breakdown is the more informative view: twenty-one drone acquisitions, twenty attain out-of-fold recall above 0.90 while one attains 0.249. Excluding that acquisition from training entirely leaves recall on a held-back half at 0.178 over ten seeds; adding the other half raises it to 0.948, with no overlap between the conditions on any seed. Running the identical experiment on all 52 units shows the effect is confined to it: no other unit recovers as much as 0.05, against 0.760 for this one, and among the other 51 starting recall has only a weak association with recovery ($r=-0.28$). The acquisition is distinguished from all others by the Doppler position of its target energy. Adding an approximate three-frame temporal input to our own compact classifier raises aggregate accuracy to 0.979 and still leaves that acquisition at 0.367, so the failure does not follow from our single-frame input. We do not reproduce the published baseline and make no claim about it. We present this as a single-acquisition case study of one benchmark and argue that acquisition-level breakdowns should accompany aggregate accuracy on benchmarks assembled from continuous recordings.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -88,7 +88,7 @@ We report negative results deliberately, and state the scope plainly: both princ
 % =====================================================================
 \section{Related Work}
 The Real Doppler RAD-DAR database was released with a convolutional baseline, DopplerNet, reporting 99.48\,\% accuracy on the three-class problem of vehicles, drones and pedestrians~\cite{roldan2020}; the acquisition hardware is described separately~\cite{quevedo2019}. A recent lightweight architecture reports 98.08\,\% average accuracy on the same data with a model footprint of roughly 400\,kB~\cite{zhang2025}, and provides the per-class confusion matrices we use as an external reference in Section~\ref{sec:baseline}. 
-That correlated samples inflate apparent performance is not a new observation. Grouped partitioning is standard practice in human activity recognition, where subject-disjoint splits are routine, and radar recognition studies have used track-level separation to limit correlation between training and test segments~\cite{buchman2022}. Nor is the difficulty of conditions absent from training a new concern in radar: recent work addresses single-source domain generalisation for low-slow-small target recognition under changing conditions~\cite{chen2025}, and open-set recognition that rejects classes not present in training rather than forcing every echo into a trained class~\cite{bai2026}.
+That correlated samples inflate apparent performance is not a new observation. Grouped partitioning is standard practice in human activity recognition, where subject-disjoint splits are routine, and radar recognition studies have used track-level separation to limit correlation between training and test segments~\cite{buchman2022}. Nor is the difficulty of conditions absent from training new in radar: recent work addresses single-source domain generalisation for low-slow-small targets~\cite{chen2025} and open-set recognition that rejects classes not present in training~\cite{bai2026}. Ours is neither. The acquisition carries a correct label and its samples sit nearest the drone centroid, so this is closed-set acquisition shift, a represented class containing a regime the training split does not cover, rather than an unknown class to reject.
  We therefore do not claim that unseen regimes are unstudied. Our contribution is an acquisition-level audit of one widely reused benchmark, localising a concrete failure regime its aggregate accuracy does not reveal, with a controlled experiment associating that failure with coverage rather than intrinsic difficulty.
 
 Comparing learning procedures across resampled partitions is statistically delicate: commonly used tests have inflated Type~I error on cross-validation scores~\cite{dietterich1998}, and the dependence from overlapping training sets must enter any variance estimate~\cite{nadeau2003}. Separately, that compression damages some classes more than others is established in vision~\cite{hooker2019,hooker2020,tran2022}; a follow-up in our artefact tested the radar instantiation and did not reproduce it (Section~\ref{sec:discussion}).
@@ -194,10 +194,10 @@ We rest no claim on a significance test. Fold scores under the two protocols are
 
 \subsection{Per-session recall}
 
-Experiments below report different recall for \texttt{13-48} because their training and test sets differ. Cross-validation tests the whole acquisition as one out-of-fold fold (0.249), the coverage test a held-back half (0.178), and Section~\ref{sec:inputgap} excludes it from training entirely (0.238 at one frame, 0.367 at three). We name the protocol wherever a figure appears.
+Recalls for \texttt{13-48} differ below because the training and test sets differ: cross-validation tests the whole acquisition as one out-of-fold fold (0.249), the coverage test a held-back half (0.178), and Section~\ref{sec:inputgap} excludes it from training entirely (0.238 at one frame, 0.367 at three). We name the protocol wherever a figure appears.
 
 
-Because every unit appears in the test fold exactly once, a single cross-validation pass yields an out-of-fold recall for each of the 52 acquisitions, which is the breakdown we argue should accompany aggregate accuracy. Across drone acquisitions, twenty fall above 0.90, between 0.9006 and 0.9929. One, \texttt{13-48}, is classified at 0.249. The weakest pedestrian and vehicle acquisitions are 0.7776 and 0.8189, respectively.
+Because every unit appears in the test fold exactly once, a single cross-validation pass yields an out-of-fold recall for each of the 52 acquisitions, which is the breakdown we argue should accompany aggregate accuracy. Across drone acquisitions, twenty fall above 0.90, between 0.9006 and 0.9929. One, \texttt{13-48}, is classified at 0.249 (grouped CV). The weakest pedestrian and vehicle acquisitions are 0.7776 and 0.8189, respectively.
 
 Excluding \texttt{13-48}, the standard deviation of drone recall across acquisitions is 0.0269, \emph{lower} than that of vehicles (0.0522) or pedestrians (0.0567). The drone class does not generalise poorly in general: the apparent effect, and the outlying fold in Section~\ref{sec:leak}, are both dominated by a single acquisition. With twenty-one drone acquisitions we can show it dominates the observed distribution, not that no other contributes.
 
@@ -207,20 +207,19 @@ We profiled twelve per-sample properties and computed for each the standardised 
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.88\columnwidth]{session_13-48_compact.png}
+\includegraphics[width=0.8\columnwidth]{session_13-48_compact.png}
 \caption{Acquisition means, range vertical and Doppler horizontal.
-\texttt{13-48} carries a band of energy at the low-Doppler edge that no typical
-drone acquisition shows; the pedestrian mean spreads along the Doppler axis,
-and 79\,\% of held-out \texttt{13-48} is assigned to that class. Whether the
-edge band is flight dynamics or a per-recording processing difference cannot
-be settled from the published data.}
+\texttt{13-48} carries a band of energy at the low edge of the retained
+Doppler window that no typical drone acquisition shows, and the pedestrian
+mean spreads along that axis, which is where 79\,\% of held-out
+\texttt{13-48} goes.}
 \label{fig:sessions}
 \end{figure}
 
 
 \begin{figure}[!tb]
 \centering
-\includegraphics[width=0.88\columnwidth]{doppler_by_acquisition.png}
+\includegraphics[width=0.74\columnwidth]{doppler_by_acquisition.png}
 \caption{The 21 drone acquisitions by Doppler centroid and by its spread
 within the acquisition. Twenty cluster at 29.70 to 31.19 with spreads of 0.64
 to 2.37 bins; \texttt{13-48} sits at 8.50 with a spread of 10.64, separated
@@ -228,7 +227,7 @@ on both axes at once.}
 \label{fig:doppler}
 \end{figure}
 
-Fig.~\ref{fig:doppler} gives the two-dimensional view. Every other drone acquisition places its target energy at Doppler centroid between 29.7 and 31.2, at the centre of the 61-bin axis, and holds it there, the within-acquisition standard deviation ranging from 0.64 to 2.37 bins. Acquisition \texttt{13-48} places it at 8.50 with a standard deviation of 10.64 bins, four and a half times the largest any other shows, so it is separated on both where its energy sits and how much that position varies. Against class centroids from the other acquisitions, 100\,\% of its samples sit nearest the drone centroid, which is consistent with the label rather than evidence for it and does not exclude a processing error.
+Fig.~\ref{fig:doppler} gives the two-dimensional view. Every other drone acquisition places its target energy at Doppler centroid between 29.7 and 31.2, the centre of the 61-bin axis, and holds it there within 0.64 to 2.37 bins. Acquisition \texttt{13-48} places it at 8.50 with a standard deviation of 10.64, four and a half times the largest any other shows, so it is separated both on where its energy sits and on how much that position varies. Against class centroids from the other acquisitions, 100\,\% of its samples sit nearest the drone centroid, consistent with the label rather than evidence for it.
 
 The source publication describes three drone exercises: radial trajectories on autopilot to 3.1\,km, a circular trajectory at 800\,m, and a free flight with speed and altitude varied manually~\cite{roldan2020,quevedo2019}. Manual free flight can produce more variation in radial velocity than an autopilot trajectory, and \texttt{13-48} is the only acquisition whose Doppler scatter is an order of magnitude above the rest, so we consider it the likeliest candidate, while noting that the publication gives no timestamps and that a per-recording processing difference cannot be excluded.
 
@@ -257,7 +256,7 @@ Acquisition & Class & Held out & Half in training & Recovery \\
 \end{tabular}
 \end{table}
 
-Both conditions are evaluated on the same held-back half ($N=197$). Recall rises from 0.178 to 0.948 over ten seeds, a recovery of 0.770 (Table~\ref{tab:coverage}). Held out, 79\,\% of samples are assigned to the pedestrian class; with half the acquisition in training, 3\,\% are. Held-out recall ranges 0.142 to 0.264 and the half-in-training condition 0.904 to 0.980, so the worst seed of one still exceeds the best of the other by 0.640, a separation we lead with because it assumes nothing about either distribution.
+Both conditions are evaluated on the same held-back half ($N=197$). Recall rises from 0.178 to 0.948 over ten seeds, a recovery of 0.770 (coverage test, Table~\ref{tab:coverage}). Held out, 79\,\% of samples are assigned to the pedestrian class; with half the acquisition in training, 3\,\% are. Held-out recall ranges 0.142 to 0.264 and the half-in-training condition 0.904 to 0.980, so the worst seed of one still exceeds the best of the other by 0.640, a separation we lead with because it assumes nothing about either distribution.
 
 The failure is therefore associated with the absence of comparable training examples rather than an irreducible inability to classify such samples, though we stop short of a stronger causal statement: because the added samples come from the same acquisition, the experiment cannot separate an out-of-distribution flight regime from an acquisition-specific signature or a per-recording processing difference. It establishes that something present here and absent from the other twenty is learnable and sufficient.
 
@@ -266,58 +265,55 @@ The failure is therefore associated with the absence of comparable training exam
 
 \begin{figure}[!tb]
 \centering
-\includegraphics[width=0.95\columnwidth]{recovery_by_acquisition.png}
+\includegraphics[width=0.78\columnwidth]{recovery_by_acquisition.png}
 \caption{The coverage test run on all 52 acquisitions at three seeds:
 recovery against the recall the unit reaches while held out. The $x$ axis
 doubles as the per-acquisition breakdown: the other 51 all reach at least
-0.79 held out, and all 51 fall in the shaded recovery band, $-0.039$ to
-$+0.050$.
-\texttt{13-48} recovers $+0.760$, fifteen times the largest value any other
-unit reaches. Among the other 51 the two axes are only weakly related
-($r=-0.28$), so starting low does not predict recovering.}
+0.79 held out and all fall in the shaded band, $-0.039$ to $+0.050$.
+\texttt{13-48} recovers $+0.760$, fifteen times the largest any other
+reaches, and among the other 51 the two axes are only weakly associated
+($r=-0.28$).}
 \label{fig:recovery}
 \end{figure}
 
 A large recovery is evidence of a coverage failure only if a large recovery
 is unusual. Rather than argue that from acquisitions chosen after seeing
 which scored worst, we ran the identical experiment on all 52 units at three
-seeds, 312 trainings (Fig.~\ref{fig:recovery}).
-
-The distribution settles it. With \texttt{13-48} set aside the other 51
-span $-0.039$ to $+0.050$ with a standard deviation of 0.017, so \textbf{not
-one recovers as much as 0.05}, while \texttt{13-48} recovers 0.760, fifteen
-times the largest and 45 standard deviations above their spread. Among the
-20 other drone units the largest is 0.024, and sixteen of the 51 recover
+seeds, 312 trainings (Fig.~\ref{fig:recovery}). With \texttt{13-48} set
+aside the other 51 span $-0.039$ to $+0.050$, sd 0.017, so \textbf{not one
+recovers as much as 0.05}, while \texttt{13-48} recovers 0.760, fifteen
+times the largest and far outside anything the rest reach. Among the 20
+other drone units the largest is 0.024, and sixteen of the 51 recover
 negatively, which is what noise around zero looks like.
 
-The obvious alternative is regression to the mean: a unit that scores badly
-when held out has more room to improve, so a large recovery might follow
-from a low starting point alone. The $x$ axis of Fig.~\ref{fig:recovery}
-tests it. Across all 52 units baseline recall and recovery correlate at
-$r=-0.927$, but \texttt{13-48} alone produces that; among the other 51 it is
-$-0.282$ ($t=-2.06$, 49 d.f.), eight per cent of the variance, and among the
-23 units below 0.95, which have room to move, $-0.238$. A weak tendency
-exists and we report it, but it is nowhere near enough to generate a
-recovery of 0.760.
+The alternative is regression to the mean: a unit scoring badly held out has
+more room to improve, so a large recovery might follow from a low starting
+point alone. The $x$ axis of Fig.~\ref{fig:recovery} tests it. Across all 52
+units baseline recall and recovery correlate at $r=-0.927$, but
+\texttt{13-48} alone produces that; among the other 51 it is $-0.282$
+($t=-2.06$, 49 d.f.), eight per cent of the variance, and among the 23 units
+below 0.95, which have room to move, $-0.238$. A weak association exists and
+we report it, but it is nowhere near enough to generate 0.760.
 
 The weakest unit of each other class was additionally examined at ten
 seeds: \texttt{11-23} ($N=154$) recovers 0.056 and \texttt{15-37} ($N=185$)
-0.008, the latter indistinguishable from zero. Neither is unrepresented in
-the way \texttt{13-48} is: \texttt{11-23} is an outlier in extent ($d=+3.4$)
-with 56.8\,\% of its frames nearest the \emph{drone} centroid, confusable
-with another class rather than missing from training, and no property
-separates \texttt{15-37} from other vehicle acquisitions at all, its largest
-standardised difference being $0.25$ against $-15.67$. An acquisition can be
-weak without being unrepresented, which is the alternative the coverage
-experiment must exclude.
+0.008. Neither is unrepresented as \texttt{13-48} is. \texttt{11-23} is an
+outlier in extent ($d=+3.4$) with 56.8\,\% of its frames nearest the
+\emph{drone} centroid, confusable with another class rather than missing
+from training, and no property separates \texttt{15-37} from other vehicle
+acquisitions at all. An acquisition can be weak without being
+unrepresented, which is the alternative the coverage experiment excludes.
 
 This is the paper's principal result, and it concerns this benchmark: a
 classifier whose aggregate score looks healthy fails severely on one of the
-dataset's acquisitions, the failure is a coverage failure rather than
-difficulty, and no other acquisition in the dataset behaves this way. What
-that acquisition represents we cannot settle, since a low-Doppler band could
-equally follow from flight dynamics or from a recording-specific processing
-difference, and the release carries no metadata separating them. A
+dataset's acquisitions, the evidence points to an acquisition-specific
+coverage failure rather than a class-wide difficulty effect, and no other
+acquisition in the dataset behaves this way. What
+that acquisition represents we cannot settle. The release crops a window
+around each detection without recording its absolute Doppler reference, so
+the displacement is low \emph{relative} Doppler within the crop rather than
+a measured velocity, and it could follow equally from flight dynamics or
+from a recording-specific processing difference. A
 deployment consequence follows only under the first reading, so we state the
 evaluation finding and leave the physical one open.
 
@@ -327,15 +323,15 @@ evaluation finding and leave the physical one open.
 
 \subsection{What the results do and do not support}
 
-The coverage result is the finding we consider established: a measured effect of 0.77 in recall, a controlled manipulation isolating within-acquisition coverage, and a descriptive signature identifying the acquisition without reference to classifier performance. It does not identify which physical or processing factor makes that coverage necessary. The recommendation follows, with its scope: for datasets assembled from continuous acquisitions, aggregate accuracy should be accompanied by an acquisition-level breakdown, a by-product of a single cross-validation pass. Where deployment operates on the benchmark's own distribution, frame-level evaluation may be appropriate and we make no claim against it.
+The coverage result is the finding we consider established: an effect of 0.77 in recall, a controlled manipulation isolating within-acquisition coverage, a descriptive signature identifying the acquisition without reference to classifier performance, and a sweep over all 52 units placing it far outside the rest. It does not identify which physical or processing factor makes that coverage necessary. The recommendation follows, with its scope: for datasets assembled from continuous acquisitions, aggregate accuracy should be accompanied by an acquisition-level breakdown, a by-product of a cross-validation pass already being run. Where deployment operates on the benchmark's own distribution, frame-level evaluation may be appropriate.
 
-A compression study in the artefact asked whether reducing input resolution changes transfer to \texttt{13-48}. Fourfold Doppler aggregation raises held-out recall from 0.222 to 0.398, positive on ten of ten seeds and with no change on the standard split, but it helped only three of five acquisitions tested one at a time, so we present it as acquisition-specific rather than a recommendation.
+A compression study in the artefact found that fourfold Doppler aggregation raises held-out recall on \texttt{13-48} from 0.222 to 0.398, positive on ten of ten seeds with no change on the standard split, but helped only three of five acquisitions tested one at a time, so we present it as acquisition-specific rather than a recommendation.
 
-Four physically motivated mechanisms were formulated and none was supported: rotor sideband loss, which the crops' Doppler span does not let us assess; low redundancy from compact energy; limited dynamic-range headroom, whose apparent correlation with per-acquisition recall (Pearson $-0.62$) falls to $-0.16$ once \texttt{13-48} is excluded, that acquisition having the largest headroom of any at 42.5\,dB against a class median near 26; and Doppler positional insensitivity, which shift augmentation at $\pm 4$, $\pm 8$ and $\pm 16$ bins fails to repair, giving 0.1608, 0.1613 and 0.1603 against 0.2214 unaugmented. Each failed to support an explanation rather than excluding the physics, which our data in several cases cannot reach.
+Four physically motivated mechanisms were formulated and none was supported: rotor sideband loss, which the crops' Doppler span does not let us assess; low redundancy from compact energy; limited dynamic-range headroom, whose correlation with per-acquisition recall (Pearson $-0.62$) falls to $-0.16$ once \texttt{13-48} is excluded, that acquisition having the largest headroom of any at 42.5\,dB against a class median near 26; and Doppler positional insensitivity, which shift augmentation at $\pm 4$, $\pm 8$ and $\pm 16$ bins fails to repair, giving 0.1608, 0.1613 and 0.1603 against 0.2214 unaugmented. Each failed to support an explanation rather than excluding the physics our data cannot reach.
 
 \subsection{Limitations}
 
-Both principal findings rest on the same acquisition, so the effective sample size at the level of flight regimes is one, and the data comes from one dataset, one radar and one drone platform, with \texttt{13-48} comprising 7.8\,\% of the drone samples. The coverage claim is no longer a contrast of hand-picked cases, since the experiment now covers every unit, but a distribution over 52 units of one dataset still says nothing about how common such acquisitions are elsewhere, and the sweep runs at three seeds against ten for the focal experiment. Whether the phenomenon appears under other architectures, or on another radar, is untested here.
+Both principal findings rest on the same acquisition, so the effective sample size at the level of flight regimes is one, from one dataset, one radar and one drone platform, with \texttt{13-48} comprising 7.8\,\% of the drone samples. The coverage claim is no longer a contrast of hand-picked cases, but a distribution over 52 units of one dataset still says nothing about how common such acquisitions are elsewhere, and that sweep runs at three seeds against ten for the focal experiment. Whether the phenomenon appears under other architectures, or on another radar, is untested here.
 
 \subsection{Approximate temporal context, and what it does not show}
 \label{sec:inputgap}
@@ -355,7 +351,9 @@ We can nevertheless approximate that formulation and measure whether the approxi
 \begin{table}[t]
 \caption{Approximate three-frame context, ten seeds; random-split figures
 are three seeds. $d$ is the mean index distance of the companion frames from
-the centre. This is our own network, not DopplerNet.}
+the centre. This is our own network, not DopplerNet. $^{\dagger}$The shuffle
+arm draws companions from anywhere in the folder, including other test
+frames, so it is transductive and its 0.9932 is not deployment-comparable.}
 \label{tab:temporal}
 \centering
 \small
@@ -367,39 +365,39 @@ Arm & Companions & $d$ & Random split & \texttt{13-48} recall \\
 single  & none            & --   & 0.9516 $\pm$ 0.0046 & 0.2379 $\pm$ 0.0428 \\
 index   & adjacent        & 1.00 & 0.9794 $\pm$ 0.0016 & 0.3673 $\pm$ 0.0661 \\
 clean   & same split tag  & 2.57 & 0.9731 $\pm$ 0.0080 & 0.4634 $\pm$ 0.0970 \\
-shuffle & folder-wide     & --   & 0.9932 $\pm$ 0.0016 & 0.5435 $\pm$ 0.1257 \\
+shuffle$^{\dagger}$ & folder-wide & -- & 0.9932 $\pm$ 0.0016 & 0.5435 $\pm$ 0.1257 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-A three-frame input raises random-split accuracy from 0.9516 to 0.9794, within a quarter of a point of the 0.9808 reported for the lighter published model. That classifier still fails on \texttt{13-48}: recall under the held-out protocol rises from 0.238 to 0.367, a paired gain of $+0.129$ over ten seeds ($t=+4.82$), so most of the acquisition's frames are still assigned to the wrong class. \textbf{The failure is therefore not an artefact of the single-frame input, and it persists while aggregate accuracy rises by 2.8 points.} Even the shuffle arm at 0.9932 leaves \texttt{13-48} at 0.544, far below both the 0.90 or better of other acquisitions and the 0.948 obtainable once it is represented in training.
+A three-frame input raises random-split accuracy from 0.9516 to 0.9794, within a quarter of a point of the 0.9808 reported for the lighter published model. That classifier still fails on \texttt{13-48}: recall rises from 0.238 (single frame, held out) to 0.367 (three-frame index arm, held out), a paired gain of $+0.129$ over ten seeds ($t=+4.82$), so most of the acquisition's frames are still assigned to the wrong class. \textbf{The failure is therefore not an artefact of the single-frame input, and it persists while aggregate accuracy rises by 2.8 points.} Even the shuffle arm at 0.9932 leaves \texttt{13-48} at 0.544, far below both the 0.90 or better of other acquisitions and the 0.948 obtainable once it is represented in training.
 
 The second result we did not anticipate, and it corrects what the audit alone would have suggested. A sliding window over a frame-level random split does put test frames inside training inputs on a large scale: 50.6\,\% of training triplets hold at least one, and 82.7\,\% of all test frames appear inside some training input under index order against 68.4\,\% under shuffled companions. The \emph{clean} arm measures what that is worth, and the audit reports exactly zero overlap for it. Removing the overlap costs 0.0063 in accuracy, 0.9794 against 0.9731, inside the spread of either arm. So although four fifths of the test set appears somewhere in training, the inflation is well under a point for this model and window construction, and three frames still beat one by 0.0215 with no overlap at all. We report this in both directions because the audit alone would have supported a stronger claim than the experiment does.
 
-What separates the arms is how far the companions sit from the centre. Recall on \texttt{13-48} rises monotonically with that distance: 0.367 for index-adjacent frames, 0.463 for the nearest same-tag frames at a mean distance of 2.57, and 0.544 for companions drawn from anywhere in the folder. Adjacent detections are nearly redundant, while more distant ones sample the acquisition's variability, largest precisely here at a Doppler centroid standard deviation of 10.64 bins against 0.64 to 2.37 elsewhere. The shuffle arm is also transductive, drawing on other test frames at inference as a live system could not, so \emph{index} is the deployment-realistic arm and 0.367 is the figure the comparison rests on. That the arms are not exchangeable is itself informative: had file-name order been arbitrary, index and shuffle would have differed by chance rather than by 0.176 ($t=-4.35$ over ten paired seeds), so the trailing integer tracks acquisition order closely enough to matter.
+What separates the arms is how far the companions sit from the centre. Recall on \texttt{13-48} rises monotonically with that distance: 0.367 for index-adjacent frames, 0.463 for the nearest same-tag frames at a mean distance of 2.57, and 0.544 for companions drawn from anywhere in the folder. Adjacent detections are nearly redundant, while more distant ones sample the acquisition's variability, largest precisely here at a Doppler centroid standard deviation of 10.64 bins against 0.64 to 2.37 elsewhere. The shuffle arm is additionally transductive, drawing on other test frames at inference as a live system could not, so \emph{index} is the arm the comparison rests on at 0.367. Even index is not causal with respect to its own centre, since the window is centred on the frame being classified: a streaming system could form it only by delaying each decision by one frame, the latency the source publication notes for its own three-frame input~\cite{roldan2020}. We therefore call it temporally ordered adjacent-frame context, not a deployment-ready one. That the arms are not exchangeable is itself informative: had file-name order been arbitrary, index and shuffle would have differed by chance rather than by 0.176 ($t=-4.35$ over ten paired seeds), so the trailing integer tracks acquisition order closely enough to matter.
 
 \section{Conclusion}
 
-On the Real Doppler RAD-DAR benchmark, grouping by inferred acquisition exposes heterogeneity that aggregate frame-level accuracy does not show. One drone acquisition of twenty-one attains 0.249 out-of-fold recall against 0.90 or better for the other twenty; excluded from training entirely it reaches 0.178 on a held-back half and 0.948 once the other half is added. The same experiment on all 52 units leaves it alone: no other recovers as much as 0.05. It differs sharply in Doppler position and variability, though the release carries no metadata separating flight dynamics from a recording-specific processing condition, and the failure survives an approximate three-frame input.
+On the Real Doppler RAD-DAR benchmark, grouping by inferred acquisition exposes heterogeneity that aggregate frame-level accuracy does not show. One drone acquisition of twenty-one attains 0.249 out-of-fold recall against 0.90 or better for the other twenty; excluded from training entirely it reaches 0.178 on a held-back half and 0.948 once the other half is added. The same experiment on all 52 units leaves it alone: no other recovers as much as 0.05. It differs sharply in Doppler position and variability, though the release carries no metadata separating flight dynamics from a recording-specific processing condition, and the failure persists in our compact classifier when three-frame context is added.
 
-These results establish a benchmark-specific case study rather than a general law, but they do support reporting acquisition-level performance wherever a dataset is assembled from continuous recordings, since it costs one cross-validation pass. Code, partition files, per-stage reports and a script that rechecks every number reported here against its own tolerance are released at \codeurl{}~\cite{dataset2026}.
+These results are a benchmark-specific case study rather than a general law, but they do support reporting acquisition-level performance wherever a dataset is assembled from continuous recordings, since it costs one cross-validation pass. Code, partition files, per-stage reports and a script that rechecks every number here against its own tolerance are released at \codeurl{}~\cite{dataset2026}.
 
 % =====================================================================
 \begin{thebibliography}{00}
 
-\bibitem{roldan2020} I.~Roldan, C.~R.~del-Blanco, \'A.~Duque de Quevedo, F.~Ib\'a\~nez Urzaiz, J.~Gismero Menoyo, A.~Asensio L\'opez \emph{et al.}, ``DopplerNet: a convolutional neural network for recognising targets in real scenarios using a persistent range--Doppler radar,'' \emph{IET Radar Sonar Navig.}, vol.~14, no.~4, pp.~593--600, 2020.
+\bibitem{roldan2020} I.~Roldan, C.~R.~del-Blanco, \'A.~Duque de Quevedo \emph{et al.}, ``DopplerNet: a convolutional neural network for recognising targets in real scenarios using a persistent range--Doppler radar,'' \emph{IET Radar Sonar Navig.}, vol.~14, no.~4, pp.~593--600, 2020.
 
 \bibitem{quevedo2019} \'A.~Duque de Quevedo, F.~Ib\'a\~nez Urzaiz, J.~Gismero Menoyo \emph{et al.}, ``Drone detection and radar-cross-section measurements by RAD-DAR,'' \emph{IET Radar Sonar Navig.}, vol.~13, no.~9, pp.~1437--1447, 2019.
 
-\bibitem{zhang2025} L.~Zhang, G.~Tu, Y.~Xu \emph{et al.}, ``A lightweight CNN-based method for micro-Doppler feature-based UAV detection and classification,'' \emph{Electronics}, vol.~14, no.~24, art.~4831, 2025.
+\bibitem{zhang2025} L.~Zhang, G.~Tu, Y.~Xu \emph{et al.}, ``A lightweight CNN for micro-Doppler UAV detection and classification,'' \emph{Electronics}, vol.~14, no.~24, art.~4831, 2025.
 
-\bibitem{buchman2022} D.~Buchman, M.~Drozdov, T.~Krilavi\v{c}ius \emph{et al.}, ``Pedestrian and animal recognition using Doppler radar signature and deep learning,'' \emph{Sensors}, vol.~22, no.~9, art.~3456, 2022.
+\bibitem{buchman2022} D.~Buchman, M.~Drozdov, T.~Krilavi\v{c}ius \emph{et al.}, ``Pedestrian and animal recognition using Doppler radar signatures,'' \emph{Sensors}, vol.~22, no.~9, art.~3456, 2022.
 
-\bibitem{chen2025} L.~Chen, N.~Zhu, H.~Chen \emph{et al.}, ``A causality-inspired single-source domain generalized method for low-slow-small threat target recognition through holographic Doppler radar,'' \emph{Expert Syst. Appl.}, vol.~287, art.~128104, 2025.
+\bibitem{chen2025} L.~Chen, N.~Zhu, H.~Chen \emph{et al.}, ``A causality-inspired single-source domain generalized method for low-slow-small threat target recognition,'' \emph{Expert Syst. Appl.}, vol.~287, art.~128104, 2025.
 
-\bibitem{bai2026} B.~Bai, L.~Xue, M.~Xue \emph{et al.}, ``Open-set recognition of radar one-dimensional range profiles based on attention mechanism and multi-task joint training,'' \emph{IET Radar Sonar Navig.}, vol.~20, no.~1, art.~e70121, 2026.
+\bibitem{bai2026} B.~Bai, L.~Xue, M.~Xue \emph{et al.}, ``Open-set recognition of radar range profiles with attention and multi-task joint training,'' \emph{IET Radar Sonar Navig.}, vol.~20, no.~1, art.~e70121, 2026.
 
-\bibitem{dietterich1998} T.~G.~Dietterich, ``Approximate statistical tests for comparing supervised classification learning algorithms,'' \emph{Neural Comput.}, vol.~10, no.~7, pp.~1895--1923, 1998.
+\bibitem{dietterich1998} T.~G.~Dietterich, ``Approximate statistical tests for comparing supervised classification algorithms,'' \emph{Neural Comput.}, vol.~10, no.~7, pp.~1895--1923, 1998.
 
 \bibitem{nadeau2003} C.~Nadeau and Y.~Bengio, ``Inference for the generalization error,'' \emph{Mach. Learn.}, vol.~52, no.~3, pp.~239--281, 2003.
 

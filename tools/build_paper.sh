@@ -32,11 +32,13 @@ build () {                      # $1 = true|false, $2 = output name, $3 = source
     ovf=$(grep -c 'Overfull' _build.log || true)
     printf '%-34s %2s pages  errors %s  undefined %s  overfull %s\n' \
            "$2" "$pages" "$bad" "$und" "$ovf"
+    # Only paper_main.tex is bound by a venue limit. paper_long.tex is a
+    # reference variant kept as a source of material, and no venue currently
+    # under consideration takes it, so its length is informational.
     case "$3" in
-      *paper_main*) lim=6 ;;
-      *)            lim=12 ;;
+      *paper_main*) [ "$pages" -le 6 ] || echo "  *** OVER THE 6-PAGE SUBMISSION LIMIT ***" ;;
+      *)            echo "  (reference variant; no venue limit applies)" ;;
     esac
-    [ "$pages" -le "$lim" ] || echo "  *** OVER THE $lim-PAGE LIMIT ***"
 }
 
 want=${1:-main}
