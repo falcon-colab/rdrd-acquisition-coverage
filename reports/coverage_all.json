@@ -1,0 +1,1011 @@
+{
+ "units": {
+  "drone/13-48": {
+   "class": "drone",
+   "n": 393,
+   "held_out": 0.176,
+   "half_included": 0.9357,
+   "recovery": 0.7597,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.0288,
+     "drone": 0.176,
+     "person": 0.7953
+    },
+    "half included": {
+     "car": 0.0169,
+     "drone": 0.9357,
+     "person": 0.0474
+    }
+   }
+  },
+  "person/12-29": {
+   "class": "person",
+   "n": 469,
+   "held_out": 0.9433,
+   "half_included": 0.9929,
+   "recovery": 0.0496,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.0057,
+     "drone": 0.0511,
+     "person": 0.9433
+    },
+    "half included": {
+     "car": 0.0,
+     "drone": 0.0071,
+     "person": 0.9929
+    }
+   }
+  },
+  "car/13-44": {
+   "class": "car",
+   "n": 400,
+   "held_out": 0.8383,
+   "half_included": 0.8783,
+   "recovery": 0.04,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.8383,
+     "drone": 0.1467,
+     "person": 0.015
+    },
+    "half included": {
+     "car": 0.8783,
+     "drone": 0.115,
+     "person": 0.0067
+    }
+   }
+  },
+  "person/15-58": {
+   "class": "person",
+   "n": 200,
+   "held_out": 0.9533,
+   "half_included": 0.9833,
+   "recovery": 0.03,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.0467,
+     "drone": 0.0,
+     "person": 0.9533
+    },
+    "half included": {
+     "car": 0.0167,
+     "drone": 0.0,
+     "person": 0.9833
+    }
+   }
+  },
+  "person/16-00": {
+   "class": "person",
+   "n": 274,
+   "held_out": 0.9586,
+   "half_included": 0.983,
+   "recovery": 0.0243,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.0414,
+     "drone": 0.0,
+     "person": 0.9586
+    },
+    "half included": {
+     "car": 0.017,
+     "drone": 0.0,
+     "person": 0.983
+    }
+   }
+  },
+  "drone/12-34": {
+   "class": "drone",
+   "n": 660,
+   "held_out": 0.9222,
+   "half_included": 0.9465,
+   "recovery": 0.0242,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.0737,
+     "drone": 0.9222,
+     "person": 0.004
+    },
+    "half included": {
+     "car": 0.0475,
+     "drone": 0.9465,
+     "person": 0.0061
+    }
+   }
+  },
+  "person/11-17": {
+   "class": "person",
+   "n": 349,
+   "held_out": 0.939,
+   "half_included": 0.9619,
+   "recovery": 0.0229,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.0019,
+     "drone": 0.059,
+     "person": 0.939
+    },
+    "half included": {
+     "car": 0.0038,
+     "drone": 0.0343,
+     "person": 0.9619
+    }
+   }
+  },
+  "drone/13-21": {
+   "class": "drone",
+   "n": 471,
+   "held_out": 0.9195,
+   "half_included": 0.9421,
+   "recovery": 0.0226,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.0749,
+     "drone": 0.9195,
+     "person": 0.0056
+    },
+    "half included": {
+     "car": 0.0551,
+     "drone": 0.9421,
+     "person": 0.0028
+    }
+   }
+  },
+  "drone/15-16": {
+   "class": "drone",
+   "n": 31,
+   "held_out": 0.9792,
+   "half_included": 1.0,
+   "recovery": 0.0208,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.0208,
+     "drone": 0.9792,
+     "person": 0.0
+    },
+    "half included": {
+     "car": 0.0,
+     "drone": 1.0,
+     "person": 0.0
+    }
+   }
+  },
+  "car/16-01": {
+   "class": "car",
+   "n": 389,
+   "held_out": 0.8581,
+   "half_included": 0.8786,
+   "recovery": 0.0205,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.8581,
+     "drone": 0.1299,
+     "person": 0.012
+    },
+    "half included": {
+     "car": 0.8786,
+     "drone": 0.1128,
+     "person": 0.0085
+    }
+   }
+  },
+  "car/15-37": {
+   "class": "car",
+   "n": 370,
+   "held_out": 0.8378,
+   "half_included": 0.8577,
+   "recovery": 0.0198,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.8378,
+     "drone": 0.1568,
+     "person": 0.0054
+    },
+    "half included": {
+     "car": 0.8577,
+     "drone": 0.1351,
+     "person": 0.0072
+    }
+   }
+  },
+  "drone/15-44": {
+   "class": "drone",
+   "n": 170,
+   "held_out": 0.949,
+   "half_included": 0.9686,
+   "recovery": 0.0196,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.051,
+     "drone": 0.949,
+     "person": 0.0
+    },
+    "half included": {
+     "car": 0.0314,
+     "drone": 0.9686,
+     "person": 0.0
+    }
+   }
+  },
+  "car/17-09": {
+   "class": "car",
+   "n": 280,
+   "held_out": 0.9024,
+   "half_included": 0.9214,
+   "recovery": 0.019,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.9024,
+     "drone": 0.0381,
+     "person": 0.0595
+    },
+    "half included": {
+     "car": 0.9214,
+     "drone": 0.0381,
+     "person": 0.0405
+    }
+   }
+  },
+  "person/16-06": {
+   "class": "person",
+   "n": 258,
+   "held_out": 0.9793,
+   "half_included": 0.9974,
+   "recovery": 0.0181,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.0207,
+     "drone": 0.0,
+     "person": 0.9793
+    },
+    "half included": {
+     "car": 0.0026,
+     "drone": 0.0,
+     "person": 0.9974
+    }
+   }
+  },
+  "drone/15-18": {
+   "class": "drone",
+   "n": 42,
+   "held_out": 0.9683,
+   "half_included": 0.9841,
+   "recovery": 0.0159,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.0317,
+     "drone": 0.9683,
+     "person": 0.0
+    },
+    "half included": {
+     "car": 0.0,
+     "drone": 0.9841,
+     "person": 0.0159
+    }
+   }
+  },
+  "car/13-38": {
+   "class": "car",
+   "n": 317,
+   "held_out": 0.8553,
+   "half_included": 0.87,
+   "recovery": 0.0147,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.8553,
+     "drone": 0.1426,
+     "person": 0.0021
+    },
+    "half included": {
+     "car": 0.87,
+     "drone": 0.1258,
+     "person": 0.0042
+    }
+   }
+  },
+  "person/12-38": {
+   "class": "person",
+   "n": 481,
+   "held_out": 0.9834,
+   "half_included": 0.9972,
+   "recovery": 0.0138,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.0166,
+     "drone": 0.0,
+     "person": 0.9834
+    },
+    "half included": {
+     "car": 0.0028,
+     "drone": 0.0,
+     "person": 0.9972
+    }
+   }
+  },
+  "person/11-00": {
+   "class": "person",
+   "n": 297,
+   "held_out": 0.9754,
+   "half_included": 0.9888,
+   "recovery": 0.0134,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.0112,
+     "drone": 0.0134,
+     "person": 0.9754
+    },
+    "half included": {
+     "car": 0.0089,
+     "drone": 0.0022,
+     "person": 0.9888
+    }
+   }
+  },
+  "person/11-23": {
+   "class": "person",
+   "n": 308,
+   "held_out": 0.7987,
+   "half_included": 0.8117,
+   "recovery": 0.013,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.0693,
+     "drone": 0.132,
+     "person": 0.7987
+    },
+    "half included": {
+     "car": 0.0736,
+     "drone": 0.1147,
+     "person": 0.8117
+    }
+   }
+  },
+  "person/12-57": {
+   "class": "person",
+   "n": 560,
+   "held_out": 0.9714,
+   "half_included": 0.9833,
+   "recovery": 0.0119,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.0155,
+     "drone": 0.0131,
+     "person": 0.9714
+    },
+    "half included": {
+     "car": 0.0095,
+     "drone": 0.0071,
+     "person": 0.9833
+    }
+   }
+  },
+  "car/13-23": {
+   "class": "car",
+   "n": 625,
+   "held_out": 0.9585,
+   "half_included": 0.9681,
+   "recovery": 0.0096,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.9585,
+     "drone": 0.0394,
+     "person": 0.0021
+    },
+    "half included": {
+     "car": 0.9681,
+     "drone": 0.0288,
+     "person": 0.0032
+    }
+   }
+  },
+  "car/13-13": {
+   "class": "car",
+   "n": 581,
+   "held_out": 0.8969,
+   "half_included": 0.9061,
+   "recovery": 0.0092,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.8969,
+     "drone": 0.0997,
+     "person": 0.0034
+    },
+    "half included": {
+     "car": 0.9061,
+     "drone": 0.0916,
+     "person": 0.0023
+    }
+   }
+  },
+  "person/11-09": {
+   "class": "person",
+   "n": 366,
+   "held_out": 0.9709,
+   "half_included": 0.98,
+   "recovery": 0.0091,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.0182,
+     "drone": 0.0109,
+     "person": 0.9709
+    },
+    "half included": {
+     "car": 0.0128,
+     "drone": 0.0073,
+     "person": 0.98
+    }
+   }
+  },
+  "drone/15-50": {
+   "class": "drone",
+   "n": 172,
+   "held_out": 0.9574,
+   "half_included": 0.9651,
+   "recovery": 0.0078,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.0426,
+     "drone": 0.9574,
+     "person": 0.0
+    },
+    "half included": {
+     "car": 0.0349,
+     "drone": 0.9651,
+     "person": 0.0
+    }
+   }
+  },
+  "drone/15-30": {
+   "class": "drone",
+   "n": 212,
+   "held_out": 0.9088,
+   "half_included": 0.9151,
+   "recovery": 0.0063,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.0912,
+     "drone": 0.9088,
+     "person": 0.0
+    },
+    "half included": {
+     "car": 0.0786,
+     "drone": 0.9151,
+     "person": 0.0063
+    }
+   }
+  },
+  "car/15-42": {
+   "class": "car",
+   "n": 347,
+   "held_out": 0.931,
+   "half_included": 0.9349,
+   "recovery": 0.0038,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.931,
+     "drone": 0.0575,
+     "person": 0.0115
+    },
+    "half included": {
+     "car": 0.9349,
+     "drone": 0.0536,
+     "person": 0.0115
+    }
+   }
+  },
+  "drone/15-33": {
+   "class": "drone",
+   "n": 177,
+   "held_out": 0.8839,
+   "half_included": 0.8876,
+   "recovery": 0.0037,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.1049,
+     "drone": 0.8839,
+     "person": 0.0112
+    },
+    "half included": {
+     "car": 0.1049,
+     "drone": 0.8876,
+     "person": 0.0075
+    }
+   }
+  },
+  "car/13-49": {
+   "class": "car",
+   "n": 637,
+   "held_out": 0.9687,
+   "half_included": 0.9718,
+   "recovery": 0.0031,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.9687,
+     "drone": 0.0251,
+     "person": 0.0063
+    },
+    "half included": {
+     "car": 0.9718,
+     "drone": 0.0282,
+     "person": 0.0
+    }
+   }
+  },
+  "person/12-43": {
+   "class": "person",
+   "n": 628,
+   "held_out": 0.9968,
+   "half_included": 0.9989,
+   "recovery": 0.0021,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.0021,
+     "drone": 0.0011,
+     "person": 0.9968
+    },
+    "half included": {
+     "car": 0.0011,
+     "drone": 0.0,
+     "person": 0.9989
+    }
+   }
+  },
+  "person/12-21": {
+   "class": "person",
+   "n": 526,
+   "held_out": 0.9949,
+   "half_included": 0.9949,
+   "recovery": 0.0,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.0051,
+     "drone": 0.0,
+     "person": 0.9949
+    },
+    "half included": {
+     "car": 0.0051,
+     "drone": 0.0,
+     "person": 0.9949
+    }
+   }
+  },
+  "car/15-48": {
+   "class": "car",
+   "n": 346,
+   "held_out": 0.8613,
+   "half_included": 0.8613,
+   "recovery": 0.0,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.8613,
+     "drone": 0.1349,
+     "person": 0.0039
+    },
+    "half included": {
+     "car": 0.8613,
+     "drone": 0.1329,
+     "person": 0.0058
+    }
+   }
+  },
+  "drone/15-24": {
+   "class": "drone",
+   "n": 169,
+   "held_out": 0.9294,
+   "half_included": 0.9294,
+   "recovery": 0.0,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.0667,
+     "drone": 0.9294,
+     "person": 0.0039
+    },
+    "half included": {
+     "car": 0.0706,
+     "drone": 0.9294,
+     "person": 0.0
+    }
+   }
+  },
+  "drone/16-09": {
+   "class": "drone",
+   "n": 220,
+   "held_out": 0.9515,
+   "half_included": 0.9515,
+   "recovery": 0.0,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.0455,
+     "drone": 0.9515,
+     "person": 0.003
+    },
+    "half included": {
+     "car": 0.0485,
+     "drone": 0.9515,
+     "person": 0.0
+    }
+   }
+  },
+  "drone/16-15": {
+   "class": "drone",
+   "n": 211,
+   "held_out": 0.9748,
+   "half_included": 0.9748,
+   "recovery": 0.0,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.0252,
+     "drone": 0.9748,
+     "person": 0.0
+    },
+    "half included": {
+     "car": 0.0252,
+     "drone": 0.9748,
+     "person": 0.0
+    }
+   }
+  },
+  "drone/16-17": {
+   "class": "drone",
+   "n": 178,
+   "held_out": 0.9363,
+   "half_included": 0.9363,
+   "recovery": 0.0,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.0637,
+     "drone": 0.9363,
+     "person": 0.0
+    },
+    "half included": {
+     "car": 0.0637,
+     "drone": 0.9363,
+     "person": 0.0
+    }
+   }
+  },
+  "person/12-14": {
+   "class": "person",
+   "n": 607,
+   "held_out": 1.0,
+   "half_included": 1.0,
+   "recovery": 0.0,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.0,
+     "drone": 0.0,
+     "person": 1.0
+    },
+    "half included": {
+     "car": 0.0,
+     "drone": 0.0,
+     "person": 1.0
+    }
+   }
+  },
+  "person/12-50": {
+   "class": "person",
+   "n": 703,
+   "held_out": 0.9924,
+   "half_included": 0.9915,
+   "recovery": -0.0009,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.0028,
+     "drone": 0.0047,
+     "person": 0.9924
+    },
+    "half included": {
+     "car": 0.0019,
+     "drone": 0.0066,
+     "person": 0.9915
+    }
+   }
+  },
+  "car/13-29": {
+   "class": "car",
+   "n": 321,
+   "held_out": 0.9151,
+   "half_included": 0.913,
+   "recovery": -0.0021,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.9151,
+     "drone": 0.0787,
+     "person": 0.0062
+    },
+    "half included": {
+     "car": 0.913,
+     "drone": 0.0766,
+     "person": 0.0104
+    }
+   }
+  },
+  "drone/15-42": {
+   "class": "drone",
+   "n": 186,
+   "held_out": 0.9462,
+   "half_included": 0.9427,
+   "recovery": -0.0036,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.0466,
+     "drone": 0.9462,
+     "person": 0.0072
+    },
+    "half included": {
+     "car": 0.043,
+     "drone": 0.9427,
+     "person": 0.0143
+    }
+   }
+  },
+  "drone/15-21": {
+   "class": "drone",
+   "n": 181,
+   "held_out": 0.9524,
+   "half_included": 0.9487,
+   "recovery": -0.0037,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.0476,
+     "drone": 0.9524,
+     "person": 0.0
+    },
+    "half included": {
+     "car": 0.0476,
+     "drone": 0.9487,
+     "person": 0.0037
+    }
+   }
+  },
+  "car/15-55": {
+   "class": "car",
+   "n": 501,
+   "held_out": 0.9296,
+   "half_included": 0.9256,
+   "recovery": -0.004,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.9296,
+     "drone": 0.0544,
+     "person": 0.0159
+    },
+    "half included": {
+     "car": 0.9256,
+     "drone": 0.0584,
+     "person": 0.0159
+    }
+   }
+  },
+  "person/10-53": {
+   "class": "person",
+   "n": 398,
+   "held_out": 0.995,
+   "half_included": 0.9899,
+   "recovery": -0.005,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.0,
+     "drone": 0.005,
+     "person": 0.995
+    },
+    "half included": {
+     "car": 0.0067,
+     "drone": 0.0034,
+     "person": 0.9899
+    }
+   }
+  },
+  "drone/15-47": {
+   "class": "drone",
+   "n": 195,
+   "held_out": 0.9558,
+   "half_included": 0.949,
+   "recovery": -0.0068,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.0306,
+     "drone": 0.9558,
+     "person": 0.0136
+    },
+    "half included": {
+     "car": 0.0204,
+     "drone": 0.949,
+     "person": 0.0306
+    }
+   }
+  },
+  "drone/15-38": {
+   "class": "drone",
+   "n": 176,
+   "held_out": 0.9621,
+   "half_included": 0.9508,
+   "recovery": -0.0114,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.0265,
+     "drone": 0.9621,
+     "person": 0.0114
+    },
+    "half included": {
+     "car": 0.0455,
+     "drone": 0.9508,
+     "person": 0.0038
+    }
+   }
+  },
+  "car/13-19": {
+   "class": "car",
+   "n": 116,
+   "held_out": 0.9598,
+   "half_included": 0.9483,
+   "recovery": -0.0115,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.9598,
+     "drone": 0.0402,
+     "person": 0.0
+    },
+    "half included": {
+     "car": 0.9483,
+     "drone": 0.046,
+     "person": 0.0057
+    }
+   }
+  },
+  "car/13-54": {
+   "class": "car",
+   "n": 56,
+   "held_out": 0.9643,
+   "half_included": 0.9524,
+   "recovery": -0.0119,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.9643,
+     "drone": 0.0357,
+     "person": 0.0
+    },
+    "half included": {
+     "car": 0.9524,
+     "drone": 0.0476,
+     "person": 0.0
+    }
+   }
+  },
+  "drone/15-36": {
+   "class": "drone",
+   "n": 165,
+   "held_out": 0.9398,
+   "half_included": 0.9237,
+   "recovery": -0.0161,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.0522,
+     "drone": 0.9398,
+     "person": 0.008
+    },
+    "half included": {
+     "car": 0.0723,
+     "drone": 0.9237,
+     "person": 0.004
+    }
+   }
+  },
+  "car/16-07": {
+   "class": "car",
+   "n": 434,
+   "held_out": 0.9662,
+   "half_included": 0.9447,
+   "recovery": -0.0215,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.9662,
+     "drone": 0.0276,
+     "person": 0.0061
+    },
+    "half included": {
+     "car": 0.9447,
+     "drone": 0.0507,
+     "person": 0.0046
+    }
+   }
+  },
+  "drone/16-11": {
+   "class": "drone",
+   "n": 184,
+   "held_out": 0.9638,
+   "half_included": 0.942,
+   "recovery": -0.0217,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.0362,
+     "drone": 0.9638,
+     "person": 0.0
+    },
+    "half included": {
+     "car": 0.058,
+     "drone": 0.942,
+     "person": 0.0
+    }
+   }
+  },
+  "person/10-45": {
+   "class": "person",
+   "n": 276,
+   "held_out": 0.9734,
+   "half_included": 0.9517,
+   "recovery": -0.0217,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.0072,
+     "drone": 0.0193,
+     "person": 0.9734
+    },
+    "half included": {
+     "car": 0.0072,
+     "drone": 0.0411,
+     "person": 0.9517
+    }
+   }
+  },
+  "drone/13-14": {
+   "class": "drone",
+   "n": 372,
+   "held_out": 0.9534,
+   "half_included": 0.9301,
+   "recovery": -0.0233,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.0466,
+     "drone": 0.9534,
+     "person": 0.0
+    },
+    "half included": {
+     "car": 0.0699,
+     "drone": 0.9301,
+     "person": 0.0
+    }
+   }
+  },
+  "drone/12-41": {
+   "class": "drone",
+   "n": 500,
+   "held_out": 0.9253,
+   "half_included": 0.8867,
+   "recovery": -0.0387,
+   "predicted_fraction": {
+    "held out": {
+     "car": 0.072,
+     "drone": 0.9253,
+     "person": 0.0027
+    },
+    "half included": {
+     "car": 0.104,
+     "drone": 0.8867,
+     "person": 0.0093
+    }
+   }
+  }
+ },
+ "seeds": [
+  0,
+  1,
+  2
+ ],
+ "epochs": 40,
+ "baseline_recovery_pearson": -0.9268,
+ "baseline_recovery_pearson_excl_13_48": -0.2824,
+ "summary": {
+  "n_units": 52,
+  "recovery_median": 0.00375,
+  "recovery_mean": 0.019703846153846162,
+  "recovery_sd": 0.10592480122392871,
+  "recovery_max": 0.7597,
+  "recovery_median_excl_13_48": 0.0037,
+  "recovery_max_excl_13_48": 0.0496,
+  "recovery_sd_excl_13_48": 0.016668406183732214
+ },
+ "_source": "Reconstructed from the run log of src/coverage_all.py (3 seeds, 40 epochs, 52 units). Values carry the four decimal places the log printed. Replace with the JSON the run itself wrote if full precision is wanted; the two agree to printed precision."
+}
