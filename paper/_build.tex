@@ -1,25 +1,38 @@
 %% ---------------------------------------------------------------------
-%% Session-grouped evaluation of a public radar target recognition dataset.
+%% Aggregate accuracy conceals an acquisition-level failure in a public
+%% radar target recognition benchmark.
 %%
-%% THIS IS THE SUBMISSION VERSION: IEEEtran two-column conference format,
-%% 6 pages including references, which is what the Pakistani conferences
-%% under consideration (ICIC at UMT, ICCII at Riphah, ICOSST at UET) all
-%% require. paper_long.tex is a 12-page single-column variant kept as a
-%% source of material; the two share no text, so a number corrected in one
-%% must be corrected in the other.
+%% SUBMISSION VERSION. IEEEtran two-column conference format, 6 pages
+%% including references, which is what ICIC (UMT), ICCII (Riphah) and
+%% ICOSST (UET) all require. It compiles on Overleaf with nothing but this
+%% file and the three images listed below.
 %%
-%% BLIND REVIEW. Set \blindtrue below if the venue reviews double-blind.
-%% ICIC states only "a blind peer review process" and requires the first
-%% author's surname in the filename, which reads as single-blind, so the
-%% default here is \blindfalse. Confirm with the venue before submitting:
-%% an author name in a double-blind submission is a desk reject.
+%% TO BUILD
+%%   1. Upload this file to the Overleaf project root.
+%%   2. Create a folder named exactly  figures  beside it (not the project
+%%      root, a folder) and upload these three images into it:
+%%          session_13-48_compact.png
+%%          doppler_by_acquisition.png
+%%          recovery_by_acquisition.png
+%%      That is what \graphicspath{{figures/}} below expects.
+%%   3. Set the compiler to pdfLaTeX. No bibtex run is needed: the
+%%      references are a thebibliography block in this file.
+%%   It should come out at exactly 6 pages with no errors, no undefined
+%%   references and no overfull boxes. If it runs to 7, a figure failed to
+%%   load and LaTeX substituted a placeholder.
 %%
-%% FIGURES must sit in a figures/ subdirectory alongside this file, which
-%% is what \graphicspath{{figures/}} expects.
+%% BLIND REVIEW. Change \blindfalse to \blindtrue below and the author
+%% block, the repository URL and the self-citation all disappear. ICIC says
+%% only "a blind peer review process" while also asking for the first
+%% author's surname in the filename, which reads as single-blind but does
+%% not say so. Confirm with the venue before submitting: an author name in
+%% a double-blind submission is a desk reject.
 %%
-%% Every number in this file comes from a measured run and is checked
-%% against the released reports by check_expected.py in the repository
-%% named in the Reproducibility section. No placeholders remain.
+%% EVERY NUMBER here comes from a measured run and is verified against the
+%% released reports by check_expected.py in the repository named in the
+%% conclusion: 145 checks, each with its own tolerance and a recorded
+%% reason for that tolerance. No placeholders remain. If you edit a number,
+%% run that checker before submitting.
 %% ---------------------------------------------------------------------
 \documentclass[conference]{IEEEtran}
 \IEEEoverridecommandlockouts
@@ -30,7 +43,7 @@
 \graphicspath{{figures/}}
 \usepackage{booktabs}
 \usepackage{url}
-\usepackage[table]{xcolor}
+%% xcolor is not used by this paper; left out deliberately.
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,positioning}
 
