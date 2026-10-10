@@ -65,7 +65,7 @@ def fig_doppler(cen, out):
     rows = cen["by_acquisition"]
     tgt = [r for r in rows if r["acquisition"].endswith("13-48")][0]
     oth = [r for r in rows if r is not tgt]
-    fig, ax = plt.subplots(figsize=(5.4, 2.3))
+    fig, ax = plt.subplots(figsize=(5.4, 1.75))
     ax.scatter([r["centroid_mean"] for r in oth], [r["centroid_sd"] for r in oth],
                s=24, facecolor="none", edgecolor=BLUE, marker="o",
                linewidths=0.9, zorder=3)
@@ -111,7 +111,7 @@ def fig_recovery(cov, out):
     """
     rows = [(k, v["class"], v["held_out"], v["recovery"])
             for k, v in cov["units"].items()]
-    fig, ax = plt.subplots(figsize=(7.4, 3.5))
+    fig, ax = plt.subplots(figsize=(7.4, 2.5))
     for cls, (col, mk) in STYLE.items():
         pts = [r for r in rows if r[1] == cls and not r[0].endswith("13-48")]
         ax.scatter([p[2] for p in pts], [p[3] for p in pts],
