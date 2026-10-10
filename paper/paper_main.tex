@@ -21,12 +21,14 @@
 %%   references and no overfull boxes. If it runs to 7, a figure failed to
 %%   load and LaTeX substituted a placeholder.
 %%
-%% BLIND REVIEW. Change \blindfalse to \blindtrue below and the author
-%% block, the repository URL and the self-citation all disappear. ICIC says
-%% only "a blind peer review process" while also asking for the first
-%% author's surname in the filename, which reads as single-blind but does
-%% not say so. Confirm with the venue before submitting: an author name in
-%% a double-blind submission is a desk reject.
+%% BLIND REVIEW. ICIC (UMT) runs DOUBLE-BLIND review: the CMT submission
+%% page states it outright, which overrides the author-guidelines page's
+%% vaguer "a blind peer review process". The SUBMITTED file must therefore
+%% be built with \blindtrue, which removes the author block, the repository
+%% URL and the self-citation. Build it with tools/build_paper.sh, which
+%% flips the switch itself and greps the result for identifying strings,
+%% rather than editing this line by hand. \blindfalse below is for the
+%% camera-ready and for circulating drafts.
 %%
 %% EVERY NUMBER here comes from a measured run and is verified against the
 %% released reports by check_expected.py in the repository named in the
