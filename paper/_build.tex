@@ -55,6 +55,19 @@
 \setlength{\abovecaptionskip}{4pt}
 \setlength{\belowcaptionskip}{0pt}
 
+%% ICIC (UMT) requires the conference identifier in the footer of the
+%% first page only, at 10pt, with no page numbers anywhere. This is the
+%% footer redefinition the IEEE conference template itself uses; the
+%% \gdef empties the macro after one use so it cannot repeat on page 2.
+\makeatletter
+\def\ps@IEEEtitlepagestyle{%
+  \def\@oddfoot{\mycopyrightnotice}%
+  \def\@evenfoot{}}
+\makeatother
+\newcommand{\mycopyrightnotice}{%
+  {\fontsize{10}{12}\selectfont 979-8-3195-2818-6/26/\$31.00~\copyright 2026 IEEE\hfill}%
+  \gdef\mycopyrightnotice{}}
+
 \begin{document}
 
 \title{Aggregate Accuracy Conceals an Acquisition-Level Failure in a Public Radar Target Recognition Benchmark}
@@ -73,7 +86,7 @@
 \else
   \newcommand{\anon}[1]{#1}
   \newcommand{\codeurl}{\url{github.com/falcon-colab/rdrd-acquisition-coverage}}
-  \author{\IEEEauthorblockN{Ghulam Mustafa, Ghulam Murtaza, Ali Nawaz, Zohaib Ahmad Khan}
+  \author{\IEEEauthorblockN{Ghulam Mustafa, Ghulam Murtaza, Ali Nawaz, Zohaib Ahmad Khan, Raja Farrukh Ali}
   \IEEEauthorblockA{\textit{College of Aeronautical Engineering} \\
   \textit{National University of Sciences and Technology}\\
   Islamabad, Pakistan \\
@@ -84,7 +97,7 @@
 \maketitle
 
 \begin{abstract}
-Radar target recognition on public benchmarks is usually evaluated by partitioning individual range--Doppler frames at random. Because those frames come from continuous recordings, such a split places neighbouring frames of the same acquisition on both sides of it, and the accuracy it reports describes recordings the model has already seen. We audit the Real Doppler RAD-DAR database at the level of acquisitions rather than frames, recovering 52 recording units from its directory structure. The aggregate penalty for doing so is small and we do not establish it statistically. That is the result rather than a null one: the cost is not spread thinly across the benchmark but concentrated in one place. Of twenty-one drone acquisitions, twenty are recognised above 0.90 out-of-fold recall and one at 0.249. A controlled exposure experiment attributes that failure to training coverage rather than to difficulty: held out of training entirely, the acquisition reaches 0.178 on a held-back half, and returning the other half to training raises the same test set to 0.948, with no overlap across ten seeds. Repeating the experiment on every one of the 52 units finds no second case. The failing acquisition is separable from all others before any training, by the Doppler position of its energy alone. Nor is the failure an artefact of our single-frame input: a three-frame approximation raises aggregate accuracy to 0.979 and still leaves the acquisition at 0.367. We do not reproduce the published baseline and make no claim about it. We present a single-acquisition case study of one benchmark, and argue that an acquisition-level breakdown, which costs one cross-validation pass, should accompany aggregate accuracy whenever a dataset is assembled from continuous recordings.
+Public radar benchmarks are usually evaluated by partitioning individual range--Doppler frames at random. Because those frames come from continuous recordings, such a split puts neighbouring frames of one acquisition on both sides of it, so the reported accuracy describes recordings the model has already seen. We audit the Real Doppler RAD-DAR database by acquisition rather than by frame, recovering 52 recording units from its directory structure. The aggregate penalty is small and we do not establish it statistically. That is the result rather than a null one: the cost is concentrated, not spread thinly. Of twenty-one drone acquisitions, twenty are recognised above 0.90 out-of-fold recall and one at 0.249. A controlled exposure experiment attributes that failure to training coverage rather than difficulty: held out entirely, the acquisition reaches 0.178 on a held-back half; returning the other half to training raises the same test set to 0.948, with no overlap across ten seeds. Repeated on all 52 units, the experiment finds no second case. The failing acquisition is separable from all others before training, by the Doppler position of its energy alone. Nor is the failure an artefact of our single-frame input: a three-frame approximation raises aggregate accuracy to 0.979 and still leaves the acquisition at 0.367. We do not reproduce the published baseline and make no claim about it. We present a single-acquisition case study of one benchmark, and argue that an acquisition-level breakdown, costing one cross-validation pass, should accompany aggregate accuracy whenever a dataset comes from continuous recordings.
 \end{abstract}
 
 \begin{IEEEkeywords}
