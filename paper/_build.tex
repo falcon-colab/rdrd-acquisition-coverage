@@ -21,12 +21,14 @@
 %%   references and no overfull boxes. If it runs to 7, a figure failed to
 %%   load and LaTeX substituted a placeholder.
 %%
-%% BLIND REVIEW. Change \blindfalse to \blindtrue below and the author
-%% block, the repository URL and the self-citation all disappear. ICIC says
-%% only "a blind peer review process" while also asking for the first
-%% author's surname in the filename, which reads as single-blind but does
-%% not say so. Confirm with the venue before submitting: an author name in
-%% a double-blind submission is a desk reject.
+%% BLIND REVIEW. ICIC (UMT) runs DOUBLE-BLIND review: the CMT submission
+%% page states it outright, which overrides the author-guidelines page's
+%% vaguer "a blind peer review process". The SUBMITTED file must therefore
+%% be built with \blindtrue, which removes the author block, the repository
+%% URL and the self-citation. Build it with tools/build_paper.sh, which
+%% flips the switch itself and greps the result for identifying strings,
+%% rather than editing this line by hand. \blindfalse below is for the
+%% camera-ready and for circulating drafts.
 %%
 %% EVERY NUMBER here comes from a measured run and is verified against the
 %% released reports by check_expected.py in the repository named in the
@@ -115,7 +117,7 @@ We state the scope plainly: both principal observations concern the same acquisi
 % =====================================================================
 \section{Related Work}
 The Real Doppler RAD-DAR database was released with a convolutional baseline, DopplerNet, reporting 99.48\,\% accuracy on the three-class problem of vehicles, drones and pedestrians~\cite{roldan2020}; the acquisition hardware is described separately~\cite{quevedo2019}. A recent lightweight architecture reports 98.08\,\% average accuracy on the same data with a model footprint of roughly 400\,kB~\cite{zhang2025}, and provides the per-class confusion matrices we use as an external reference in Section~\ref{sec:baseline}. Both sit in a line of work applying convolutional networks to micro-Doppler signatures that runs back to human activity classification~\cite{kim2016}, and a recent review surveys radar drone classification together with its evaluation practice~\cite{ahmad2023}.
-That correlated samples inflate apparent performance is not a new observation. Grouped partitioning is standard practice in human activity recognition, where subject-disjoint splits are routine, and radar recognition studies have used track-level separation to limit correlation between training and test segments~\cite{buchman2022}. A survey of machine-learning-based science gives a taxonomy of leakage as a recurring cause of overoptimistic reported results~\cite{kapoor2023}; the duplicated archive tree of Section~\ref{sec:data} is its category L1.4, duplicates in datasets, and partitioning correlated frames at random is its L3.2, nonindependence between train and test samples. Nor is the difficulty of conditions absent from training new in radar: recent work addresses single-source domain generalisation for low-slow-small targets~\cite{chen2025} and open-set recognition that rejects classes not present in training~\cite{bai2026}. Ours is neither. The acquisition carries a correct label and its samples sit nearest the drone centroid, so this is closed-set acquisition shift, a represented class containing a regime the training split does not cover, rather than an unknown class to reject.
+That correlated samples inflate apparent performance is not a new observation. Grouped partitioning is standard practice in human activity recognition, where subject-disjoint splits are routine, and radar recognition studies have used track-level separation to limit correlation between training and test segments~\cite{buchman2022}. A survey of machine-learning-based science gives a taxonomy of leakage as a recurring cause of overoptimistic reported results~\cite{kapoor2023}; the duplicated archive tree of Section~\ref{sec:data} is its category L1.4, duplicates in datasets, and partitioning correlated frames at random is its L3.2, nonindependence between train and test samples. Nor is the difficulty of conditions absent from training new in radar: recent work addresses single-source domain generalisation for low-slow-small targets~\cite{chen2025} and open-set recognition that rejects classes not present in training~\cite{bai2026}. Ours is neither: the acquisition carries a correct label and its samples sit nearest the drone centroid, so this is closed-set acquisition shift, a represented class containing a regime the training split does not cover.
  We therefore do not claim that unseen regimes are unstudied; our contribution is the acquisition-level audit of one widely reused benchmark.
 
 Comparing learning procedures across resampled partitions is statistically delicate: commonly used tests have inflated Type~I error on cross-validation scores~\cite{dietterich1998}, and the dependence from overlapping training sets must enter any variance estimate~\cite{nadeau2003}. Separately, that compression damages some classes more than others is established in vision~\cite{hooker2019,tran2022}; a follow-up in our artefact tested the radar instantiation and did not reproduce it (Section~\ref{sec:discussion}).
@@ -155,7 +157,7 @@ The distributed archive carries the directory tree twice, once beneath a \texttt
 
 Acquisition structure is encoded in the directory hierarchy rather than in file names, which are running indices: folders are named by acquisition time, with suffixes distinguishing variants recorded in the same session, for example \texttt{15-55}, \texttt{15-55a}, \texttt{15-55m} and \texttt{15-55p}. We group by the leading \texttt{HH-MM} timestamp, which is a fact about when the data was collected and cannot drift with a parameter choice, and which yields 15 vehicle, 21 drone and 16 pedestrian units, 52 in total, from 80 folders.
 
-We call a timestamp group an \emph{acquisition} throughout, as shorthand for a proposed grouping unit: the rule is an inference from directory structure, not a ground-truth identifier. The suffix pattern is systematic, and several suffixed pairs share a file count \emph{and} peak-to-floor statistics identical to one decimal place, for instance \texttt{17-09} and \texttt{17-09p} at 140 files and 41.4\,dB; every such pair falls within one unit. Merging cannot introduce train/test correlation that folder-level grouping would have avoided, though it does change fold composition. The choice does not reach the principal result: the rule merges folders only in the vehicle class, 27 into 15, and the pedestrian class, 32 into 16, while all 21 drone folders map one to one onto 21 units, so folder-level and timestamp-level grouping are identical for the drone class and \texttt{13-48} is a single folder under either rule.
+We call a timestamp group an \emph{acquisition} throughout, as shorthand for a proposed grouping unit: the rule is an inference from directory structure, not a ground-truth identifier. The suffix pattern is systematic: \texttt{17-09} and \texttt{17-09p}, for instance, share a file count and peak-to-floor statistics to one decimal place, 140 files and 41.4\,dB, and every such pair falls within one unit. Merging cannot introduce train/test correlation that folder-level grouping would have avoided, though it does change fold composition. The choice does not reach the principal result: the rule merges folders only in the vehicle class, 27 into 15, and the pedestrian class, 32 into 16, while all 21 drone folders map one to one onto 21 units, so folder-level and timestamp-level grouping are identical for the drone class and \texttt{13-48} is a single folder under either rule.
 % =====================================================================
 \section{Model and Protocol}
 \label{sec:baseline}
@@ -211,7 +213,7 @@ A seed sets the partition as well as the initialisation, drawing the validation 
 
 We ran five folds by three seeds under each protocol, separating two sources of variation: \emph{fold} standard deviation measures sensitivity to which units are held out, \emph{seed} standard deviation sensitivity to initialisation alone. Grouped partitioning gives mean accuracy 0.9099 against 0.9335 and mean drone recall 0.8376 against 0.9358. Those differences are not trivial, but they are small beside the fold-to-fold spread: the grouped fold standard deviation is 0.0427 for accuracy and 0.1389 for drone recall, roughly eight and eighteen times the random-partition figures of 0.0055 and 0.0078, while seed standard deviations stay below 0.04 throughout.
 
-We rest no claim on a significance test. Fold scores under the two protocols are not naturally paired, since a grouped fold is defined by which acquisitions it contains while a random fold is defined by a shuffle, and cross-validation scores are dependent through overlapping training sets~\cite{dietterich1998,nadeau2003}. \textbf{We therefore report that we did not establish a significant aggregate difference between the protocols, which is a weaker statement than the absence of one.} What the data shows clearly is heterogeneity: the per-fold differences in drone F1 are $+0.003$, $-0.023$, $+0.007$, $-0.226$ and $-0.010$, so the aggregate difference is dominated by a single fold rather than appearing as a consistent shift. Section~\ref{sec:regime} identifies what that fold contains.
+We rest no claim on a significance test. Fold scores under the two protocols are not naturally paired, since a grouped fold is defined by which acquisitions it contains while a random fold is defined by a shuffle, and cross-validation scores are dependent through overlapping training sets~\cite{dietterich1998,nadeau2003}. \textbf{We therefore report that we did not establish a significant aggregate difference between the protocols, which is a weaker statement than the absence of one.} What the data shows clearly is heterogeneity: the per-fold differences in drone F1 are $+0.003$, $-0.023$, $+0.007$, $-0.226$ and $-0.010$, so the aggregate difference is dominated by a single fold rather than appearing as a consistent shift.
 
 % =====================================================================
 \section{One Acquisition Behaves Differently}
@@ -232,12 +234,14 @@ We profiled twelve per-sample properties and computed for each the standardised 
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.82\columnwidth]{session_13-48_compact.png}
-\caption{Acquisition means, range vertical and Doppler horizontal.
-\texttt{13-48} carries a band of energy at the low edge of the retained
-Doppler window that no typical drone acquisition shows, and the pedestrian
-mean spreads along that axis, which is where 79\,\% of held-out
-\texttt{13-48} goes.}
+\includegraphics[width=\columnwidth]{session_13-48_compact.png}
+\caption{Mean range--Doppler maps on one shared colour scale, each sample
+referenced to its own peak first so the panels compare shape and not
+level. Left, the failing acquisition \texttt{13-48}; centre, \texttt{12-34},
+a typical drone acquisition; right, the pedestrian class, where 79\,\% of
+held-out \texttt{13-48} is sent. The white curve is energy summed over
+range, the triangle its Doppler centroid with the value printed, and the
+dashed line zero Doppler at bin 30.}
 \label{fig:sessions}
 \end{figure}
 
@@ -356,7 +360,7 @@ Four physically motivated mechanisms were formulated and none was supported: rot
 
 \subsection{Limitations}
 
-Both principal findings rest on the same acquisition, so the effective sample size at the level of flight regimes is one, from one dataset, one radar and one drone platform, with \texttt{13-48} comprising 7.8\,\% of the drone samples. The coverage claim is no longer a contrast of hand-picked cases, but a distribution over 52 units of one dataset still says nothing about how common such acquisitions are elsewhere, and that sweep runs at three seeds against ten for the focal experiment. Whether the phenomenon appears under other architectures, or on another radar, is untested here. Two changes to our own model leave it in place: widening to 871\,731 parameters and supplying three-frame input both raise aggregate accuracy without lifting this acquisition above 0.367. That points to a property of what the training split covers rather than of capacity or input length, and we would expect the failure to survive a change of architecture, but we have not shown it.
+Both principal findings rest on the same acquisition, so the effective sample size at the level of flight regimes is one, from one dataset, one radar and one drone platform, \texttt{13-48} being 7.8\,\% of the drone samples. The coverage claim is no longer a contrast of hand-picked cases, but a distribution over 52 units of one dataset still says nothing about how common such acquisitions are elsewhere, and that sweep runs at three seeds against ten for the focal experiment. Whether the phenomenon appears under other architectures, or on another radar, is untested here. Two changes to our own model leave it in place: widening to 871\,731 parameters and supplying three-frame input both raise aggregate accuracy without lifting this acquisition above 0.367. That points to a property of what the training split covers rather than of capacity or input length, and we would expect the failure to survive a change of architecture, but we have not shown it.
 
 \subsection{Approximate temporal context, and what it does not show}
 \label{sec:inputgap}
@@ -397,7 +401,7 @@ shuffle$^{\dagger}$ & folder-wide & -- & 0.9932 $\pm$ 0.0016 & 0.5435 $\pm$ 0.12
 
 A three-frame input raises random-split accuracy from 0.9516 to 0.9794, within a quarter of a point of the 0.9808 reported for the lighter published model. That classifier still fails on \texttt{13-48}: recall rises from 0.238 (single frame, held out) to 0.367 (three-frame index arm, held out), a paired gain of $+0.129$ over ten seeds ($t=+4.82$), so most of the acquisition's frames are still assigned to the wrong class. \textbf{The failure is therefore not an artefact of the single-frame input, and it persists while aggregate accuracy rises by 2.8 points.} Even the shuffle arm at 0.9932 leaves it at 0.544, far below the 0.948 obtainable once it is represented in training.
 
-The second result we did not anticipate. A sliding window over a frame-level random split does put test frames inside training inputs on a large scale: 50.6\,\% of training triplets hold at least one, and 82.7\,\% of all test frames appear inside some training input under index order against 68.4\,\% under shuffled companions. The \emph{clean} arm, which the audit reports at exactly zero overlap, measures what that is worth: removing the overlap costs 0.0063 in accuracy, 0.9794 against 0.9731, inside the spread of either arm. So although four fifths of the test set appears somewhere in training, the inflation is well under a point here, and three frames still beat one by 0.0215 with no overlap at all. We report it in both directions because the audit alone would have supported a stronger claim than the experiment does.
+The second result we did not anticipate. A sliding window over a frame-level random split does put test frames inside training inputs on a large scale: 50.6\,\% of training triplets hold at least one, and 82.7\,\% of all test frames appear inside some training input under index order against 68.4\,\% under shuffled companions. The \emph{clean} arm, which the audit reports at exactly zero overlap, measures what that is worth: removing the overlap costs 0.0063 in accuracy, 0.9794 against 0.9731, inside the spread of either arm. So although four fifths of the test set appears somewhere in training, the inflation is well under a point here, and three frames still beat one by 0.0215 with no overlap at all.
 
 What separates the arms is how far the companions sit from the centre. Recall on \texttt{13-48} rises monotonically with that distance: 0.367 for index-adjacent frames, 0.463 for the nearest same-tag frames at a mean distance of 2.57, and 0.544 for companions drawn from anywhere in the folder. Adjacent detections are nearly redundant, while more distant ones sample the acquisition's variability, largest precisely here (Section~\ref{sec:regime}). The shuffle arm is additionally transductive, drawing on other test frames at inference as a live system could not, so \emph{index} is the arm the comparison rests on. Even index is not causal with respect to its own centre, since the window is centred on the frame being classified: a streaming system could form it only by delaying each decision by one frame, the latency the source publication notes for its own three-frame input~\cite{roldan2020}. We therefore call it temporally ordered adjacent-frame context, not a deployment-ready one. Index and shuffle differ by 0.176 ($t=-4.35$ over ten paired seeds) rather than by chance, so the trailing integer tracks acquisition order closely enough to matter.
 
