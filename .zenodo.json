@@ -1,6 +1,6 @@
 {
   "title": "Code and analysis for \"Acquisition-Level Evaluation of Deep Learning for Range-Doppler Radar Target Recognition\"",
-  "description": "<p>Session-grouped evaluation of the Real Doppler RAD-DAR database. Twenty of twenty-one drone acquisitions reach out-of-fold recall between 0.90 and 0.99; one reaches 0.249. Held out of training entirely, recall on a held-back half is 0.178, rising to 0.948 once the other half is in training, while the same experiment on a control acquisition, the weakest of another class, recovers 0.056.</p><p>The repository contains the full pipeline (inventory and deduplication, acquisition grouping, the split comparison, the coverage experiment, the compression grid, the leave-one-acquisition-out test), eighteen unit tests of the claims the paper makes about the code, a synthetic self-test that runs the whole pipeline without the archive and without a GPU, and a verification script that reruns every experiment on the real archive and checks each number the paper states against a recorded tolerance.</p><p>The Real Doppler RAD-DAR database itself is not redistributed here. It is obtained separately from Kaggle.</p>",
+  "description": "<p>Acquisition-level evaluation of the Real Doppler RAD-DAR database. The distributed archive carries its directory tree twice; removing that duplication leaves 5,720 vehicle, 5,065 drone and 6,700 pedestrian samples, 17,485 in all, and the directory hierarchy recovers 52 acquisitions from 80 folders.</p><p>Grouping whole acquisitions rather than shuffling frames lowers aggregate accuracy only from 0.9335 to 0.9099, a difference this work does not establish as significant. The per-acquisition view disagrees: twenty of the twenty-one drone acquisitions reach out-of-fold recall between 0.9006 and 0.9929, and one reaches 0.249. Excluded from training entirely, that acquisition reaches 0.178 on a reserved half over ten seeds; returning its other half to training raises the same reserved half to 0.948, with no overlap between the two conditions on any seed.</p><p>Repeating that coverage experiment on all 52 acquisitions, 312 trainings at three seeds, finds no second case: the other 51 recover between -0.039 and +0.050 with a standard deviation of 0.017, none exceeding 0.050, against 0.760 for the failing acquisition. Starting low explains little of it, correlating with recovery at -0.282 among those 51. The acquisition is separable from every other before any training, by the Doppler position of its energy (centroid at bin 8.50 against 29.70 to 31.19) and by its spread (10.64 bins against 0.64 to 2.37). An approximate three-frame input raises random-split accuracy to 0.9794 and still leaves it at 0.367, so the failure does not follow from single-frame input.</p><p>The repository contains the full pipeline (inventory and deduplication, acquisition grouping, the split comparison, the coverage experiment and its 52-unit sweep, the compression grid, the leave-one-acquisition-out test), 25 unit tests of the claims the paper makes about the code, a synthetic self-test that runs the whole pipeline without the archive and without a GPU, and a verification script that reruns every experiment on the real archive and checks 145 stated numbers against recorded tolerances.</p><p>The Real Doppler RAD-DAR database itself is not redistributed here. It is obtained separately from Kaggle.</p>",
   "upload_type": "software",
   "license": "mit",
   "creators": [
@@ -12,7 +12,10 @@
     "radar target recognition",
     "range-Doppler",
     "FMCW",
+    "evaluation protocol",
     "dataset partitioning",
+    "data leakage",
+    "cross-validation",
     "out-of-distribution generalisation",
     "drone detection",
     "reproducibility"
