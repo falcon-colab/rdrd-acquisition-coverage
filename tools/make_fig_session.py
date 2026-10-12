@@ -53,6 +53,7 @@ import argparse
 import json
 import os
 import shutil
+import sys
 
 import numpy as np
 import matplotlib
@@ -111,47 +112,76 @@ def doppler_profile(M):
     return p / max(p.max(), 1e-30)
 
 
-def centroid_bin(M):
-    """Doppler centroid of the panel, by the same rule as the text.
+def _features(X):
+    """src/step2d.py's own feature code, imported rather than copied.
 
-    src/step2d.py computes this per sample over the excess above each
-    sample's median floor; here it is computed once on the mean map.
-    The two agree closely for these panels but they are not identical
-    quantities, so the caption says the figure's value is the centroid
-    of the mean map.
+    THIS IS THE BUG THIS FIGURE SHIPPED WITH ONCE. The first version
+    computed the Doppler centroid on the mean map, taking that map's
+    median as the floor. The paper computes it per sample, each against
+    its own floor, and reports the mean of those. For an acquisition
+    whose samples all sit at the same Doppler bin the two agree, which
+    is why the typical drone and the pedestrian panels looked right. For
+    \texttt{13-48}, whose per-sample Doppler scatter is 10.64 bins, the
+    mean map smears and its centroid is pulled towards the middle: the
+    figure printed 12.5 against the 8.50 the text and Fig. 3 both quote,
+    two different numbers for one named quantity on one page.
+
+    Importing the real function removes the possibility of the two
+    definitions drifting apart again.
     """
-    lin = 10.0 ** (M / 10.0)
-    excess = np.maximum(lin - np.median(lin), 0.0)
-    mass = excess.sum(axis=0)
-    cols = np.arange(M.shape[1])
-    return float((mass * cols).sum() / max(mass.sum(), 1e-30))
+    here = os.path.dirname(os.path.abspath(__file__))
+    src = os.path.join(os.path.dirname(here), "src")
+    if src not in sys.path:
+        sys.path.insert(0, src)
+    from step2d import sample_features           # noqa: E402
+    return sample_features(X)
+
+
+def centroid_bin(X):
+    """Mean of the per-sample Doppler centroids, as the text defines it."""
+    return float(_features(X)["doppler_centroid"].mean())
+
+
+def doppler_profile_mean(X):
+    """Mean of the per-sample Doppler profiles, normalised to [0, 1].
+
+    The profile of the mean map would disagree with the centroid marker
+    for the same reason the old centroid did, so the curve is averaged
+    the same way the number is: per sample first, then across samples.
+    """
+    peak = X.reshape(len(X), -1).max(axis=1)
+    lin = 10.0 ** ((X - peak[:, None, None]) / 10.0)
+    p = lin.sum(axis=1)                          # over range -> (n, W)
+    p = p / np.maximum(p.max(axis=1, keepdims=True), 1e-30)
+    p = p.mean(axis=0)
+    p = p - p.min()
+    return p / max(p.max(), 1e-30)
 
 
 def panels(X, y, unit, target, typical, confused):
     """The three mean maps, in the order the argument is made."""
     out = []
-    sel = unit == target
-    out.append((target.split("/")[-1], "the failing acquisition",
-                peak_referenced(X[sel]), int(sel.sum())))
-    sel = unit == typical
-    out.append((typical.split("/")[-1], "a typical drone acquisition",
-                peak_referenced(X[sel]), int(sel.sum())))
-    sel = y == confused
-    out.append(("pedestrian", "the class it is sent to",
-                peak_referenced(X[sel]), int(sel.sum())))
+    for name, role, sel in (
+            (target.split("/")[-1], "the failing acquisition", unit == target),
+            (typical.split("/")[-1], "a typical drone acquisition",
+             unit == typical),
+            ("pedestrian", "the class it is sent to", y == confused)):
+        Xs = X[sel]
+        out.append((name, role, peak_referenced(Xs), int(sel.sum()),
+                    centroid_bin(Xs), doppler_profile_mean(Xs)))
     return out
 
 
 def draw(items, out_dir, z, name="session_13-48_compact.png"):
     style(z)
     H, W = items[0][2].shape
-    lo = min(np.percentile(m, 2.0) for _, _, m, _ in items)
-    hi = max(m.max() for _, _, m, _ in items)
+    lo = min(np.percentile(m, 2.0) for _, _, m, _, _, _ in items)
+    hi = max(m.max() for _, _, m, _, _, _ in items)
 
     fig, axes = plt.subplots(1, 3, figsize=z["fig"], sharey=True,
                              gridspec_kw={"wspace": z["wspace"]})
 
-    for ax, (title, role, M, n) in zip(axes, items):
+    for ax, (title, role, M, n, c, prof) in zip(axes, items):
         im = ax.imshow(M, aspect="auto", origin="lower", cmap="viridis",
                        vmin=lo, vmax=hi, interpolation="nearest",
                        extent=(-0.5, W - 0.5, -0.5, H - 0.5))
@@ -159,11 +189,9 @@ def draw(items, out_dir, z, name="session_13-48_compact.png"):
         ax.axvline((W - 1) / 2.0, color=LINE, lw=0.7, alpha=0.5,
                    linestyle=(0, (2.5, 2)))
 
-        p = doppler_profile(M)
-        ax.plot(np.arange(W), p * (H - 1) * 0.80 - 0.5, color=LINE,
+        ax.plot(np.arange(W), prof * (H - 1) * 0.80 - 0.5, color=LINE,
                 lw=1.0, alpha=0.9, solid_joinstyle="round")
 
-        c = centroid_bin(M)
         ax.plot([c], [-0.5], marker="^", ms=5.5, color=LINE, clip_on=False,
                 markeredgecolor=INK, markeredgewidth=0.4, zorder=5)
         # inside the panel, so it cannot crowd the title
@@ -213,8 +241,8 @@ def draw(items, out_dir, z, name="session_13-48_compact.png"):
     plt.close(fig)
     print("  %s  %d panels, shared scale %.1f to %.1f dB"
           % (path, len(items), lo, hi))
-    for title, role, M, n in items:
-        print("    %-26s centroid %6.2f   n=%d" % (title, centroid_bin(M), n))
+    for title, role, M, n, c, _ in items:
+        print("    %-26s centroid %6.2f   n=%d" % (title, c, n))
     return path
 
 
