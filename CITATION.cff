@@ -1,8 +1,8 @@
 cff-version: 1.2.0
 message: If you use this code or its findings, please cite the paper.
 title: >-
-  Code and analysis for "Aggregate Accuracy Conceals an Acquisition-Level
-  Failure in a Public Radar Target Recognition Benchmark"
+  Code and analysis for "Acquisition-Level Evaluation of Deep Learning for
+  Range-Doppler Radar Target Recognition"
 abstract: >-
   Session-grouped evaluation of the Real Doppler RAD-DAR database. Twenty of
   twenty-one drone acquisitions reach out-of-fold recall between 0.90 and

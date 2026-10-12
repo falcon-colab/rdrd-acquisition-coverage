@@ -59,10 +59,22 @@ echo
 for f in conference_6pp_blind.pdf singlecol_12pp_blind.pdf; do
   [ -f "$f" ] || continue
   echo "anonymity check on $f:"
+  # Body only. The reference list legitimately contains surnames that
+  # collide with the author list: a cited paper by a different S. E.
+  # Mustafa made this check fail on a PDF whose author block was empty.
+  # A check that cries wolf is a check that gets ignored, so the
+  # bibliography is cut before grepping. Self-citation in a double-blind
+  # submission is handled by citing in the third person, not by hiding
+  # the reference.
   hits=$(pdftotext "$f" - \
-         | grep -ciE 'mustafa|murtaza|nawaz|zohaib|nust|aeronautical|islamabad|falcon-colab|github|zenodo' || true)
-  if [ "$hits" = "0" ]; then echo "  clean: no identifying string found"
-  else echo "  *** $hits identifying strings present, DO NOT SUBMIT ***"; fi
+         | sed '/^R *EFERENCES/,$d' \
+         | grep -ciE 'mustafa|murtaza|nawaz|zohaib|liaquat|farrukh|nust|aeronautical|islamabad|falcon-colab|github|zenodo' || true)
+  if [ "$hits" = "0" ]; then echo "  clean: no identifying string found in the body"
+  else echo "  *** $hits identifying strings in the body, DO NOT SUBMIT ***"; fi
+  # and the bibliography separately, as a note rather than a failure
+  refs=$(pdftotext "$f" - | sed -n '/^R *EFERENCES/,$p' \
+         | grep -ciE 'falcon-colab|github|zenodo' || true)
+  [ "$refs" = "0" ] || echo "  note: $refs repository or DOI strings in the reference list"
 done
 # pdffonts columns end: ... emb sub uni object ID, so the emb flag is $(NF-4).
 pdffonts conference_6pp_named.pdf | awk 'NR>2 && NF>5 {t++; if ($(NF-4)!="yes") n++} END {

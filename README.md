@@ -1,4 +1,4 @@
-# Aggregate accuracy conceals an acquisition-level failure in a public radar benchmark
+# Acquisition-level evaluation of deep learning for range-Doppler radar target recognition
 
 Code and analysis for the paper of that name, on the Real Doppler RAD-DAR
 database (RDRD).
