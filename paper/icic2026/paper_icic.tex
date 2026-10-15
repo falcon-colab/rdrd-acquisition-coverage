@@ -84,7 +84,7 @@ The contributions are fourfold. First, a reproducible preparation removes duplic
 \section{Literature Review}
 \label{sec:related}
 
-The Real Doppler RAD-DAR database was released with a convolutional baseline, DopplerNet, which reached 99.48\% accuracy in classifying vehicles, drones, and pedestrians~\cite{roldan2020}. The acquisition hardware is described separately~\cite{quevedo2019}. A recent lightweight model reached 98.08\% on the same data with a model size of about 400\,kB~\cite{zhang2025}. These studies belong to a broader line of work on convolutional networks for micro-Doppler signatures, which began with human activity classification~\cite{kim2016} and now covers drones~\cite{ahmad2024}, drones versus birds~\cite{mustafa2026}, and material classification with software-defined radio (SDR) platforms~\cite{liaquat2025imm}. Low-cost SDR-based FMCW radars~\cite{tariq2024} and end-to-end simulation of the range-Doppler and constant false alarm rate (CFAR) processing chain~\cite{liaquat2024tut} make such datasets easier to produce, which raises the importance of how they are evaluated.
+The Real Doppler RAD-DAR database was released with a convolutional baseline, DopplerNet, which reached 99.48\% accuracy in classifying vehicles, drones, and pedestrians~\cite{roldan2020}. The acquisition hardware is described separately~\cite{quevedo2019}. A recent lightweight model reached 98.08\% on the same data with a model size of about 400\,kB~\cite{zhang2025}. These studies belong to a broader line of work on convolutional networks for micro-Doppler signatures, which began with human activity classification~\cite{kim2016} and now covers drones~\cite{ahmad2024}, drones versus birds~\cite{mustafa2026}, and material classification with software-defined radio (SDR) platforms~\cite{liaquat2025imm}. End-to-end simulation of the range-Doppler and constant false alarm rate (CFAR) processing chain~\cite{liaquat2024tut} makes such datasets easier to produce, which raises the importance of how they are evaluated.
 
 Correlated samples inflate performance metrics. Human activity recognition commonly uses subject-disjoint splits, and radar recognition studies use track-level separation for the same reason~\cite{buchman2022}. In WiFi sensing benchmarks, re-splitting by subject reduced reported performance to between roughly one quarter and three quarters of the published values~\cite{varga2024a,varga2024b}. A survey of leakage in machine-learning-based science provides a taxonomy~\cite{kapoor2023}. In that taxonomy, the duplicated archive tree described in Section~\ref{sec:method} falls under L1.4 (duplicates in the dataset), and random partitioning of correlated frames falls under L3.2 (nonindependence between training and test samples). Conditions absent from training have been addressed through single-source domain generalization for low-slow-small radar targets~\cite{chen2025} and open-set recognition, which rejects classes never seen in training~\cite{bai2026}. The present case is different. The failing acquisition is correctly labeled and its samples lie closest to the drone centroid, so it is a closed-set acquisition shift, in which a known class contains a scenario absent from the training split.
 
@@ -306,7 +306,12 @@ Both principal findings rest on the same acquisition, so the effective sample si
 % =====================================================================
 \section{Conclusion}
 
-On the Real Doppler RAD-DAR benchmark, grouping frames by inferred acquisition reveals heterogeneity that aggregate frame-level accuracy misses. One drone acquisition out of twenty-one reaches 0.249 out-of-fold recall, while the other twenty reach 0.90 or more. Adding half of it to training raises recall on the other half from 0.178 to 0.948, a recovery that no other of the 52 acquisitions approaches, and the failure persists with three-frame input. The acquisition is distinguished by the Doppler position and spread of its energy. These results form a benchmark-specific case study rather than a general law. They nonetheless support reporting per-acquisition performance whenever a dataset is assembled from continuous recordings, since it costs only one cross-validation pass. Future work will apply the audit to other radar benchmarks and architectures. Code, partition files, per-stage reports, and a script that rechecks every number against its tolerance are released at \codeurl{}.
+On the Real Doppler RAD-DAR benchmark, grouping frames by inferred acquisition reveals heterogeneity that aggregate frame-level accuracy misses. One drone acquisition out of twenty-one reaches 0.249 out-of-fold recall, while the other twenty reach 0.90 or more. Adding half of it to training raises recall on the other half from 0.178 to 0.948, a recovery that no other of the 52 acquisitions approaches, and the failure persists with three-frame input. The acquisition is distinguished by the Doppler position and spread of its energy. These results form a benchmark-specific case study rather than a general law. They nonetheless support reporting per-acquisition performance whenever a dataset is assembled from continuous recordings, since it costs only one cross-validation pass. Future work will apply the audit to other radar benchmarks and architectures. Code, partition files, per-stage reports, and a script that rechecks every number against its tolerance are released at \codeurl{}~\cite{artefact2026}.
+
+
+\section*{ACKNOWLEDGMENT}
+
+The authors thank C.~R.~del-Blanco, I.~Roldan and their colleagues at the Universidad Polit\'ecnica de Madrid for collecting the Real Doppler RAD-DAR database and for releasing it publicly. This study is an audit of that resource and would not have been possible without it.
 
 % =====================================================================
 \begin{thebibliography}{00}
@@ -329,7 +334,7 @@ On the Real Doppler RAD-DAR benchmark, grouping frames by inferred acquisition r
 
 \bibitem{kim2016} Y.~Kim and T.~Moon, ``Human detection and activity classification based on micro-Doppler signatures using deep convolutional neural networks,'' \emph{IEEE Geosci. Remote Sens. Lett.}, vol.~13, no.~1, pp.~8--12, 2016.
 
-\bibitem{tariq2024} K.~Tariq, H.~Ahmad, S.~Liaquat \emph{et al.}, ``A framework for improving search and rescue operations through SDR-based FMCW radar and LPWAN technology,'' in \emph{Proc. 11th Int. Conf. Wireless Netw. Mobile Commun. (WINCOM)}, Leeds, U.K., 2024, pp.~1--6.
+
 
 \bibitem{liaquat2024tut} S.~Liaquat, N.~M.~Mahyuddin, and I.~H.~Naqvi, ``An end-to-end modular framework for radar signal processing: A simulation-based tutorial,'' \emph{IEEE Aerosp. Electron. Syst. Mag.}, vol.~39, no.~9, pp.~98--118, Sep. 2024.
 
@@ -350,6 +355,12 @@ On the Real Doppler RAD-DAR benchmark, grouping frames by inferred acquisition r
 \bibitem{tran2022} C.~Tran, F.~Fioretto, J.-E.~Kim, and R.~Naidu, ``Pruning has a disparate impact on model accuracy,'' in \emph{Proc. Adv. Neural Inf. Process. Syst. (NeurIPS)}, vol.~35, 2022, pp.~17652--17664.
 
 \bibitem{han2026} S.-K.~Han and Y.-H.~Jung, ``A time-synchronized multi-sensor drone dataset acquired from multiple radars and RF receiver,'' \emph{Sci. Data}, vol.~13, Art.~no.~407, 2026.
+
+\ifblind
+\bibitem{artefact2026} Author(s) withheld for blind review, ``Code and analysis for this paper,'' archived artefact, 2026.
+\else
+\bibitem{artefact2026} G.~Mustafa, ``Code and analysis for \emph{Acquisition-level evaluation of deep learning for range-Doppler radar target recognition},'' Zenodo, 2026, doi:10.5281/zenodo.23118075. [Online]. Available: \url{https://github.com/falcon-colab/rdrd-acquisition-coverage}
+\fi
 
 \end{thebibliography}
 
